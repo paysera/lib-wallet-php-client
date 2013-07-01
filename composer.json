@@ -1,0 +1,13 @@
+{
+    "name": "evp/paysera-wallet-php-client",
+    "description": "PHP client for Paysera.com Wallet API",
+    "authors": [
+        {
+            "name": "Marius Balčytis",
+            "email": "m.balcytis@evp.lt"
+        }
+    ],
+    "autoload": {
+        "psr-0": { "Paysera_WalletApi": "src/" }
+    }
+}
