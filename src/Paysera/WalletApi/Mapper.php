@@ -468,6 +468,57 @@ class Paysera_WalletApi_Mapper
     }
 
     /**
+     * Encodes payer
+     *
+     * @param Paysera_WalletApi_Entity_WalletIdentifier $walletIdentifier
+     *
+     * @return array
+     */
+    public function encodePayer(Paysera_WalletApi_Entity_WalletIdentifier $walletIdentifier)
+    {
+        return array(
+            'payer' => $this->encodeIdentifier($walletIdentifier),
+        );
+    }
+
+    /**
+     * Encodes identifier
+     *
+     * @param Paysera_WalletApi_Entity_WalletIdentifier $walletIdentifier
+     *
+     * @return array
+     */
+    public function encodeIdentifier(Paysera_WalletApi_Entity_WalletIdentifier $walletIdentifier)
+    {
+        if ($walletIdentifier->getCard() !== null) {
+            return array(
+                'card' => array(
+                    'issuer' => $walletIdentifier->getCard()->getIssuer(),
+                    'number' => $walletIdentifier->getCard()->getNumber(),
+                ),
+            );
+        }
+
+        if ($walletIdentifier->getEmail() !== null) {
+            return array(
+                'email' => $walletIdentifier->getEmail(),
+            );
+        }
+
+        if ($walletIdentifier->getId() !== null) {
+            return array(
+                'id' => $walletIdentifier->getId(),
+            );
+        }
+
+        if ($walletIdentifier->getPhone() !== null) {
+            return array(
+                'phone' => $walletIdentifier->getPhone(),
+            );
+        }
+    }
+
+    /**
      * Encodes user information object to array
      *
      * @param Paysera_WalletApi_Entity_UserInformation $userInformation

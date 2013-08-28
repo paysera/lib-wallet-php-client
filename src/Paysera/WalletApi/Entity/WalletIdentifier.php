@@ -21,6 +21,11 @@ class Paysera_WalletApi_Entity_WalletIdentifier
     protected $id;
 
     /**
+     * @var Paysera_WalletApi_Entity_Card
+     */
+    protected $card;
+
+    /**
      * Creates object, used for fluent interface
      *
      * @return self
@@ -38,6 +43,30 @@ class Paysera_WalletApi_Entity_WalletIdentifier
     public function getEmail()
     {
         return $this->email;
+    }
+
+    /**
+     * Set card
+     *
+     * @param Paysera_WalletApi_Entity_Card $card
+     *
+     * @return Paysera_WalletApi_Entity_WalletIdentifier
+     */
+    public function setCard(Paysera_WalletApi_Entity_Card $card)
+    {
+        $this->card = $card;
+
+        return $this;
+    }
+
+    /**
+     * Get card
+     *
+     * @return Paysera_WalletApi_Entity_Card
+     */
+    public function getCard()
+    {
+        return $this->card;
     }
 
     /**
@@ -99,4 +128,25 @@ class Paysera_WalletApi_Entity_WalletIdentifier
         return $this;
     }
 
+    /**
+     * Validation for wallet identifier entity
+     *
+     * @return boolean
+     * @throws Paysera_WalletApi_Exception_LogicException
+     */
+    public function validate()
+    {
+        $setValueCount = count(array_diff(
+            array($this->getId(), $this->getCard(), $this->getPhone(), $this->getEmail()),
+            array(null)
+        ));
+
+        if ($setValueCount == 0) {
+            throw new Paysera_WalletApi_Exception_LogicException("Atleast one identifier must be set");
+        } else if ($setValueCount > 1) {
+            throw new Paysera_WalletApi_Exception_LogicException("Only one identifier can be set at the same time");
+        }
+
+        return true;
+    }
 }
