@@ -4,7 +4,7 @@
 /**
  * Base search result
  */
-abstract class Paysera_WalletApi_Entity_Search_Result implements \IteratorAggregate
+abstract class Paysera_WalletApi_Entity_Search_Result implements IteratorAggregate
 {
     /**
      * @var integer

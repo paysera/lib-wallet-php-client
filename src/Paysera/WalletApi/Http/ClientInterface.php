@@ -3,7 +3,7 @@
 /**
  * Interface for web client
  */
-interface Paysera_WalletApi_WebClient_Interface
+interface Paysera_WalletApi_Http_ClientInterface
 {
 
     /**

@@ -16,21 +16,23 @@ $clientId = 'CLIENT_ID';
 // $secret - shared secret to use in MAC auth
 $secret = 'SECRET';
 // or information about certificate to use in SSL auth
-$secret = Paysera_WalletApi_Http_ClientCertificate::create()
-    ->setCertificatePath('/path/to/cert.crt')
-    ->setPrivateKeyPath('/path/to/private.key');
+//$secret = Paysera_WalletApi_Http_ClientCertificate::create()
+//    ->setCertificatePath('/path/to/cert.crt')
+//    ->setPrivateKeyPath('/path/to/private.key');
 
 // create main object to use for all functionality
-$api = new Paysera_WalletApi(Paysera_WalletApi_Container::create($clientId, $secret));
+$api = new Paysera_WalletApi($clientId, $secret);
+// get service, responsible for OAuth code grant type integration
+$oauth = $api->oauthConsumer();
 
 // example how to get ask and get information about paysera.com user
 session_start();
 try {
     if (!isset($_SESSION['token'])) {           // no token in session - let's get the token
-        $token = $api->getOAuthAccessToken();   // this gets code query parameter if available and exchanges for token
+        $token = $oauth->getOAuthAccessToken(); // this gets code query parameter if available and exchanges for token
         if ($token === null) {                  // no code parameter - redirect user to authentication endpoint
             $redirectUri = null;                // URL of this file; it's optional parameter
-            header('Location: ' . $api->getAuthorizationUri(array(              // scopes are optional, no scope allows to get user ID/wallet ID
+            header('Location: ' . $token->getAuthorizationUri(array(            // scopes are optional, no scope allows to get user ID/wallet ID
                 Paysera_WalletApi_OAuth_Consumer::SCOPE_EMAIL,                  // to get user's main email address
                 // Paysera_WalletApi_OAuth_Consumer::SCOPE_IDENTITY,            // this scope allows to get personal code, name and surname
                 // Paysera_WalletApi_OAuth_Consumer::SCOPE_FULL_NAME,           // use this scope if only name and surname is needed
@@ -42,14 +44,14 @@ try {
     }
 
     if (isset($_SESSION['token'])) {
-        $tokenRelatedApi = $api->createApiForToken($_SESSION['token']);
+        $tokenRelatedClient = $api->walletClientWithToken($_SESSION['token']);
         echo '<pre>';
-        $user = $tokenRelatedApi->getUser();
+        $user = $tokenRelatedClient->getUser();
         var_dump($user);
-        // $user->getId();                            // you can save user ID (on paysera.com), user's email etc.
-        // var_dump($api->getUserIdentity($userId));  // if you have offline scope, you can get info by user ID later
+        // $user->getId();                                            // you can save user ID (on paysera.com), user's email etc.
+        // var_dump($api->walletClient()->getUserIdentity($userId));  // if you have offline scope, you can get info by user ID later
         echo '</pre>';
-        $_SESSION['token'] = $tokenRelatedApi->getCurrentAccessToken();     // this could be refreshed, re-save
+        $_SESSION['token'] = $tokenRelatedClient->getCurrentAccessToken();     // this could be refreshed, re-save
     }
 
 } catch (Exception $e) {

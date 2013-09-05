@@ -3,7 +3,7 @@
 /**
  * Checks whether callback sign is valid
  */
-class Paysera_WalletApi_Auth_CallbackSignChecker
+class Paysera_WalletApi_Callback_SignChecker
 {
     /**
      * @var string
@@ -11,7 +11,7 @@ class Paysera_WalletApi_Auth_CallbackSignChecker
     protected $publicKeyUri;
 
     /**
-     * @var Paysera_WalletApi_WebClient_Interface
+     * @var Paysera_WalletApi_Http_ClientInterface
      */
     protected $webClient;
 
@@ -19,9 +19,9 @@ class Paysera_WalletApi_Auth_CallbackSignChecker
      * Constructs object
      *
      * @param string                          $publicKeyUri
-     * @param Paysera_WalletApi_WebClient_Interface $webClient
+     * @param Paysera_WalletApi_Http_ClientInterface $webClient
      */
-    public function __construct($publicKeyUri, Paysera_WalletApi_WebClient_Interface $webClient)
+    public function __construct($publicKeyUri, Paysera_WalletApi_Http_ClientInterface $webClient)
     {
         $this->publicKeyUri = $publicKeyUri;
         $this->webClient = $webClient;

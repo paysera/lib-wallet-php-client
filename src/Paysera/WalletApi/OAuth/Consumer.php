@@ -52,23 +52,92 @@ class Paysera_WalletApi_OAuth_Consumer
     protected $requestInfo;
 
     /**
+     * @var Paysera_WalletApi_Client_OAuthClient
+     */
+    protected $oauthClient;
+
+    /**
      * Constructs object
      *
-     * @param string                                    $clientId
-     * @param string                                    $authPath
+     * @param string                                          $clientId
+     * @param Paysera_WalletApi_Client_OAuthClient                  $oauthClient
+     * @param string                                          $authPath
      * @param Paysera_WalletApi_State_StatePersisterInterface $statePersister
      * @param Paysera_WalletApi_Util_RequestInfo              $requestInfo
      */
     public function __construct(
         $clientId,
+        Paysera_WalletApi_Client_OAuthClient $oauthClient,
         $authPath,
         Paysera_WalletApi_State_StatePersisterInterface $statePersister,
         Paysera_WalletApi_Util_RequestInfo $requestInfo
     ) {
         $this->clientId = $clientId;
+        $this->oauthClient = $oauthClient;
         $this->authPath = $authPath;
         $this->statePersister = $statePersister;
         $this->requestInfo = $requestInfo;
+    }
+
+    /**
+     * Gets redirect URI for OAuth authorization. After confirming or rejecting authorization request, user will
+     * be redirected to redirect URI.
+     *
+     * @param array                              $scopes          can contain Paysera_WalletApi_OAuth_Consumer::SCOPE_* constants
+     * @param string                             $redirectUri     takes current URI without authorization parameters if not passed
+     * @param Paysera_WalletApi_Entity_UserInformation $userInformation if passed, creates OAuth session by API with confirmed user's information
+     *
+     * @return string
+     *
+     * @throws Paysera_WalletApi_Exception_OAuthException
+     * @throws Paysera_WalletApi_Exception_ApiException
+     */
+    public function getAuthorizationUri(
+        array $scopes = array(),
+        $redirectUri = null,
+        Paysera_WalletApi_Entity_UserInformation $userInformation = null
+    ) {
+        if ($redirectUri === null) {
+            $redirectUri = $this->getCurrentUri();
+        }
+        if ($userInformation === null) {
+            $query = http_build_query($this->getOAuthParameters($scopes, $redirectUri), null, '&');
+            return $this->authPath . '?' . $query;
+        } else {
+            $parameters = $this->getOAuthParameters($scopes, $redirectUri);
+            $responseData = $this->oauthClient->createSession($parameters, $userInformation);
+            return $this->authPath . '/' . $responseData['key'];
+        }
+    }
+
+    /**
+     * Gets OAuth access token from query parameters. Redirect URI must be the same as passed when getting the
+     * authorization URI, otherwise authorization will fail
+     * If no authorization parameters are passed, returns null
+     * If authorization error is passed or some data is invalid (like state parameter), exception is thrown
+     *
+     * @param array  $params      takes $_GET if not passed
+     * @param string $redirectUri takes current URI without authorization parameters if not passed
+     *
+     * @return Paysera_WalletApi_Entity_MacAccessToken|null
+     *
+     * @throws Paysera_WalletApi_Exception_OAuthException
+     * @throws Paysera_WalletApi_Exception_ApiException
+     */
+    public function getOAuthAccessToken($params = null, $redirectUri = null)
+    {
+        if ($params === null) {
+            $params = $_GET;
+        }
+        $authorizationCode = $this->getOAuthCode($params);
+        if ($authorizationCode === null) {
+            return null;
+        }
+
+        if ($redirectUri === null) {
+            $redirectUri = $this->getCurrentUri();
+        }
+        return $this->oauthClient->exchangeCodeForAccessToken($authorizationCode, $redirectUri);
     }
 
     public function getOAuthParameters(array $scopes, $redirectUri)
@@ -80,17 +149,6 @@ class Paysera_WalletApi_OAuth_Consumer
             'redirect_uri' => $redirectUri,
             'state' => $this->createState(),
         );
-    }
-
-    public function getAuthorizationUri(array $scopes = array(), $redirectUri)
-    {
-        $query = http_build_query($this->getOAuthParameters($scopes, $redirectUri), null, '&');
-        return $this->authPath . '?' . $query;
-    }
-
-    public function getAuthorisationUriForKey($key)
-    {
-        return $this->authPath . '/' . $key;
     }
 
     public function getOAuthCode(array $params)
@@ -124,7 +182,7 @@ class Paysera_WalletApi_OAuth_Consumer
      *
      * @return string
      */
-    public function getCurrentUri()
+    protected function getCurrentUri()
     {
         return $this->requestInfo->getCurrentUri(self::$authenticationParameters);
     }

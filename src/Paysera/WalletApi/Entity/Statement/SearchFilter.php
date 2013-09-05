@@ -118,7 +118,7 @@ class Paysera_WalletApi_Entity_Statement_SearchFilter extends Paysera_WalletApi_
     /**
      * Gets toDate
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getToDate()
     {

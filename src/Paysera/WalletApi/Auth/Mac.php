@@ -31,12 +31,13 @@ class Paysera_WalletApi_Auth_Mac implements Paysera_WalletApi_Auth_SignerInterfa
      * Signs request - adds Authorization header with generated value
      *
      * @param Paysera_WalletApi_Http_Request $request
+     * @param array                          $parameters
      */
-    public function signRequest(Paysera_WalletApi_Http_Request $request)
+    public function signRequest(Paysera_WalletApi_Http_Request $request, array $parameters = array())
     {
         $timestamp = $this->getTimestamp();
         $nonce = $this->generateNonce();
-        $ext = $this->calculateExt($request);
+        $ext = $this->generateExt($request, $parameters);
         $mac = $this->calculateMac(
             $timestamp,
             $nonce,
@@ -94,19 +95,25 @@ class Paysera_WalletApi_Auth_Mac implements Paysera_WalletApi_Auth_SignerInterfa
     }
 
     /**
-     * Calculates ext field for this request to be used in MAC authorization header
+     * Generates ext field for this request to be used in MAC authorization header
      *
      * @param Paysera_WalletApi_Http_Request $request
+     * @param array                          $parameters
      *
      * @return string
      */
-    protected function calculateExt(Paysera_WalletApi_Http_Request $request)
+    protected function generateExt(Paysera_WalletApi_Http_Request $request, array $parameters)
     {
         $content = $request->getContent();
-        if ($content == '') {
-            return '';
+        $extParts = array();
+        if ($content != '') {
+            $extParts['body_hash'] = base64_encode(hash('sha256', $content, true));
+        }
+        $extParts = $extParts + $parameters;
+        if (count($extParts) > 0) {
+            return http_build_query($extParts);
         } else {
-            return hash('sha256', $content, false);
+            return '';
         }
     }
 

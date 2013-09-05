@@ -54,7 +54,7 @@ class Paysera_WalletApi_Entity_Wallet
     }
 
     /**
-     * @return \Paysera_WalletApi_Entity_Wallet_Account
+     * @return Paysera_WalletApi_Entity_Wallet_Account
      */
     public function getAccount()
     {

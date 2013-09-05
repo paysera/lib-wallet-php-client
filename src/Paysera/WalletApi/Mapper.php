@@ -516,6 +516,8 @@ class Paysera_WalletApi_Mapper
                 'phone' => $walletIdentifier->getPhone(),
             );
         }
+
+        return array();
     }
 
     /**
@@ -562,7 +564,7 @@ class Paysera_WalletApi_Mapper
      *
      * @return array
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function encodeWalletIdentifier(Paysera_WalletApi_Entity_WalletIdentifier $walletIdentifier)
     {
@@ -573,7 +575,7 @@ class Paysera_WalletApi_Mapper
         } elseif ($walletIdentifier->getPhone() !== null) {
             return array('phone' => $walletIdentifier->getPhone());
         } else {
-            throw new \InvalidArgumentException('Wallet identifier has no identifier set');
+            throw new InvalidArgumentException('Wallet identifier has no identifier set');
         }
     }
 

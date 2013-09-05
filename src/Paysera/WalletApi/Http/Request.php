@@ -10,6 +10,9 @@ class Paysera_WalletApi_Http_Request
     const METHOD_DELETE = 'DELETE';
     const METHOD_PUT = 'PUT';
 
+    const CONTENT_TYPE_JSON = 'application/json';
+    const CONTENT_TYPE_URLENCODED = 'application/x-www-form-urlencoded';
+
     /**
      * @var Paysera_WalletApi_Http_HeaderBag
      */

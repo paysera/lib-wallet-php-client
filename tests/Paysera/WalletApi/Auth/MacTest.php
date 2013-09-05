@@ -62,8 +62,8 @@ class Paysera_WalletApi_Auth_MacTest extends PHPUnit_Framework_TestCase
                 '/wallet/oauth/v1/',
                 'POST',
                 'grant_type=authorization_code&code=SplxlOBeZQQYbYS6WxSbIA&redirect_uri=http%3A%2F%2Flocalhost%2Fabc',
-                'LAdTwsIVsaz7pKy9fO713d/kzBFKyhYjFqsugUtFj+k=',
-                '21fb73c40b589622d0c78e9cd8900f89d9472aa724d0e5c3eca9ac1cd9d2a6d5',
+                'YEIWoGDeREjJNh+IplpTcCLRNASTAMgFqa540igFcaY=',
+                'body_hash=IftzxAtYliLQx46c2JAPidlHKqck0OXD7KmsHNnSptU%3D',
             ),
         );
     }

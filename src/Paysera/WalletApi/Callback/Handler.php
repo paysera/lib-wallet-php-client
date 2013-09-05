@@ -1,9 +1,9 @@
 <?php
 
-class Paysera_WalletApi_CallbackHandler
+class Paysera_WalletApi_Callback_Handler
 {
     /**
-     * @var Paysera_WalletApi_Auth_CallbackSignChecker
+     * @var Paysera_WalletApi_Callback_SignChecker
      */
     protected $callbackSignChecker;
 
@@ -13,20 +13,29 @@ class Paysera_WalletApi_CallbackHandler
     protected $mapper;
 
     /**
+     * @var Paysera_WalletApi_EventDispatcher_EventDispatcher
+     */
+    protected $eventDispatcher;
+
+    /**
      * Constructs object
      *
-     * @param Paysera_WalletApi_Auth_CallbackSignChecker $callbackSignChecker
-     * @param Paysera_WalletApi_Mapper                   $mapper
+     * @param Paysera_WalletApi_EventDispatcher_EventDispatcher $eventDispatcher
+     * @param Paysera_WalletApi_Callback_SignChecker            $callbackSignChecker
+     * @param Paysera_WalletApi_Mapper                          $mapper
      */
     public function __construct(
-        Paysera_WalletApi_Auth_CallbackSignChecker $callbackSignChecker,
+        Paysera_WalletApi_EventDispatcher_EventDispatcher $eventDispatcher,
+        Paysera_WalletApi_Callback_SignChecker $callbackSignChecker,
         Paysera_WalletApi_Mapper $mapper
     ) {
+        $this->eventDispatcher = $eventDispatcher;
         $this->callbackSignChecker = $callbackSignChecker;
         $this->mapper = $mapper;
     }
 
-    public function handle($post, Paysera_WalletApi_Event_EventDispatcher $eventDispatcher)
+
+    public function handle($post)
     {
         if (!isset($post['event']) || !isset($post['sign'])) {
             throw new Paysera_WalletApi_Exception_CallbackException('At least one of required parameters is missing');
@@ -42,11 +51,17 @@ class Paysera_WalletApi_CallbackHandler
 
         try {
             if ($eventData['object'] === 'transaction') {
-                $subject = $this->mapper->decodeTransaction($eventData['data']);
+                $subject = new Paysera_WalletApi_Event_TransactionEvent(
+                    $this->mapper->decodeTransaction($eventData['data'])
+                );
             } elseif ($eventData['object'] === 'payment') {
-                $subject = $this->mapper->decodePayment($eventData['data']);
+                $subject = new Paysera_WalletApi_Event_PaymentEvent(
+                    $this->mapper->decodePayment($eventData['data'])
+                );
             } elseif ($eventData['object'] === 'allowance') {
-                $subject = $this->mapper->decodeAllowance($eventData['data']);
+                $subject = new Paysera_WalletApi_Event_AllowanceEvent(
+                    $this->mapper->decodeAllowance($eventData['data'])
+                );
             } else {
                 throw new Paysera_WalletApi_Exception_CallbackUnsupportedException('Unknown event object');
             }
@@ -61,8 +76,6 @@ class Paysera_WalletApi_CallbackHandler
         }
 
         $eventKey = $eventData['object'] . '.' . $eventData['type'];
-        if (!$eventDispatcher->dispatch($eventKey, $subject)) {
-            throw new Paysera_WalletApi_Exception_CallbackUnsupportedException('Unhandled event');
-        }
+        $this->eventDispatcher->dispatch($eventKey, $subject);
     }
 }

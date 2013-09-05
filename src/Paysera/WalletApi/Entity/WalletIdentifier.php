@@ -142,7 +142,7 @@ class Paysera_WalletApi_Entity_WalletIdentifier
         ));
 
         if ($setValueCount == 0) {
-            throw new Paysera_WalletApi_Exception_LogicException("Atleast one identifier must be set");
+            throw new Paysera_WalletApi_Exception_LogicException("At least one identifier must be set");
         } else if ($setValueCount > 1) {
             throw new Paysera_WalletApi_Exception_LogicException("Only one identifier can be set at the same time");
         }

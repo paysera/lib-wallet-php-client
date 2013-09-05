@@ -60,7 +60,7 @@ class Paysera_WalletApi_Entity_Statement
     /**
      * Gets amount
      *
-     * @return \Paysera_WalletApi_Entity_Money
+     * @return Paysera_WalletApi_Entity_Money
      */
     public function getAmount()
     {
@@ -70,7 +70,7 @@ class Paysera_WalletApi_Entity_Statement
     /**
      * Gets date
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getDate()
     {
@@ -90,7 +90,7 @@ class Paysera_WalletApi_Entity_Statement
     /**
      * Gets otherParty
      *
-     * @return \Paysera_WalletApi_Entity_Statement_Party
+     * @return Paysera_WalletApi_Entity_Statement_Party
      */
     public function getOtherParty()
     {

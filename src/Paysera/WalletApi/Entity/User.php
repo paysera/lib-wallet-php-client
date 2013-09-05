@@ -56,7 +56,7 @@ class Paysera_WalletApi_Entity_User
     }
 
     /**
-     * @return \Paysera_WalletApi_Entity_User_Address
+     * @return Paysera_WalletApi_Entity_User_Address
      */
     public function getAddress()
     {
@@ -72,7 +72,7 @@ class Paysera_WalletApi_Entity_User
     }
 
     /**
-     * @return \Paysera_WalletApi_Entity_User_Identity
+     * @return Paysera_WalletApi_Entity_User_Identity
      */
     public function getIdentity()
     {

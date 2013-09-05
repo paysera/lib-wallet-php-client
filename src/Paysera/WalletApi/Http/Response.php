@@ -74,6 +74,11 @@ class Paysera_WalletApi_Http_Response
     protected $content;
 
     /**
+     * @var Paysera_WalletApi_Http_Request
+     */
+    protected $request;
+
+    /**
      * Constructs object
      *
      * @param integer $statusCode
@@ -178,5 +183,29 @@ class Paysera_WalletApi_Http_Response
     public function getContent()
     {
         return $this->content;
+    }
+
+    /**
+     * Sets request
+     *
+     * @param Paysera_WalletApi_Http_Request $request
+     *
+     * @return $this
+     */
+    public function setRequest($request)
+    {
+        $this->request = $request;
+
+        return $this;
+    }
+
+    /**
+     * Gets request
+     *
+     * @return Paysera_WalletApi_Http_Request
+     */
+    public function getRequest()
+    {
+        return $this->request;
     }
 }

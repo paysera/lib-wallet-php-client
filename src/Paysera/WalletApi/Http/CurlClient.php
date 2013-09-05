@@ -3,7 +3,7 @@
 /**
  * Web client using cURL library
  */
-class Paysera_WalletApi_WebClient_Curl implements Paysera_WalletApi_WebClient_Interface
+class Paysera_WalletApi_Http_CurlClient implements Paysera_WalletApi_Http_ClientInterface
 {
     /**
      * User agent
