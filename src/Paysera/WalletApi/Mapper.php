@@ -533,6 +533,81 @@ class Paysera_WalletApi_Mapper
     }
 
     /**
+     * Encodes user object to array
+     *
+     * @param Paysera_WalletApi_Entity_User $user
+     *
+     * @return array
+     */
+    public function encodeUser(Paysera_WalletApi_Entity_User $user)
+    {
+        $data = array();
+        if ($user->getEmail() !== null) {
+            $data['email'] = $user->getEmail();
+        }
+        if ($user->getPhone() !== null) {
+            $data['phone'] = $user->getPhone();
+        }
+        if ($identity = $user->getIdentity()) {
+            $data['identity'] = $this->encodeUserIdentity($identity);
+        }
+        if ($address = $user->getAddress()) {
+            $data['address'] = $this->encodeUserAddress($address);
+        }
+        return $data;
+    }
+
+    /**
+     * Encodes user identity object to array
+     *
+     * @param Paysera_WalletApi_Entity_User_Identity $identity
+     *
+     * @return array
+     */
+    public function encodeUserIdentity(Paysera_WalletApi_Entity_User_Identity $identity)
+    {
+        $data = array();
+        if ($identity->getName() !== null) {
+            $data['name'] = $identity->getName();
+        }
+        if ($identity->getSurname() !== null) {
+            $data['surname'] = $identity->getSurname();
+        }
+        if ($identity->getNationality() !== null) {
+            $data['nationality'] = $identity->getNationality();
+        }
+        if ($identity->getCode() !== null) {
+            $data['code'] = $identity->getCode();
+        }
+        return $data;
+    }
+
+    /**
+     * Encodes user address object to array
+     *
+     * @param Paysera_WalletApi_Entity_User_Address $address
+     *
+     * @return array
+     */
+    public function encodeUserAddress(Paysera_WalletApi_Entity_User_Address $address)
+    {
+        $data = array();
+        if ($address->getCountry() !== null) {
+            $data['country'] = $address->getCountry();
+        }
+        if ($address->getCity() !== null) {
+            $data['city'] = $address->getCity();
+        }
+        if ($address->getStreet() !== null) {
+            $data['street'] = $address->getStreet();
+        }
+        if ($address->getPostIndex() !== null) {
+            $data['post_index'] = $address->getPostIndex();
+        }
+        return $data;
+    }
+
+    /**
      * Encodes money object to array
      *
      * @param Paysera_WalletApi_Entity_Money $price
