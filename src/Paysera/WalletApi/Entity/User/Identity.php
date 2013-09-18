@@ -68,5 +68,59 @@ class Paysera_WalletApi_Entity_User_Identity
         return $this->surname;
     }
 
+    /**
+     * Setter of Code
+     *
+     * @param string $code
+     *
+     * @return Paysera_WalletApi_Entity_User_Identity
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
 
+        return $this;
+    }
+
+    /**
+     * Setter of Name
+     *
+     * @param string $name
+     *
+     * @return Paysera_WalletApi_Entity_User_Identity
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Setter of Nationality
+     *
+     * @param string $nationality
+     *
+     * @return Paysera_WalletApi_Entity_User_Identity
+     */
+    public function setNationality($nationality)
+    {
+        $this->nationality = $nationality;
+
+        return $this;
+    }
+
+    /**
+     * Setter of Surname
+     *
+     * @param string $surname
+     *
+     * @return Paysera_WalletApi_Entity_User_Identity
+     */
+    public function setSurname($surname)
+    {
+        $this->surname = $surname;
+
+        return $this;
+    }
 }
