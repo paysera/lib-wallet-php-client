@@ -74,6 +74,9 @@ class Paysera_WalletApi_Mapper
         if (($parameters = $payment->getParameters()) !== null) {
             $result['parameters'] = $parameters;
         }
+        if (($password = $payment->getPaymentPassword()) !== null) {
+            $result['password'] = $this->encodePaymentPassword($password);
+        }
 
         if (!(isset($result['description']) && isset($result['price']) || isset($result['items']))) {
             throw new Paysera_WalletApi_Exception_LogicException('Description and price are required if items are not set');
@@ -134,6 +137,9 @@ class Paysera_WalletApi_Mapper
         }
         if (isset($data['parameters'])) {
             $payment->setParameters($data['parameters']);
+        }
+        if (isset($data['password'])) {
+            $payment->setPaymentPassword($this->decodePaymentPassword($data['password']));
         }
 
         return $payment;
@@ -678,6 +684,68 @@ class Paysera_WalletApi_Mapper
             }
         }
         return $walletIdentifier;
+    }
+
+    /**
+     * Encodes paymentPassword object to array
+     *
+     * @param Paysera_WalletApi_Entity_PaymentPassword $paymentPassword
+     *
+     * @return array
+     *
+     * @throws Paysera_WalletApi_Exception_LogicException
+     */
+    public function encodePaymentPassword(Paysera_WalletApi_Entity_PaymentPassword $paymentPassword)
+    {
+        $result = array();
+
+        if ($paymentPassword->getType() === null) {
+            throw new Paysera_WalletApi_Exception_LogicException('Password type must be provided');
+        }
+        if (
+            $paymentPassword->getType() === Paysera_WalletApi_Entity_PaymentPassword::TYPE_PROVIDED
+            && $paymentPassword->getValue() === null
+        ) {
+            throw new Paysera_WalletApi_Exception_LogicException('Password value must be provided');
+        }
+        if ($paymentPassword->getStatus() !== null) {
+            throw new Paysera_WalletApi_Exception_LogicException('Status for payment password is read only');
+        }
+
+        $result['type'] = $paymentPassword->getType();
+
+        if ($paymentPassword->getValue() !== null) {
+            $result['value'] = $paymentPassword->getValue();
+        }
+        if ($paymentPassword->getOptional() !== null) {
+            $result['optional'] = $paymentPassword->getOptional();
+        }
+        if ($paymentPassword->getCancelable() !== null) {
+            $result['cancelable'] = $paymentPassword->getCancelable();
+        }
+
+        return $result;
+    }
+
+    /**
+     * Decodes paymentPassword object from array
+     *
+     * @param array $data
+     *
+     * @return Paysera_WalletApi_Entity_PaymentPassword
+     */
+    public function decodePaymentPassword($data)
+    {
+        $paymentPassword = new Paysera_WalletApi_Entity_PaymentPassword();
+
+        if (isset($data['type'])) {
+            $paymentPassword->setType($data['type']);
+        }
+        if (isset($data['status'])) {
+            $paymentPassword->setStatus($data['status']);
+        }
+
+        return $paymentPassword;
     }
 
     /**
