@@ -136,8 +136,7 @@ class Paysera_WalletApi_Entity_Money
         if ((string) intval($amountInCents) !== (string) $amountInCents) {
             throw new InvalidArgumentException('Amount must be integer');
         }
-        $amountInCents = (string) $amountInCents;
-        $amountInCents = '00' . $amountInCents;
+        $amountInCents = ($amountInCents < 0 ? '-' : '') . '00' . (string)abs($amountInCents);
         $amount = substr($amountInCents, 0, -2) . '.' . substr($amountInCents, -2);
         $this->setAmount($amount);
         return $this;
