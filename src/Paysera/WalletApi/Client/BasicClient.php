@@ -72,7 +72,8 @@ class Paysera_WalletApi_Client_BasicClient implements Paysera_WalletApi_Client_B
                         'error' => 'internal_server_error',
                         'error_description' => 'Empty response from server',
                     ),
-                    $response->getStatusCode() . ' ' . $response->getStatusCodeMessage()
+                    $response->getStatusCode(),
+                    $response->getStatusCodeMessage()
                 );
             }
 
@@ -84,14 +85,16 @@ class Paysera_WalletApi_Client_BasicClient implements Paysera_WalletApi_Client_B
                         'error' => 'internal_server_error',
                         'error_description' => 'Invalid response from server: "' . $response->getContent() . '"',
                     ),
-                    $response->getStatusCode() . ' ' . $response->getStatusCodeMessage()
+                    $response->getStatusCode(),
+                    $response->getStatusCodeMessage()
                 );
             } elseif ($response->getStatusCode() === 200) {
                 return $result;
             } else {
                 throw new Paysera_WalletApi_Exception_ResponseException(
                     $result,
-                    $response->getStatusCode() . ' ' . $response->getStatusCodeMessage()
+                    $response->getStatusCode(),
+                    $response->getStatusCodeMessage()
                 );
             }
         } catch (Paysera_WalletApi_Exception_ResponseException $exception) {

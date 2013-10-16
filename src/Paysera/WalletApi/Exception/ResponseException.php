@@ -26,15 +26,22 @@ class Paysera_WalletApi_Exception_ResponseException extends Paysera_WalletApi_Ex
     protected $statusCode;
 
     /**
+     * @var string
+     */
+    protected $statusCodeMessage;
+
+    /**
      * Constructs object
      *
-     * @param array      $error
-     * @param integer    $statusCode
+     * @param array     $error
+     * @param integer   $statusCode
+     * @param string    $statusCodeMessage
      * @param Exception $previous
      */
-    public function __construct(array $error, $statusCode, $previous = null)
+    public function __construct(array $error, $statusCode, $statusCodeMessage, $previous = null)
     {
         $this->setStatusCode($statusCode);
+        $this->setStatusCodeMessage($statusCodeMessage);
         $message = 'Got error response from Wallet API.';
         if (isset($error['error'])) {
             $code = $error['error'];
@@ -146,4 +153,27 @@ class Paysera_WalletApi_Exception_ResponseException extends Paysera_WalletApi_Ex
         return $this;
     }
 
+    /**
+     * Set statusCodeMessage
+     *
+     * @param string $statusCodeMessage
+     *
+     * @return Paysera_WalletApi_Exception_ResponseException
+     */
+    public function setStatusCodeMessage($statusCodeMessage)
+    {
+        $this->statusCodeMessage = $statusCodeMessage;
+
+        return $this;
+    }
+
+    /**
+     * Get statusCodeMessage
+     *
+     * @return string
+     */
+    public function getStatusCodeMessage()
+    {
+        return $this->statusCodeMessage;
+    }
 }
