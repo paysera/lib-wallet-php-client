@@ -527,6 +527,24 @@ class Paysera_WalletApi_Mapper
     }
 
     /**
+     * @param Paysera_WalletApi_Entity_TransactionPrice[] $transactionPrices
+     *
+     * @return array
+     */
+    public function encodeTransactionPrices(array $transactionPrices)
+    {
+        $result = array();
+        foreach ($transactionPrices as $transactionPrice) {
+            $result[$transactionPrice->getPaymentId()] = array(
+                'price' => $transactionPrice->getPrice()->getAmountInCents(),
+                'currency' => $transactionPrice->getPrice()->getCurrency()
+            );
+        }
+
+        return $result;
+    }
+
+    /**
      * Encodes payer
      *
      * @param Paysera_WalletApi_Entity_WalletIdentifier $walletIdentifier

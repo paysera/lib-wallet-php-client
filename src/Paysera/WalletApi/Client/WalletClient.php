@@ -307,15 +307,17 @@ class Paysera_WalletApi_Client_WalletClient extends Paysera_WalletApi_Client_Bas
      * Confirms transaction by transaction key using API
      *
      * @param string $transactionKey
+     * @param array $transactionPrices
      *
      * @return Paysera_WalletApi_Entity_Transaction
      *
      * @throws Paysera_WalletApi_Exception_ApiException
      */
-    public function confirmTransaction($transactionKey)
+    public function confirmTransaction($transactionKey, $transactionPrices = array())
     {
         Paysera_WalletApi_Util_Assert::isScalar($transactionKey);
-        $responseData = $this->put('transaction/' . $transactionKey . '/confirm');
+        $requestData = $this->mapper->encodeTransactionPrices($transactionPrices);
+        $responseData = $this->put('transaction/' . $transactionKey . '/confirm', $requestData);
         return $this->mapper->decodeTransaction($responseData);
     }
 
