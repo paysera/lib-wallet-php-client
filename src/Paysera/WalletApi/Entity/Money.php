@@ -159,6 +159,9 @@ class Paysera_WalletApi_Entity_Money
             } else {
                 $centsPart = substr($parts[1] . '00', 0, 3);
                 $cents = intval(round(intval($centsPart, 10), -1) / 10);
+                if (substr($this->amount, 0, 1) === '-') {
+                    $cents *= -1;
+                }
                 return intval($parts[0]) * 100 + $cents;
             }
         }
