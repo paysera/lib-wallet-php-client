@@ -105,7 +105,7 @@ class Paysera_WalletApi
         return $this->container->createOAuthConsumer(
             $this->clientId,
             $this->oauthClient(),
-            $this->router->getOAuthEndpoint()
+            $this->router
         );
     }
 
