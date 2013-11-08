@@ -96,7 +96,7 @@ class Paysera_WalletApi_EventDispatcher_EventDispatcher
         foreach ($dispatcher->listeners as $eventName => $priorities) {
             foreach ($priorities as $priority => $listeners) {
                 foreach ($listeners as $listener) {
-                    $this->addListener($eventName, $priority, $listener);
+                    $this->addListener($eventName, $listener, $priority);
                 }
             }
         }

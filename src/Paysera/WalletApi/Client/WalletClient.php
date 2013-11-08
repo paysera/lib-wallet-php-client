@@ -307,15 +307,17 @@ class Paysera_WalletApi_Client_WalletClient extends Paysera_WalletApi_Client_Bas
      * Confirms transaction by transaction key using API
      *
      * @param string $transactionKey
+     * @param array $transactionPrices
      *
      * @return Paysera_WalletApi_Entity_Transaction
      *
      * @throws Paysera_WalletApi_Exception_ApiException
      */
-    public function confirmTransaction($transactionKey)
+    public function confirmTransaction($transactionKey, $transactionPrices = array())
     {
         Paysera_WalletApi_Util_Assert::isScalar($transactionKey);
-        $responseData = $this->put('transaction/' . $transactionKey . '/confirm');
+        $requestData = $this->mapper->encodeTransactionPrices($transactionPrices);
+        $responseData = $this->put('transaction/' . $transactionKey . '/confirm', $requestData);
         return $this->mapper->decodeTransaction($responseData);
     }
 
@@ -629,5 +631,134 @@ class Paysera_WalletApi_Client_WalletClient extends Paysera_WalletApi_Client_Bas
         Paysera_WalletApi_Util_Assert::isId($userId);
         $responseData = $this->get('user/' . $userId . '/wallets');
         return $this->mapper->decodeWallets($responseData);
+    }
+
+    /**
+     * Get project by id
+     *
+     * @param int $projectId
+     *
+     * @return Paysera_WalletApi_Entity_Project
+     */
+    public function getProject($projectId)
+    {
+        $responseData = $this->get('project/' . $projectId);
+
+        return $this->mapper->decodeProject($responseData);
+    }
+
+    /**
+     * Creates project
+     *
+     * @param Paysera_WalletApi_Entity_Project $project
+     *
+     * @return Paysera_WalletApi_Entity_Project
+     * @throws Paysera_WalletApi_Exception_LogicException
+     */
+    public function saveProject(Paysera_WalletApi_Entity_Project $project)
+    {
+        if ($project->getId() === null) {
+            throw new Paysera_WalletApi_Exception_LogicException("Project must have id property set");
+        }
+
+        $responseData = $this->put('project/' . $project->getId(), $this->mapper->encodeProject($project));
+
+        return $this->mapper->decodeProject($responseData);
+    }
+
+    /**
+     * Creates location
+     *
+     * @param int                               $projectId
+     * @param Paysera_WalletApi_Entity_Location $location
+     *
+     * @return Paysera_WalletApi_Entity_Location
+     */
+    public function createLocation($projectId, Paysera_WalletApi_Entity_Location $location)
+    {
+        $responseData = $this->post('project/'. $projectId .'/location', $this->mapper->encodeLocation($location));
+
+        return $this->mapper->decodeLocation($responseData);
+    }
+
+    /**
+     * Updates location
+     *
+     * @param Paysera_WalletApi_Entity_Location $location
+     *
+     * @return Paysera_WalletApi_Entity_Location
+     * @throws Paysera_WalletApi_Exception_LogicException
+     */
+    public function updateLocation(Paysera_WalletApi_Entity_Location $location)
+    {
+        if ($location->getId() === null) {
+            throw new Paysera_WalletApi_Exception_LogicException("Location id has been not provided");
+        }
+
+        $responseData = $this->put('location/' . $location->getId(), $this->mapper->encodeLocation($location));
+
+        return $this->mapper->decodeLocation($responseData);
+    }
+
+    /**
+     * Get project locations
+     *
+     * @param int $projectId
+     *
+     * @return Paysera_WalletApi_Entity_Location[]
+     */
+    public function getProjectLocations($projectId)
+    {
+        $responseData = $this->get('project/' . $projectId . '/locations');
+
+        $locations = array();
+        foreach ($responseData as $item) {
+            $locations[] = $this->mapper->decodeLocation($item);
+        }
+
+        return $locations;
+    }
+
+    /**
+     * If clientId is not provided will return current client
+     *
+     * @param null|int $clientId
+     *
+     * @return Paysera_WalletApi_Entity_Client
+     */
+    public function getClient($clientId = null)
+    {
+        $path = $clientId === null ? 'client' : 'client/' . $clientId;
+        $responseData = $this->get($path);
+
+        return $this->mapper->decodeClient($responseData);
+    }
+
+    /**
+     * Create client
+     *
+     * @param Paysera_WalletApi_Entity_Client $client
+     *
+     * @return Paysera_WalletApi_Entity_Client
+     */
+    public function createClient(Paysera_WalletApi_Entity_Client $client)
+    {
+        $responseData = $this->post('client', $this->mapper->encodeClient($client));
+
+        return $this->mapper->decodeClient($responseData);
+    }
+
+    /**
+     * Update client
+     *
+     * @param Paysera_WalletApi_Entity_Client $client
+     *
+     * @return Paysera_WalletApi_Entity_Client
+     */
+    public function updateClient(Paysera_WalletApi_Entity_Client $client)
+    {
+        $responseData = $this->put('client/' . $client->getId(), $this->mapper->encodeClient($client));
+
+        return $this->mapper->decodeClient($responseData);
     }
 }

@@ -136,8 +136,7 @@ class Paysera_WalletApi_Entity_Money
         if ((string) intval($amountInCents) !== (string) $amountInCents) {
             throw new InvalidArgumentException('Amount must be integer');
         }
-        $amountInCents = (string) $amountInCents;
-        $amountInCents = '00' . $amountInCents;
+        $amountInCents = ($amountInCents < 0 ? '-' : '') . '00' . (string)abs($amountInCents);
         $amount = substr($amountInCents, 0, -2) . '.' . substr($amountInCents, -2);
         $this->setAmount($amount);
         return $this;
@@ -160,6 +159,9 @@ class Paysera_WalletApi_Entity_Money
             } else {
                 $centsPart = substr($parts[1] . '00', 0, 3);
                 $cents = intval(round(intval($centsPart, 10), -1) / 10);
+                if (substr($this->amount, 0, 1) === '-') {
+                    $cents *= -1;
+                }
                 return intval($parts[0]) * 100 + $cents;
             }
         }

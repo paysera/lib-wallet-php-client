@@ -88,6 +88,11 @@ class Paysera_WalletApi_Entity_Payment
     protected $cashback;
 
     /**
+     * @var Paysera_WalletApi_Entity_PaymentPassword
+     */
+    protected $paymentPassword;
+
+    /**
      * Creates object, used for fluent interface
      *
      * @return self
@@ -477,4 +482,24 @@ class Paysera_WalletApi_Entity_Payment
         return $this;
     }
 
+    /**
+     * Set paymentPassword
+     *
+     * @param \Paysera_WalletApi_Entity_PaymentPassword $paymentPassword
+     *
+     * @return self
+     */
+    public function setPaymentPassword($paymentPassword)
+    {
+        $this->paymentPassword = $paymentPassword;
+        return $this;
+    }
+
+    /**
+     * @return \Paysera_WalletApi_Entity_PaymentPassword
+     */
+    public function getPaymentPassword()
+    {
+        return $this->paymentPassword;
+    }
 }
