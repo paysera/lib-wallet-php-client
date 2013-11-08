@@ -15,6 +15,7 @@ class Paysera_WalletApi_Util_Router
     const WALLET_API_PATH = '/rest/v1/';
     const PUBLIC_KEY_PATH = '/publickey';
     const OAUTH_PATH = '/oauth';
+    const REMIND_PASSWORD_PATH = '/wallet/remind-password';
     const TRANSACTION_PATH = '/wallet/confirm';
 
     protected $apiEndpoint;
@@ -34,14 +35,27 @@ class Paysera_WalletApi_Util_Router
      *
      * @return string
      */
-    public function getTransactionConfirmationUri($transactionKey, $lang = 'en')
+    public function getTransactionConfirmationUri($transactionKey, $lang = null)
     {
-        return $this->authEndpoint . '/' . $lang . self::TRANSACTION_PATH . '/' . $transactionKey;
+        return $this->authEndpoint . $this->getLanguagePrefix($lang) . self::TRANSACTION_PATH . '/' . $transactionKey;
     }
 
-    public function getOAuthEndpoint()
+    public function getOAuthEndpoint($lang = null)
     {
-        return $this->authEndpoint . self::OAUTH_PATH;
+        return $this->authEndpoint . $this->getLanguagePrefix($lang) . self::OAUTH_PATH;
+    }
+
+    /**
+     * Gets URI to redirect to change users password
+     *
+     * @param int    $userId
+     * @param string $lang
+     *
+     * @return string
+     */
+    public function getRemindPasswordUri($userId, $lang = null)
+    {
+        return $this->authEndpoint . $this->getLanguagePrefix($lang) . self::REMIND_PASSWORD_PATH . '/' . $userId;
     }
 
     public function getApiEndpoint($path = null)
@@ -67,4 +81,19 @@ class Paysera_WalletApi_Util_Router
     {
         return $this->getApiEndpoint(self::PUBLIC_KEY_PATH);
     }
-} 
+
+    /**
+     * Gets language prefix for URI paths
+     *
+     * @param string $lang
+     *
+     * @return string
+     */
+    protected function getLanguagePrefix($lang = null)
+    {
+        if (!$lang) {
+            return;
+        }
+        return '/' . $lang;
+    }
+}

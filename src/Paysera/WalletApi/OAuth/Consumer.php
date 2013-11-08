@@ -37,9 +37,9 @@ class Paysera_WalletApi_OAuth_Consumer
     protected $statePersister;
 
     /**
-     * @var string
+     * @var Paysera_WalletApi_Util_Router
      */
-    protected $authPath;
+    protected $router;
 
     /**
      * @var string
@@ -60,21 +60,21 @@ class Paysera_WalletApi_OAuth_Consumer
      * Constructs object
      *
      * @param string                                          $clientId
-     * @param Paysera_WalletApi_Client_OAuthClient                  $oauthClient
-     * @param string                                          $authPath
+     * @param Paysera_WalletApi_Client_OAuthClient            $oauthClient
+     * @param Paysera_WalletApi_Util_Router                   $router
      * @param Paysera_WalletApi_State_StatePersisterInterface $statePersister
      * @param Paysera_WalletApi_Util_RequestInfo              $requestInfo
      */
     public function __construct(
         $clientId,
         Paysera_WalletApi_Client_OAuthClient $oauthClient,
-        $authPath,
+        Paysera_WalletApi_Util_Router $router,
         Paysera_WalletApi_State_StatePersisterInterface $statePersister,
         Paysera_WalletApi_Util_RequestInfo $requestInfo
     ) {
         $this->clientId = $clientId;
         $this->oauthClient = $oauthClient;
-        $this->authPath = $authPath;
+        $this->router = $router;
         $this->statePersister = $statePersister;
         $this->requestInfo = $requestInfo;
     }
@@ -102,11 +102,11 @@ class Paysera_WalletApi_OAuth_Consumer
         }
         if ($userInformation === null) {
             $query = http_build_query($this->getOAuthParameters($scopes, $redirectUri), null, '&');
-            return $this->authPath . '?' . $query;
+            return $this->router->getOAuthEndpoint() . '?' . $query;
         } else {
             $parameters = $this->getOAuthParameters($scopes, $redirectUri);
             $responseData = $this->oauthClient->createSession($parameters, $userInformation);
-            return $this->authPath . '/' . $responseData['key'];
+            return $this->router->getOAuthEndpoint() . '/' . $responseData['key'];
         }
     }
 
@@ -174,6 +174,28 @@ class Paysera_WalletApi_OAuth_Consumer
         } else {
             return null;
         }
+    }
+
+    /**
+     * Gets password change/reset URI for specific user
+     *
+     * @param int    $userId
+     * @param string $lang
+     * @param string $redirectUri
+     *
+     * @return string
+     */
+    public function getResetPasswordUri($userId, $lang = null, $redirectUri = null)
+    {
+        if ($redirectUri === null) {
+            $redirectUri = $this->getCurrentUri();
+        }
+        $parameters = array(
+            'client_id'    => $this->clientId,
+            'redirect_uri' => $redirectUri,
+        );
+        $query = http_build_query($parameters, null, '&');
+        return $this->router->getRemindPasswordUri($userId, $lang) . '?' . $query;
     }
 
     /**

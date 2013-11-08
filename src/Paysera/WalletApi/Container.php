@@ -151,18 +151,18 @@ class Paysera_WalletApi_Container
     /**
      * Creates OAuth consumer service
      *
-     * @param string                         $clientId
+     * @param string                               $clientId
      * @param Paysera_WalletApi_Client_OAuthClient $oauthClient
-     * @param string                         $authPath
+     * @param Paysera_WalletApi_Util_Router        $router
      *
      * @return Paysera_WalletApi_OAuth_Consumer
      */
-    public function createOAuthConsumer($clientId, Paysera_WalletApi_Client_OAuthClient $oauthClient, $authPath)
+    public function createOAuthConsumer($clientId, Paysera_WalletApi_Client_OAuthClient $oauthClient, Paysera_WalletApi_Util_Router $router)
     {
         return new Paysera_WalletApi_OAuth_Consumer(
             $clientId,
             $oauthClient,
-            $authPath,
+            $router,
             new Paysera_WalletApi_State_SessionStatePersister('Paysera_WalletApi_' . $clientId),
             new Paysera_WalletApi_Util_RequestInfo($_SERVER)
         );
