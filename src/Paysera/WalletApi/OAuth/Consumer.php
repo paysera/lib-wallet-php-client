@@ -20,6 +20,10 @@ class Paysera_WalletApi_OAuth_Consumer
     const SCOPE_FULL_NAME_OFFLINE = 'full_name_offline';
     const SCOPE_WALLET_LIST = 'wallet_list';
     const SCOPE_WALLET_LIST_OFFLINE = 'wallet_list_offline';
+    const SCOPE_DOB = 'dob';
+    const SCOPE_DOB_OFFLINE = 'dob_offline';
+    const SCOPE_GENDER = 'gender';
+    const SCOPE_GENDER_OFFLINE = 'gender_offline';
 
     /**
      * @var array all query parameters which can be used in OAuth authentication
