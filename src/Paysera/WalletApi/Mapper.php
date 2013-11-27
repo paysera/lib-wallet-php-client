@@ -77,6 +77,9 @@ class Paysera_WalletApi_Mapper
         if (($password = $payment->getPaymentPassword()) !== null) {
             $result['password'] = $this->encodePaymentPassword($password);
         }
+        if (($priceRules = $payment->getPriceRules()) !== null) {
+            $result['price_rules'] = $this->encodePriceRules($priceRules);
+        }
 
         if (!(isset($result['description']) && isset($result['price']) || isset($result['items']))) {
             throw new Paysera_WalletApi_Exception_LogicException('Description and price are required if items are not set');
@@ -193,6 +196,9 @@ class Paysera_WalletApi_Mapper
         }
         if (isset($data['password'])) {
             $payment->setPaymentPassword($this->decodePaymentPassword($data['password']));
+        }
+        if (isset($data['price_rules'])) {
+            $payment->setPriceRules($this->decodePriceRules($data['price_rules'], $data['currency']));
         }
 
         return $payment;
@@ -829,6 +835,75 @@ class Paysera_WalletApi_Mapper
         }
 
         return $paymentPassword;
+    }
+
+    /**
+     * Encodes priceRules object to array
+     *
+     * @param Paysera_WalletApi_Entity_PriceRules $priceRules
+     *
+     * @return array
+     *
+     * @throws Paysera_WalletApi_Exception_LogicException
+     */
+    public function encodePriceRules(Paysera_WalletApi_Entity_PriceRules $priceRules)
+    {
+        $result = array();
+
+        if ($priceRules->getMin() !== null) {
+            $result['min'] = $priceRules->getMin()->getAmountInCents();
+        }
+        if ($priceRules->getMax() !== null) {
+            $result['max'] = $priceRules->getMax()->getAmountInCents();
+        }
+        if ($priceRules->getChoices() !== null) {
+            $result['choices'] = array();
+            foreach ($priceRules->getChoices() as $choice) {
+                $result['choices'][] = $choice->getAmountInCents();
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Decodes priceRules object from array
+     *
+     * @param array  $data
+     * @param string $currency
+     *
+     * @return Paysera_WalletApi_Entity_PriceRules
+     */
+    public function decodePriceRules($data, $currency)
+    {
+        $priceRules = new Paysera_WalletApi_Entity_PriceRules();
+
+        if (isset($data['min'])) {
+            $priceRules->setMin(
+                Paysera_WalletApi_Entity_Money::create()
+                    ->setAmountInCents($data['min'])
+                    ->setCurrency($currency)
+            );
+        }
+        if (isset($data['max'])) {
+            $priceRules->setMax(
+                Paysera_WalletApi_Entity_Money::create()
+                    ->setAmountInCents($data['max'])
+                    ->setCurrency($currency)
+            );
+        }
+        if (isset($data['choices']) && is_array($data['choices'])) {
+            $choices = array();
+            foreach ($data['choices'] as $choice) {
+                $choices[] = Paysera_WalletApi_Entity_Money::create()
+                    ->setAmountInCents($choice)
+                    ->setCurrency($currency);
+            }
+
+            $priceRules->setChoices($choices);
+        }
+
+        return $priceRules;
     }
 
     /**

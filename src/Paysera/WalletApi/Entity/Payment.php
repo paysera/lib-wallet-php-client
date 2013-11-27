@@ -93,6 +93,11 @@ class Paysera_WalletApi_Entity_Payment
     protected $paymentPassword;
 
     /**
+     * @var Paysera_WalletApi_Entity_PriceRules
+     */
+    protected $priceRules;
+
+    /**
      * Creates object, used for fluent interface
      *
      * @return self
@@ -502,4 +507,29 @@ class Paysera_WalletApi_Entity_Payment
     {
         return $this->paymentPassword;
     }
+
+    /**
+     * Sets priceRules
+     *
+     * @param \Paysera_WalletApi_Entity_PriceRules $priceRules
+     *
+     * @return self
+     */
+    public function setPriceRules($priceRules)
+    {
+        $this->priceRules = $priceRules;
+        return $this;
+    }
+
+    /**
+     * Gets priceRules
+     *
+     * @return \Paysera_WalletApi_Entity_PriceRules
+     */
+    public function getPriceRules()
+    {
+        return $this->priceRules;
+    }
+
+
 }
