@@ -80,6 +80,9 @@ class Paysera_WalletApi_Mapper
         if (($priceRules = $payment->getPriceRules()) !== null) {
             $result['price_rules'] = $this->encodePriceRules($priceRules);
         }
+        if (($purpose = $payment->getPurpose()) !== null) {
+            $result['purpose'] = $purpose;
+        }
 
         if (!(isset($result['description']) && isset($result['price']) || isset($result['items']))) {
             throw new Paysera_WalletApi_Exception_LogicException('Description and price are required if items are not set');
@@ -199,6 +202,9 @@ class Paysera_WalletApi_Mapper
         }
         if (isset($data['price_rules'])) {
             $payment->setPriceRules($this->decodePriceRules($data['price_rules'], $data['currency']));
+        }
+        if (isset($data['purpose'])) {
+            $payment->setPurpose($data['purpose']);
         }
 
         return $payment;
@@ -856,7 +862,7 @@ class Paysera_WalletApi_Mapper
         if ($priceRules->getMax() !== null) {
             $result['max'] = $priceRules->getMax()->getAmountInCents();
         }
-        if ($priceRules->getChoices() !== null) {
+        if (count($priceRules->getChoices()) > 0) {
             $result['choices'] = array();
             foreach ($priceRules->getChoices() as $choice) {
                 $result['choices'][] = $choice->getAmountInCents();
@@ -892,15 +898,14 @@ class Paysera_WalletApi_Mapper
                     ->setCurrency($currency)
             );
         }
-        if (isset($data['choices']) && is_array($data['choices'])) {
-            $choices = array();
+        if (isset($data['choices'])) {
             foreach ($data['choices'] as $choice) {
-                $choices[] = Paysera_WalletApi_Entity_Money::create()
-                    ->setAmountInCents($choice)
-                    ->setCurrency($currency);
+                $priceRules->addChoice(
+                    Paysera_WalletApi_Entity_Money::create()
+                        ->setAmountInCents($choice)
+                        ->setCurrency($currency)
+                );
             }
-
-            $priceRules->setChoices($choices);
         }
 
         return $priceRules;

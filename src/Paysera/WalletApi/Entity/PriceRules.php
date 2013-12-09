@@ -18,7 +18,7 @@ class Paysera_WalletApi_Entity_PriceRules
     /**
      * @var Paysera_WalletApi_Entity_Money[]
      */
-    protected $choices;
+    protected $choices = array();
 
     /**
      * Creates object, used for fluent interface
@@ -66,6 +66,17 @@ class Paysera_WalletApi_Entity_PriceRules
     public function getMax()
     {
         return $this->max;
+    }
+
+    /**
+     * @param Paysera_WalletApi_Entity_Money $choice
+     *
+     * @return self
+     */
+    public function addChoice($choice)
+    {
+        $this->choices[] = $choice;
+        return $this;
     }
 
     /**

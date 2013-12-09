@@ -17,6 +17,9 @@ class Paysera_WalletApi_Entity_Payment
     const STATUS_DONE = 'done';
     const STATUS_CANCELED = 'canceled';
 
+    const PURPOSE_CASH = 'cash';
+    const PURPOSE_TIPS = 'tips';
+
     /**
      * @var integer    read-only
      */
@@ -91,6 +94,11 @@ class Paysera_WalletApi_Entity_Payment
      * @var Paysera_WalletApi_Entity_PaymentPassword
      */
     protected $paymentPassword;
+
+    /**
+     * @var string
+     */
+    protected $purpose;
 
     /**
      * @var Paysera_WalletApi_Entity_PriceRules
@@ -529,6 +537,30 @@ class Paysera_WalletApi_Entity_Payment
     public function getPriceRules()
     {
         return $this->priceRules;
+    }
+
+    /**
+     * Sets purpose
+     *
+     * @param string $purpose
+     *
+     * @return $this
+     */
+    public function setPurpose($purpose)
+    {
+        $this->purpose = $purpose;
+
+        return $this;
+    }
+
+    /**
+     * Gets purpose
+     *
+     * @return string
+     */
+    public function getPurpose()
+    {
+        return $this->purpose;
     }
 
 
