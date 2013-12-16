@@ -5,6 +5,9 @@
  */
 class Paysera_WalletApi_Entity_User
 {
+    const GENDER_MALE = 'male';
+    const GENDER_FEMALE = 'female';
+
     /**
      * @var int
      */
@@ -34,6 +37,16 @@ class Paysera_WalletApi_Entity_User
      * @var int[]
      */
     protected $wallets;
+
+    /**
+     * @var string
+     */
+    protected $gender;
+
+    /**
+     * @var string
+     */
+    protected $dob;
 
     /**
      * Creates object, used for fluent interface
@@ -163,5 +176,45 @@ class Paysera_WalletApi_Entity_User
         $this->phone = $phone;
 
         return $this;
+    }
+
+    /**
+     * Gets dob
+     *
+     * @return string
+     */
+    public function getDob()
+    {
+        return $this->dob;
+    }
+
+    /**
+     * Gets gender
+     *
+     * @return string
+     */
+    public function getGender()
+    {
+        return $this->gender;
+    }
+
+    /**
+     * Returns null if gender is unknown, true/false if gender is known
+     *
+     * @return bool|null
+     */
+    public function isGenderMale()
+    {
+        return $this->gender !== null ? $this->gender === self::GENDER_MALE : null;
+    }
+
+    /**
+     * Returns null if gender is unknown, true/false if gender is known
+     *
+     * @return bool|null
+     */
+    public function isGenderFemale()
+    {
+        return $this->gender !== null ? $this->gender === self::GENDER_FEMALE : null;
     }
 }

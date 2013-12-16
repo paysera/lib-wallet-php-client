@@ -1094,6 +1094,12 @@ class Paysera_WalletApi_Mapper
         if (isset($data['phone'])) {
             $this->setProperty($user, 'phone', $data['phone']);
         }
+        if (isset($data['dob'])) {
+            $this->setProperty($user, 'dob', $data['dob']);
+        }
+        if (isset($data['gender'])) {
+            $this->setProperty($user, 'gender', $data['gender']);
+        }
         if (isset($data['address'])) {
             $this->setProperty($user, 'address', $this->decodeAddress($data['address']));
         }
