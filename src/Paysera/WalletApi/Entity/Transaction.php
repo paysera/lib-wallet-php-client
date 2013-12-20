@@ -127,6 +127,11 @@ class Paysera_WalletApi_Entity_Transaction
     protected $autoConfirm;
 
     /**
+     * @var Paysera_WalletApi_Entity_Restrictions
+     */
+    protected $restrictions;
+
+    /**
      * Creates object, used for fluent interface
      *
      * @return self
@@ -784,5 +789,25 @@ class Paysera_WalletApi_Entity_Transaction
     public function isAutoConfirm()
     {
         return $this->autoConfirm;
+    }
+
+    /**
+     * @param \Paysera_WalletApi_Entity_Restrictions $restrictions
+     *
+     * @return $this
+     */
+    public function setRestrictions($restrictions)
+    {
+        $this->restrictions = $restrictions;
+
+        return $this;
+    }
+
+    /**
+     * @return \Paysera_WalletApi_Entity_Restrictions
+     */
+    public function getRestrictions()
+    {
+        return $this->restrictions;
     }
 }

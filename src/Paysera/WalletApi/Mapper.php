@@ -92,6 +92,30 @@ class Paysera_WalletApi_Mapper
     }
 
     /**
+     * Encodes transaction restriction object to array
+     *
+     * @param Paysera_WalletApi_Entity_Restrictions $restrictions
+     * @return array
+     */
+    public function encodeRestrictions(Paysera_WalletApi_Entity_Restrictions $restrictions)
+    {
+        $result = array();
+        if ($accountOwnerRestriction = $restrictions->getAccountOwnerRestriction()) {
+            $requirements = array();
+            if ($accountOwnerRestriction->isIdentityRequired()) {
+                $requirements[] = 'identity';
+            }
+
+            $result['account_owner'] = array(
+                'type' => $accountOwnerRestriction->getType(),
+                'requirements' => $requirements
+            );
+        }
+
+        return $result;
+    }
+
+    /**
      * Encodes project object to array
      *
      * @param Paysera_WalletApi_Entity_Project $project
@@ -387,6 +411,32 @@ class Paysera_WalletApi_Mapper
     }
 
     /**
+     * Decodes transaction restriction object from array
+     *
+     * @param $data
+     *
+     * @return Paysera_WalletApi_Entity_Restrictions|null
+     */
+    public function decodeRestrictions($data)
+    {
+        if (isset($data['account_owner'])) {
+            return
+                Paysera_WalletApi_Entity_Restrictions::create()
+                    ->setAccountOwnerRestriction(
+                        Paysera_WalletApi_Entity_Restriction_UserRestriction::create()
+                            ->setType(isset($data['account_owner']['type']) ? $data['account_owner']['type'] : null)
+                            ->setIdentityRequired(
+                                isset($data['account_owner']['requirements'])
+                                && in_array('identity', $data['account_owner']['requirements'])
+                            )
+                    )
+            ;
+        }
+
+        return null;
+    }
+
+    /**
      * Encodes transaction object to array. Used for creating transaction
      *
      * @param Paysera_WalletApi_Entity_Transaction $transaction
@@ -455,6 +505,9 @@ class Paysera_WalletApi_Mapper
         $result['use_allowance'] = $transaction->getUseAllowance();
         $result['suggest_allowance'] = $transaction->getSuggestAllowance();
 
+        if ($restrictions = $transaction->getRestrictions()) {
+            $result['restrictions'] = $this->encodeRestrictions($restrictions);
+        }
         if ($transaction->isAutoConfirm() !== null) {
             $result['auto_confirm'] = $transaction->isAutoConfirm();
         }
@@ -515,6 +568,10 @@ class Paysera_WalletApi_Mapper
             $allowance = $this->decodeAllowance($data['allowance']['data']);
             $this->setProperty($transaction, 'allowance', $allowance);
             $transaction->setAllowanceOptional($data['allowance']['optional']);
+        }
+        if (isset($data['restrictions'])) {
+            $restrictions = $this->decodeRestrictions($data['restrictions']);
+            $this->setProperty($transaction, 'restrictions', $restrictions);
         }
         if (isset($data['use_allowance'])) {
             $transaction->setUseAllowance($data['use_allowance']);
