@@ -8,12 +8,12 @@ class Paysera_WalletApi_Entity_Wallet_Balance
     /**
      * @var array
      */
-    protected $balanceAtDisposal;
+    protected $balanceAtDisposal = array();
 
     /**
      * @var array
      */
-    protected $reserved;
+    protected $reserved = array();
 
     /**
      * Creates object, used for fluent interface
