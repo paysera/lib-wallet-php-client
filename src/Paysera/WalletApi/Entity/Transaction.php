@@ -792,7 +792,7 @@ class Paysera_WalletApi_Entity_Transaction
     }
 
     /**
-     * @param \Paysera_WalletApi_Entity_Restrictions $restrictions
+     * @param Paysera_WalletApi_Entity_Restrictions $restrictions
      *
      * @return $this
      */
@@ -804,7 +804,7 @@ class Paysera_WalletApi_Entity_Transaction
     }
 
     /**
-     * @return \Paysera_WalletApi_Entity_Restrictions
+     * @return Paysera_WalletApi_Entity_Restrictions
      */
     public function getRestrictions()
     {

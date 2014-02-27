@@ -125,11 +125,11 @@ class Paysera_WalletApi_Entity_User
     /**
      * Setter of Address
      *
-     * @param \Paysera_WalletApi_Entity_User_Address $address
+     * @param Paysera_WalletApi_Entity_User_Address $address
      *
      * @return Paysera_WalletApi_Entity_User
      */
-    public function setAddress(\Paysera_WalletApi_Entity_User_Address $address)
+    public function setAddress(Paysera_WalletApi_Entity_User_Address $address)
     {
         $this->address = $address;
 
@@ -153,11 +153,11 @@ class Paysera_WalletApi_Entity_User
     /**
      * Setter of Identity
      *
-     * @param \Paysera_WalletApi_Entity_User_Identity $identity
+     * @param Paysera_WalletApi_Entity_User_Identity $identity
      *
      * @return Paysera_WalletApi_Entity_User
      */
-    public function setIdentity(\Paysera_WalletApi_Entity_User_Identity $identity)
+    public function setIdentity(Paysera_WalletApi_Entity_User_Identity $identity)
     {
         $this->identity = $identity;
 

@@ -31,7 +31,7 @@ class Paysera_WalletApi_Entity_Location_DayWorkingHours
     /**
      * Set closingTime
      *
-     * @param \Paysera_WalletApi_Entity_Time $closingTime
+     * @param Paysera_WalletApi_Entity_Time $closingTime
      *
      * @return Paysera_WalletApi_Entity_Location_DayWorkingHours
      */
@@ -45,7 +45,7 @@ class Paysera_WalletApi_Entity_Location_DayWorkingHours
     /**
      * Get closingTime
      *
-     * @return \Paysera_WalletApi_Entity_Time
+     * @return Paysera_WalletApi_Entity_Time
      */
     public function getClosingTime()
     {
@@ -55,7 +55,7 @@ class Paysera_WalletApi_Entity_Location_DayWorkingHours
     /**
      * Set openingTime
      *
-     * @param \Paysera_WalletApi_Entity_Time $openingTime
+     * @param Paysera_WalletApi_Entity_Time $openingTime
      *
      * @return Paysera_WalletApi_Entity_Location_DayWorkingHours
      */
@@ -69,7 +69,7 @@ class Paysera_WalletApi_Entity_Location_DayWorkingHours
     /**
      * Get openingTime
      *
-     * @return \Paysera_WalletApi_Entity_Time
+     * @return Paysera_WalletApi_Entity_Time
      */
     public function getOpeningTime()
     {
@@ -168,6 +168,19 @@ class Paysera_WalletApi_Entity_Location_DayWorkingHours
     public function markAsSunday()
     {
         return $this->setDay(self::DAY_SUNDAY);
+    }
+
+    /**
+     * @return string
+     */
+    public function getFormatted()
+    {
+        return
+            $this->getOpeningTime()->getFormatted() . ' - '
+            . ($this->getClosingTime()->getHours() === 0 && $this->getClosingTime()->getMinutes() === 0
+                    ? '24:00'
+                    : $this->getClosingTime()->getFormatted()
+            );
     }
 
     /**

@@ -458,7 +458,7 @@ class Paysera_WalletApi_Client_WalletClient extends Paysera_WalletApi_Client_Bas
      * @param integer                                   $walletId
      * @param Paysera_WalletApi_Entity_Statement_SearchFilter $filter
      *
-     * @return Paysera_WalletApi_Entity_Statement_SearchResult|Paysera_WalletApi_Entity_Statement[]
+     * @return Paysera_WalletApi_Entity_Search_Result|Paysera_WalletApi_Entity_Statement[]
      *
      * @throws Paysera_WalletApi_Exception_ApiException
      */
@@ -717,6 +717,39 @@ class Paysera_WalletApi_Client_WalletClient extends Paysera_WalletApi_Client_Bas
         }
 
         return $locations;
+    }
+
+    /**
+     * Get all locations
+     *
+     * @param Paysera_WalletApi_Entity_Location_SearchFilter $filter
+     * @return Paysera_WalletApi_Entity_Search_Result|Paysera_WalletApi_Entity_Location[]
+     */
+    public function getLocations(Paysera_WalletApi_Entity_Location_SearchFilter $filter = null)
+    {
+        if ($filter !== null) {
+            $query = '?' . http_build_query($this->mapper->encodeLocationFilter($filter), null, '&');
+        } else {
+            $query = '';
+        }
+        return $this->mapper->decodeLocationSearchResult(
+            $this->get('locations' . $query)
+        );
+    }
+
+    /**
+     * Get Location pay categories
+     *
+     * @param $locale
+     * @return Paysera_WalletApi_Entity_PayCategory[]
+     */
+    public function getLocationPayCategories($locale)
+    {
+        $query = '?' . http_build_query(array('locale' => $locale), null, '&');
+
+        return $this->mapper->decodeLocationPayCategories(
+            $this->get('locations/pay-categories' . $query)
+        );
     }
 
     /**

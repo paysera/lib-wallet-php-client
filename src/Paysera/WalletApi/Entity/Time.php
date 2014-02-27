@@ -50,7 +50,7 @@ class Paysera_WalletApi_Entity_Time
     /**
      * @return string
      */
-    public function __toString()
+    public function getFormatted()
     {
         return str_pad($this->hours, 2, '0', STR_PAD_LEFT) . ':' . str_pad($this->minutes, 2, '0', STR_PAD_LEFT);
     }
@@ -65,13 +65,13 @@ class Paysera_WalletApi_Entity_Time
         if (is_numeric($this->hours)) {
             $this->hours = (int) $this->hours;
         } else {
-            throw new \InvalidArgumentException('Hours must be an integer');
+            throw new InvalidArgumentException('Hours must be an integer');
         }
 
         if (is_numeric($this->minutes)) {
             $this->minutes = (int) $this->minutes;
         } else {
-            throw new \InvalidArgumentException('Minutes must be an integer');
+            throw new InvalidArgumentException('Minutes must be an integer');
         }
 
         if ($this->hours < 0 || $this->hours > 23) {

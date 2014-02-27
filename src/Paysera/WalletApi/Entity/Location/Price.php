@@ -28,7 +28,7 @@ class Paysera_WalletApi_Entity_Location_Price
     /**
      * Set price
      *
-     * @param \Paysera_WalletApi_Entity_Money $price
+     * @param Paysera_WalletApi_Entity_Money $price
      *
      * @return Paysera_WalletApi_Entity_Location_Price
      */
@@ -42,7 +42,7 @@ class Paysera_WalletApi_Entity_Location_Price
     /**
      * Get price
      *
-     * @return \Paysera_WalletApi_Entity_Money
+     * @return Paysera_WalletApi_Entity_Money
      */
     public function getPrice()
     {

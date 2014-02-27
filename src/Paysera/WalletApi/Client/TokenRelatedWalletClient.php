@@ -49,7 +49,7 @@ class Paysera_WalletApi_Client_TokenRelatedWalletClient extends Paysera_WalletAp
      *
      * @param Paysera_WalletApi_Entity_Statement_SearchFilter $filter
      *
-     * @return Paysera_WalletApi_Entity_Statement_SearchResult|Paysera_WalletApi_Entity_Statement[]
+     * @return Paysera_WalletApi_Entity_Search_Result|Paysera_WalletApi_Entity_Statement[]
      */
     public function getCurrentWalletStatements(Paysera_WalletApi_Entity_Statement_SearchFilter $filter = null)
     {

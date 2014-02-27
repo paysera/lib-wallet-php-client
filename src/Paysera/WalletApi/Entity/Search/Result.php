@@ -4,7 +4,7 @@
 /**
  * Base search result
  */
-abstract class Paysera_WalletApi_Entity_Search_Result implements IteratorAggregate
+class Paysera_WalletApi_Entity_Search_Result implements IteratorAggregate
 {
     /**
      * @var integer
@@ -20,6 +20,16 @@ abstract class Paysera_WalletApi_Entity_Search_Result implements IteratorAggrega
      * @var integer
      */
     protected $limit;
+
+    /**
+     * @var array
+     */
+    protected $resultList;
+
+    public function __construct(array $resultList)
+    {
+        $this->resultList = $resultList;
+    }
 
     /**
      * Gets limit
@@ -64,5 +74,8 @@ abstract class Paysera_WalletApi_Entity_Search_Result implements IteratorAggrega
     /**
      * @return array
      */
-    abstract public function getResultList();
+    public function getResultList()
+    {
+        return $this->resultList;
+    }
 }

@@ -5,6 +5,21 @@
  */
 class Paysera_WalletApi_Entity_Location
 {
+    const STATUS_ACTIVE = 'active';
+    const STATUS_INACTIVE = 'inactive';
+
+    const SERVICE_TYPE_CASH_IN = 'cash_in';
+    const SERVICE_TYPE_CASH_OUT = 'cash_out';
+    const SERVICE_TYPE_IDENTIFICATION = 'identification';
+    const SERVICE_TYPE_PAY = 'pay';
+
+    protected static $serviceTypes = array(
+        self::SERVICE_TYPE_CASH_IN,
+        self::SERVICE_TYPE_CASH_OUT,
+        self::SERVICE_TYPE_IDENTIFICATION,
+        self::SERVICE_TYPE_PAY,
+    );
+
     /**
      * @var
      * @readonly
@@ -55,6 +70,26 @@ class Paysera_WalletApi_Entity_Location
      * @var Paysera_WalletApi_Entity_Location_DayWorkingHours[]
      */
     protected $workingHours = array();
+
+    /**
+     * @var string
+     */
+    protected $imagePinOpen;
+
+    /**
+     * @var string
+     */
+    protected $imagePinClosed;
+
+    /**
+     * @var array
+     */
+    protected $services;
+
+    /**
+     * @var array
+     */
+    protected $payCategories;
 
     /**
      * Set id
@@ -323,6 +358,86 @@ class Paysera_WalletApi_Entity_Location
     }
 
     /**
+     * @param string $imagePinClosed
+     *
+     * @return $this
+     */
+    public function setImagePinClosed($imagePinClosed)
+    {
+        $this->imagePinClosed = $imagePinClosed;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getImagePinClosed()
+    {
+        return $this->imagePinClosed;
+    }
+
+    /**
+     * @param string $imagePinOpen
+     *
+     * @return $this
+     */
+    public function setImagePinOpen($imagePinOpen)
+    {
+        $this->imagePinOpen = $imagePinOpen;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getImagePinOpen()
+    {
+        return $this->imagePinOpen;
+    }
+
+    /**
+     * @param array $payCategories
+     *
+     * @return $this
+     */
+    public function setPayCategories($payCategories)
+    {
+        $this->payCategories = $payCategories;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPayCategories()
+    {
+        return $this->payCategories;
+    }
+
+    /**
+     * @param array $services
+     *
+     * @return $this
+     */
+    public function setServices($services)
+    {
+        $this->services = $services;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getServices()
+    {
+        return $this->services;
+    }
+
+    /**
      * Creates object, used for fluent interface
      *
      * @return self
@@ -330,5 +445,15 @@ class Paysera_WalletApi_Entity_Location
     public static function create()
     {
         return new static();
+    }
+
+    /**
+     * Available location service types
+     *
+     * @return array
+     */
+    public static function getServiceTypes()
+    {
+        return self::$serviceTypes;
     }
 }

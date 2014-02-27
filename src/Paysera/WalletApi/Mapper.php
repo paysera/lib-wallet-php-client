@@ -1080,17 +1080,16 @@ class Paysera_WalletApi_Mapper
      *
      * @param $data
      *
-     * @return Paysera_WalletApi_Entity_Statement_SearchResult
+     * @return Paysera_WalletApi_Entity_Search_Result|Paysera_WalletApi_Entity_Statement[]
      */
     public function decodeStatementSearchResult($data)
     {
-        $result = new Paysera_WalletApi_Entity_Statement_SearchResult();
         $statements = array();
         foreach ($data['statements'] as $statementData) {
             $statements[] = $this->decodeStatement($statementData);
         }
+        $result = new Paysera_WalletApi_Entity_Search_Result($statements);
         $metadata = $data['_metadata'];
-        $this->setProperty($result, 'statements', $statements);
         $this->setProperty($result, 'total', $metadata['total']);
         $this->setProperty($result, 'offset', $metadata['offset']);
         $this->setProperty($result, 'limit', $metadata['limit']);
@@ -1318,9 +1317,113 @@ class Paysera_WalletApi_Mapper
             }
         }
 
+        if (!empty($data['images']['pin_open'])) {
+            $location->setImagePinOpen($data['images']['pin_open']);
+        }
+        if (!empty($data['images']['pin_closed'])) {
+            $location->setImagePinClosed($data['images']['pin_closed']);
+        }
+
+        if (!empty($data['services'])) {
+            $services = array();
+            foreach ($data['services'] as $key => $val) {
+                if (!empty($val['available']) && $val['available'] === true) {
+                    $services[] = $key;
+                }
+            }
+            $location->setServices($services);
+        }
+
+        if (!empty($data['services']['pay']['categories'])) {
+            $location->setPayCategories($data['services']['pay']['categories']);
+        }
 
         return $location;
     }
+
+    /**
+     * @param Paysera_WalletApi_Entity_Location_SearchFilter $filter
+     * @return array
+     */
+    public function encodeLocationFilter(Paysera_WalletApi_Entity_Location_SearchFilter $filter)
+    {
+        $data = array();
+        if ($filter->getLimit() !== null) {
+            $data['limit'] = $filter->getLimit();
+        }
+        if ($filter->getOffset() !== null) {
+            $data['offset'] = $filter->getOffset();
+        }
+
+        if ($filter->getLat() !== null && $filter->getLng() !== null) {
+            $data['lat'] = $filter->getLat();
+            $data['lng'] = $filter->getLng();
+
+            if ($filter->getDistance() !== null) {
+                $data['distance'] = $filter->getDistance();
+            }
+        }
+        if ($filter->getStatus() !== null) {
+            $data['status'] = $filter->getStatus();
+        }
+        if ($filter->getUpdatedAfter() !== null) {
+            $data['updated_after'] = $filter->getUpdatedAfter();
+        }
+        if ($filter->getPayCategory() !== null) {
+            $data['pay_category'] = $filter->getPayCategory();
+        }
+        if ($filter->getLocationServices() !== null) {
+            $data['service'] = implode(',', $filter->getLocationServices());
+        }
+
+        return $data;
+    }
+
+    /**
+     * @param array $data
+     * @return Paysera_WalletApi_Entity_Search_Result|Paysera_WalletApi_Entity_Location[]
+     */
+    public function decodeLocationSearchResult($data)
+    {
+        $locations = array();
+        foreach ($data['locations'] as $locationData) {
+            $locations[] = $this->decodeLocation($locationData);
+        }
+
+        $result = new Paysera_WalletApi_Entity_Search_Result($locations);
+        $metadata = $data['_metadata'];
+        $this->setProperty($result, 'total', $metadata['total']);
+        $this->setProperty($result, 'offset', $metadata['offset']);
+        $this->setProperty($result, 'limit', $metadata['limit']);
+        return $result;
+    }
+
+    /**
+     * @param array $data
+     * @return Paysera_WalletApi_Entity_PayCategory[]
+     */
+    public function decodeLocationPayCategories($data)
+    {
+        $result = array();
+
+        foreach ($data as $payCategoryData) {
+            $payCategory = new Paysera_WalletApi_Entity_PayCategory();
+            $payCategory->setId($payCategoryData['id']);
+            $payCategory->setTitle($payCategoryData['title']);
+            if (!empty($payCategoryData['parent_id'])) {
+                $payCategory->setParentId($payCategoryData['parent_id']);
+            }
+            $result[$payCategory->getId()] = $payCategory;
+        }
+
+        /** @var $item Paysera_WalletApi_Entity_PayCategory*/
+        foreach ($result as $cat) {
+            $cat->setParent($result[$cat->getParentId()]);
+        }
+
+        return $result;
+    }
+
 
     /**
      * Encodes time
@@ -1345,7 +1448,10 @@ class Paysera_WalletApi_Mapper
     {
         $time = explode(':', $input);
 
-        return new Paysera_WalletApi_Entity_Time($time[0], $time[1]);
+        return new Paysera_WalletApi_Entity_Time(
+            (int) $time[0] !== 24 ? $time[0] : 0,
+            $time[1]
+        );
     }
 
     /**
