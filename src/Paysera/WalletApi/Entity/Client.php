@@ -23,7 +23,7 @@ class Paysera_WalletApi_Entity_Client
     /**
      * @var Paysera_WalletApi_Entity_ClientPermissions
      */
-    protected $permissions = array();
+    protected $permissions;
 
     /**
      * @var Paysera_WalletApi_Entity_Client_Host[]
@@ -49,6 +49,11 @@ class Paysera_WalletApi_Entity_Client
      * @var Paysera_WalletApi_Entity_MacCredentials
      */
     protected $credentials;
+
+    public function __construct()
+    {
+        $this->permissions = new Paysera_WalletApi_Entity_ClientPermissions();
+    }
 
     /**
      * @return self
