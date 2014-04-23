@@ -26,9 +26,14 @@ class Paysera_WalletApi_Entity_Item
     protected $price;
 
     /**
-     * @var integer
+     * @var float
      */
     protected $quantity = 1;
+
+    /**
+     * @var Paysera_WalletApi_Entity_Money
+     */
+    protected $totalPrice;
 
     /**
      * @var mixed
@@ -140,7 +145,7 @@ class Paysera_WalletApi_Entity_Item
     /**
      * Sets quantity
      *
-     * @param integer $quantity
+     * @param float $quantity
 
      * @return self
      */
@@ -153,11 +158,34 @@ class Paysera_WalletApi_Entity_Item
     /**
      * Gets quantity
      *
-     * @return integer
+     * @return float
      */
     public function getQuantity()
     {
         return $this->quantity;
+    }
+
+    /**
+     * Sets totalPrice
+     *
+     * @param \Paysera_WalletApi_Entity_Money $totalPrice
+     *
+     * @return self
+     */
+    public function setTotalPrice($totalPrice)
+    {
+        $this->totalPrice = $totalPrice;
+        return $this;
+    }
+
+    /**
+     * Gets totalPrice
+     *
+     * @return \Paysera_WalletApi_Entity_Money
+     */
+    public function getTotalPrice()
+    {
+        return $this->totalPrice;
     }
 
     /**
@@ -181,14 +209,5 @@ class Paysera_WalletApi_Entity_Item
     public function getParameters()
     {
         return $this->parameters;
-    }
-
-    public function getTotalPrice()
-    {
-        return $this->price === null || $this->quantity === null
-            ? null
-            : Paysera_WalletApi_Entity_Money::create()->setAmountInCents(
-                $this->price->getAmountInCents() * $this->quantity
-            )->setCurrency($this->price->getCurrency());
     }
 }

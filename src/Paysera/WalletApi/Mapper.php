@@ -262,6 +262,9 @@ class Paysera_WalletApi_Mapper
         if (($parameters = $item->getParameters()) !== null) {
             $result['parameters'] = $parameters;
         }
+        if ($item->getTotalPrice() !== null) {
+            $result['total_price'] = $item->getTotalPrice()->getAmountInCents();
+        }
         return $result;
     }
 
@@ -289,6 +292,13 @@ class Paysera_WalletApi_Mapper
         }
         if (isset($data['parameters'])) {
             $item->setParameters($data['parameters']);
+        }
+        if (isset($data['total_price'])) {
+            $item->setTotalPrice(
+                Paysera_WalletApi_Entity_Money::create()
+                    ->setAmountInCents($data['total_price'])
+                    ->setCurrency($data['currency'])
+            );
         }
         return $item;
     }
