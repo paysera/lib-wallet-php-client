@@ -32,7 +32,7 @@ try {
         $token = $oauth->getOAuthAccessToken(); // this gets code query parameter if available and exchanges for token
         if ($token === null) {                  // no code parameter - redirect user to authentication endpoint
             $redirectUri = null;                // URL of this file; it's optional parameter
-            header('Location: ' . $token->getAuthorizationUri(array(            // scopes are optional, no scope allows to get user ID/wallet ID
+            header('Location: ' . $oauth->getAuthorizationUri(array(            // scopes are optional, no scope allows to get user ID/wallet ID
                 Paysera_WalletApi_OAuth_Consumer::SCOPE_EMAIL,                  // to get user's main email address
                 // Paysera_WalletApi_OAuth_Consumer::SCOPE_IDENTITY,            // this scope allows to get personal code, name and surname
                 // Paysera_WalletApi_OAuth_Consumer::SCOPE_FULL_NAME,           // use this scope if only name and surname is needed

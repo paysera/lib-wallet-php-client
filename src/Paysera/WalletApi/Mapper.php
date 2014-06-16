@@ -262,6 +262,9 @@ class Paysera_WalletApi_Mapper
         if (($parameters = $item->getParameters()) !== null) {
             $result['parameters'] = $parameters;
         }
+        if ($item->getTotalPrice() !== null) {
+            $result['total_price'] = $item->getTotalPrice()->getAmountInCents();
+        }
         return $result;
     }
 
@@ -289,6 +292,13 @@ class Paysera_WalletApi_Mapper
         }
         if (isset($data['parameters'])) {
             $item->setParameters($data['parameters']);
+        }
+        if (isset($data['total_price'])) {
+            $item->setTotalPrice(
+                Paysera_WalletApi_Entity_Money::create()
+                    ->setAmountInCents($data['total_price'])
+                    ->setCurrency($data['currency'])
+            );
         }
         return $item;
     }
@@ -1261,6 +1271,10 @@ class Paysera_WalletApi_Mapper
             $prices[] = $this->encodeLocationPrice($price);
         }
 
+        $services = $this->encodeLocationServices(
+            $object->getServices(),
+            $object->getPayCategories()
+        );
         return array(
             'id'            => $object->getId(),
             'title'         => $object->getTitle(),
@@ -1271,6 +1285,7 @@ class Paysera_WalletApi_Mapper
             'radius'        => $object->getRadius(),
             'working_hours' => $workingHours,
             'prices'        => $prices,
+            'services'      => $services,
         );
     }
 
@@ -1332,10 +1347,9 @@ class Paysera_WalletApi_Mapper
                 }
             }
             $location->setServices($services);
-        }
-
-        if (!empty($data['services']['pay']['categories'])) {
-            $location->setPayCategories($data['services']['pay']['categories']);
+            if (!empty($data['services']['pay']['categories'])) {
+                $location->setPayCategories($data['services']['pay']['categories']);
+            }
         }
 
         return $location;
@@ -1501,6 +1515,27 @@ class Paysera_WalletApi_Mapper
         }
 
         return $locationPrice;
+    }
+
+    /**
+     * Convert service list to associative array
+     *
+     * @param array $services
+     * @param array $categories
+     *
+     * @return array
+     */
+    public function encodeLocationServices(array $services, array $categories)
+    {
+        $data = array();
+        foreach ($services as $serviceName) {
+            $data[$serviceName] = array('available' => true);
+        }
+
+        if (isset($data['pay']) && sizeof($categories) > 0) {
+            $data['pay']['categories'] = $categories;
+        }
+        return $data;
     }
 
     /**
