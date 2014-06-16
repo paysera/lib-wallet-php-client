@@ -208,4 +208,9 @@ class Paysera_WalletApi_Http_Response
     {
         return $this->request;
     }
+
+    public function isSuccessful()
+    {
+        return $this->getStatusCode() >= 200 && $this->getStatusCode() <= 299;
+    }
 }

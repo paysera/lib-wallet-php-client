@@ -66,29 +66,23 @@ class Paysera_WalletApi_Client_BasicClient implements Paysera_WalletApi_Client_B
 
         try {
             $responseContent = $response->getContent();
-            if ($responseContent === '') {
+
+            $result = $responseContent !== '' ? json_decode($responseContent, true) : null;
+            if (
+                   ($response->getStatusCode() === 200 && $responseContent === '')
+                || ($result === null && $responseContent !== '' && $responseContent !== 'null')
+            ) {
                 throw new Paysera_WalletApi_Exception_ResponseException(
                     array(
                         'error' => 'internal_server_error',
-                        'error_description' => 'Empty response from server',
+                        'error_description' => sprintf('Bad response from server! Response: %s', $responseContent),
                     ),
                     $response->getStatusCode(),
                     $response->getStatusCodeMessage()
                 );
             }
 
-            $result = json_decode($responseContent, true);
-
-            if ($result === null && $response->getContent() !== 'null') {
-                throw new Paysera_WalletApi_Exception_ResponseException(
-                    array(
-                        'error' => 'internal_server_error',
-                        'error_description' => 'Invalid response from server: "' . $response->getContent() . '"',
-                    ),
-                    $response->getStatusCode(),
-                    $response->getStatusCodeMessage()
-                );
-            } elseif ($response->getStatusCode() === 200) {
+            if ($response->isSuccessful()) {
                 return $result;
             } else {
                 throw new Paysera_WalletApi_Exception_ResponseException(
