@@ -84,12 +84,12 @@ class Paysera_WalletApi_Entity_Location
     /**
      * @var array
      */
-    protected $services;
+    protected $services = array();
 
     /**
      * @var array
      */
-    protected $payCategories;
+    protected $payCategories = array();
 
     /**
      * Set id
