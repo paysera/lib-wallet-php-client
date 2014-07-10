@@ -1160,6 +1160,9 @@ class Paysera_WalletApi_Mapper
         if (isset($data['phone'])) {
             $this->setProperty($user, 'phone', $data['phone']);
         }
+        if (isset($data['display_name'])) {
+            $this->setProperty($user, 'displayName', $data['display_name']);
+        }
         if (isset($data['dob'])) {
             $this->setProperty($user, 'dob', $data['dob']);
         }
@@ -1174,6 +1177,9 @@ class Paysera_WalletApi_Mapper
         }
         if (isset($data['wallets'])) {
             $this->setProperty($user, 'wallets', $data['wallets']);
+        }
+        if (isset($data['type'])) {
+            $this->setProperty($user, 'type', $data['type']);
         }
 
         return $user;

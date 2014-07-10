@@ -7,6 +7,8 @@ class Paysera_WalletApi_Entity_User
 {
     const GENDER_MALE = 'male';
     const GENDER_FEMALE = 'female';
+    const TYPE_NATURAL = 'natural';
+    const TYPE_LEGAL = 'legal';
 
     /**
      * @var int
@@ -22,6 +24,11 @@ class Paysera_WalletApi_Entity_User
      * @var string
      */
     protected $phone;
+
+    /**
+     * @var string
+     */
+    protected $displayName;
 
     /**
      * @var Paysera_WalletApi_Entity_User_Address
@@ -47,6 +54,11 @@ class Paysera_WalletApi_Entity_User
      * @var string
      */
     protected $dob;
+
+    /**
+     * @var string
+     */
+    protected $type;
 
     /**
      * Creates object, used for fluent interface
@@ -98,6 +110,14 @@ class Paysera_WalletApi_Entity_User
     public function getPhone()
     {
         return $this->phone;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDisplayName()
+    {
+        return $this->displayName;
     }
 
     /**
@@ -196,6 +216,16 @@ class Paysera_WalletApi_Entity_User
     public function getGender()
     {
         return $this->gender;
+    }
+
+    /**
+     * Returns whether the user is a natural or a legal entity.
+     *
+     * @return string natural|legal
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 
     /**
