@@ -92,6 +92,11 @@ class Paysera_WalletApi_Entity_Location
     protected $payCategories = array();
 
     /**
+     * @var string
+     */
+    protected $status;
+
+    /**
      * Set id
      *
      * @param mixed $id
@@ -435,6 +440,26 @@ class Paysera_WalletApi_Entity_Location
     public function getServices()
     {
         return $this->services;
+    }
+
+    /**
+     * @param string $status
+     *
+     * @return $this
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 
     /**

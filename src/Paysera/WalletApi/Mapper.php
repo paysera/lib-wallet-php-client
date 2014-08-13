@@ -1291,6 +1291,7 @@ class Paysera_WalletApi_Mapper
             'radius'        => $object->getRadius(),
             'working_hours' => $workingHours,
             'prices'        => $prices,
+            'status'        => $object->getStatus(),
             'services'      => $services,
         );
     }
@@ -1356,6 +1357,10 @@ class Paysera_WalletApi_Mapper
             if (!empty($data['services']['pay']['categories'])) {
                 $location->setPayCategories($data['services']['pay']['categories']);
             }
+        }
+
+        if (!empty($data['status'])) {
+            $location->setStatus($data['status']);
         }
 
         return $location;
