@@ -83,12 +83,66 @@ class Paysera_WalletApi_Mapper
         if (($purpose = $payment->getPurpose()) !== null) {
             $result['purpose'] = $purpose;
         }
+        if (($fundsSource = $payment->getFundsSource()) !== null) {
+            $result['funds_source'] = $this->encodeFundsSource($fundsSource);
+        }
 
         if (!(isset($result['description']) && isset($result['price']) || isset($result['items']))) {
-            throw new Paysera_WalletApi_Exception_LogicException('Description and price are required if items are not set');
+            throw new Paysera_WalletApi_Exception_LogicException(
+                'Description and price are required if items are not set'
+            );
         }
 
         return $result;
+    }
+
+    /**
+     * Encodes payment funds source to array
+     *
+     * @param Paysera_WalletApi_Entity_FundsSource $fundsSource
+     *
+     * @throws Paysera_WalletApi_Exception_LogicException
+     *
+     * @return array
+     */
+    public function encodeFundsSource(Paysera_WalletApi_Entity_FundsSource $fundsSource)
+    {
+        if (0 === strlen($fundsSource->getType()) && 0 === strlen($fundsSource->getDetails())) {
+            throw new Paysera_WalletApi_Exception_LogicException("Funds source type or details required");
+        }
+
+        $result = array();
+
+        if ($fundsSource->getType() !== null) {
+            $result['type'] = $fundsSource->getType();
+        }
+
+        if (strlen($fundsSource->getDetails()) > 0) {
+            $result['details'] = $fundsSource->getDetails();
+        }
+
+        return $result;
+    }
+
+    /**
+     * Decodes funds source object from array
+     *
+     * @param array $data
+     *
+     * @return Paysera_WalletApi_Entity_FundsSource
+     */
+    public function decodeFundsSource($data)
+    {
+        $fundsSource = new Paysera_WalletApi_Entity_FundsSource();
+
+        if (!empty($data['type'])) {
+            $fundsSource->setType($data['type']);
+        }
+        if (!empty($data['details'])) {
+            $fundsSource->setDetails($data['details']);
+        }
+
+        return $fundsSource;
     }
 
     /**
@@ -229,6 +283,9 @@ class Paysera_WalletApi_Mapper
         }
         if (isset($data['purpose'])) {
             $payment->setPurpose($data['purpose']);
+        }
+        if (isset($data['funds_source'])) {
+            $payment->setFundsSource($this->decodeFundsSource($data['funds_source']));
         }
 
         return $payment;

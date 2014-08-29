@@ -106,6 +106,11 @@ class Paysera_WalletApi_Entity_Payment
     protected $priceRules;
 
     /**
+     * @var Paysera_WalletApi_Entity_FundsSource
+     */
+    protected $fundsSource;
+
+    /**
      * Creates object, used for fluent interface
      *
      * @return self
@@ -563,5 +568,27 @@ class Paysera_WalletApi_Entity_Payment
         return $this->purpose;
     }
 
+    /**
+     * Set funds source
+     *
+     * @param \Paysera_WalletApi_Entity_FundsSource $fundsSource
+     *
+     * @return $this
+     */
+    public function setFundsSource($fundsSource)
+    {
+        $this->fundsSource = $fundsSource;
 
+        return $this;
+    }
+
+    /**
+     * Get funds source
+     *
+     * @return \Paysera_WalletApi_Entity_FundsSource
+     */
+    public function getFundsSource()
+    {
+        return $this->fundsSource;
+    }
 }
