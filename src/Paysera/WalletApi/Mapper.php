@@ -50,6 +50,10 @@ class Paysera_WalletApi_Mapper
             $result['price'] = $price->getAmountInCents();
             $result['currency'] = $price->getCurrency();
         }
+        $commission = $payment->getCommission();
+        if ($commission !== null) {
+            $result['commission'] = $this->encodeCommission($commission);
+        }
         $cashback = $payment->getCashback();
         if ($cashback !== null) {
             if ($price !== null && $price->getCurrency() !== $cashback->getCurrency()) {
@@ -242,6 +246,9 @@ class Paysera_WalletApi_Mapper
         $payment->setPrice(
             Paysera_WalletApi_Entity_Money::create()->setAmountInCents($data['price'])->setCurrency($data['currency'])
         );
+        if (isset($data['commission'])) {
+            $payment->setCommission($this->decodeCommission($data['commission'], $data['currency']));
+        }
         if (isset($data['cashback'])) {
             $payment->setCashback(
                 Paysera_WalletApi_Entity_Money::create()->setAmountInCents($data['cashback'])->setCurrency($data['currency'])
@@ -289,6 +296,61 @@ class Paysera_WalletApi_Mapper
         }
 
         return $payment;
+    }
+
+    /**
+     * Encodes payment commission to array
+     *
+     * @param Paysera_WalletApi_Entity_Commission $commission
+     *
+     * @throws Paysera_WalletApi_Exception_LogicException
+     *
+     * @return array
+     */
+    protected function encodeCommission(Paysera_WalletApi_Entity_Commission $commission)
+    {
+        if (null === $commission->getOutCommission() && null === $commission->getInCommission()) {
+            throw new Paysera_WalletApi_Exception_LogicException("In our Out commission required");
+        }
+
+        $result = array();
+
+        if ($commission->getOutCommission() !== null) {
+            $result['out_commission'] = $commission->getOutCommission()->getAmountInCents();
+        }
+
+        if ($commission->getInCommission() !== null) {
+            $result['in_commission'] = $commission->getInCommission()->getAmountInCents();
+        }
+
+        return $result;
+    }
+
+    /**
+     * Decodes payment commssion object from array
+     *
+     * @param $data
+     * @param $currency
+     *
+     * @return Paysera_WalletApi_Entity_Commission
+     */
+    protected function decodeCommission($data, $currency)
+    {
+        $commission = new Paysera_WalletApi_Entity_Commission();
+
+        if (isset($data['in_commission'])) {
+            $commission->setInCommission(
+                Paysera_WalletApi_Entity_Money::create()->setAmountInCents($data['in_commission'])->setCurrency($currency)
+            );
+        }
+
+        if (isset($data['out_commission'])) {
+            $commission->setOutCommission(
+                Paysera_WalletApi_Entity_Money::create()->setAmountInCents($data['out_commission'])->setCurrency($currency)
+            );
+        }
+
+        return $commission;
     }
 
     /**

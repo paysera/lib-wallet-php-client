@@ -12,6 +12,15 @@ class Paysera_WalletApi_Entity_FundsSource
     const TYPE_INHERITANCE  = 'inheritance';
     const TYPE_DIVIDENDS  = 'dividends';
 
+    protected static $types = array(
+        self::TYPE_BUY => self::TYPE_BUY,
+        self::TYPE_SELL => self::TYPE_SELL,
+        self::TYPE_LOAN => self::TYPE_LOAN,
+        self::TYPE_GIFT => self::TYPE_GIFT,
+        self::TYPE_INHERITANCE => self::TYPE_INHERITANCE,
+        self::TYPE_DIVIDENDS => self::TYPE_DIVIDENDS,
+    );
+
     /**
      * @var string $type
      */
@@ -23,11 +32,21 @@ class Paysera_WalletApi_Entity_FundsSource
     protected $details;
 
     /**
+     * Creates object, used for fluent interface
+     *
+     * @return self
+     */
+    static public function create()
+    {
+        return new static();
+    }
+
+    /**
      * Set type
      *
      * @param string $type
      *
-     * @return $this
+     * @return self
      */
     public function setType($type)
     {
@@ -51,7 +70,7 @@ class Paysera_WalletApi_Entity_FundsSource
      *
      * @param string $details
      *
-     * @return $this
+     * @return self
      */
     public function setDetails($details)
     {
@@ -68,5 +87,15 @@ class Paysera_WalletApi_Entity_FundsSource
     public function getDetails()
     {
         return $this->details;
+    }
+
+    /**
+     * Get available funds source types
+     *
+     * @return array
+     */
+    public static function getAvailableTypes()
+    {
+        return self::$types;
     }
 }

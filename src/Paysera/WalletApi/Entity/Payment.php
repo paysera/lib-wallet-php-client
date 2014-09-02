@@ -86,6 +86,11 @@ class Paysera_WalletApi_Entity_Payment
     protected $price;
 
     /**
+     * @var Paysera_WalletApi_Entity_Commission
+     */
+    protected $commission;
+
+    /**
      * @var Paysera_WalletApi_Entity_Money
      */
     protected $cashback;
@@ -324,6 +329,30 @@ class Paysera_WalletApi_Entity_Payment
     public function getPrice()
     {
         return $this->price;
+    }
+
+    /**
+     * Sets commission
+     *
+     * @param Paysera_WalletApi_Entity_Commission $commission
+     *
+     * @return self
+     */
+    public function setCommission(Paysera_WalletApi_Entity_Commission $commission)
+    {
+        $this->commission = $commission;
+
+        return $this;
+    }
+
+    /**
+     * Gets commission
+     *
+     * @return Paysera_WalletApi_Entity_Commission
+     */
+    public function getCommission()
+    {
+        return $this->commission;
     }
 
     /**
