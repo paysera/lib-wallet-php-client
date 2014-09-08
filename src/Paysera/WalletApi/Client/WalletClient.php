@@ -324,22 +324,27 @@ class Paysera_WalletApi_Client_WalletClient extends Paysera_WalletApi_Client_Bas
     /**
      * Tries to accept transaction by active allowance using API
      *
-     * @param string  $transactionKey
+     * @param string $transactionKey
      * @param int|Paysera_WalletApi_Entity_WalletIdentifier|string $payer
+     * @param Paysera_WalletApi_Entity_FundsSource[] $fundsSources
      *
      * @return Paysera_WalletApi_Entity_Transaction
      *
-     * @throws Paysera_WalletApi_Exception_ApiException
      */
-    public function acceptTransactionUsingAllowance($transactionKey, $payer)
+    public function acceptTransactionUsingAllowance($transactionKey, $payer, $fundsSources = array())
     {
         Paysera_WalletApi_Util_Assert::isScalar($transactionKey);
 
-        $content = null;
+        $content = array();
+
+        if (count($fundsSources) > 0) {
+            $content = array_merge($this->mapper->encodeFundsSources($fundsSources));
+        }
+
         if ($payer instanceof Paysera_WalletApi_Entity_WalletIdentifier) {
             $payer->validate();
 
-            $content = $this->mapper->encodePayer($payer);
+            $content = array_merge($content, $this->mapper->encodePayer($payer));
             $uri = 'transaction/' . $transactionKey . '/reserve';
         } else {
             Paysera_WalletApi_Util_Assert::isId($payer);
@@ -355,20 +360,24 @@ class Paysera_WalletApi_Client_WalletClient extends Paysera_WalletApi_Client_Bas
     /**
      * Tries to accept transaction by sending user's PIN code using API
      *
-     * @param string  $transactionKey
+     * @param string $transactionKey
      * @param int|Paysera_WalletApi_Entity_WalletIdentifier|string $payer
-     * @param string  $pin
+     * @param string $pin
+     * @param Paysera_WalletApi_Entity_FundsSource[] $fundsSources
      *
      * @return Paysera_WalletApi_Entity_Transaction
      *
-     * @throws Paysera_WalletApi_Exception_ApiException
      */
-    public function acceptTransactionUsingPin($transactionKey, $payer, $pin)
+    public function acceptTransactionUsingPin($transactionKey, $payer, $pin, $fundsSources = array())
     {
         Paysera_WalletApi_Util_Assert::isScalar($transactionKey);
         Paysera_WalletApi_Util_Assert::isScalar($pin);
 
         $content = $this->mapper->encodePin($pin);
+
+        if (count($fundsSources) > 0) {
+            $content = array_merge($this->mapper->encodeFundsSources($fundsSources));
+        }
 
         if ($payer instanceof Paysera_WalletApi_Entity_WalletIdentifier) {
             $payer->validate();

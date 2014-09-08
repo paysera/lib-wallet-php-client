@@ -101,6 +101,26 @@ class Paysera_WalletApi_Mapper
     }
 
     /**
+     * Encodes transaction funds sources to array
+     *
+     * @param Paysera_WalletApi_Entity_FundsSource[] $fundsSources
+     *
+     * @throws Paysera_WalletApi_Exception_LogicException
+     *
+     * @return array
+     */
+    public function encodeFundsSources(array $fundsSources)
+    {
+        $result = array();
+
+        foreach ($fundsSources as $key => $fundsSource) {
+            $result[$key] = $this->encodeFundsSource($fundsSource);
+        }
+
+        return array('funds_sources' => $result);
+    }
+
+    /**
      * Encodes payment funds source to array
      *
      * @param Paysera_WalletApi_Entity_FundsSource $fundsSource

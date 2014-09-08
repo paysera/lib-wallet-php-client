@@ -32,16 +32,16 @@ class Paysera_WalletApi_Client_TokenRelatedWalletClient extends Paysera_WalletAp
     /**
      * Tries to accept transaction by sending user's PIN code using API
      *
-     * @param string  $transactionKey
-     * @param string  $pin
+     * @param string $transactionKey
+     * @param string $pin
+     * @param Paysera_WalletApi_Entity_FundsSource[] $fundsSources
      *
      * @return Paysera_WalletApi_Entity_Transaction
      *
-     * @throws Paysera_WalletApi_Exception_ApiException
      */
-    public function acceptTransactionUsingCurrentPin($transactionKey, $pin)
+    public function acceptTransactionUsingCurrentPin($transactionKey, $pin, $fundsSources = array())
     {
-        return $this->acceptTransactionUsingPin($transactionKey, 'me', $pin);
+        return $this->acceptTransactionUsingPin($transactionKey, 'me', $pin, $fundsSources);
     }
 
     /**
@@ -59,15 +59,15 @@ class Paysera_WalletApi_Client_TokenRelatedWalletClient extends Paysera_WalletAp
     /**
      * Tries to accept transaction by active allowance using API
      *
-     * @param string                                                $transactionKey
+     * @param string $transactionKey
      * @param int|Paysera_WalletApi_Entity_WalletIdentifier|string $payer
+     * @param Paysera_WalletApi_Entity_FundsSource[] $fundsSources
      *
      * @return Paysera_WalletApi_Entity_Transaction
-     *
      */
-    public function acceptTransactionUsingAllowance($transactionKey, $payer = 'me')
+    public function acceptTransactionUsingAllowance($transactionKey, $payer = 'me', $fundsSources = array())
     {
-        return parent::acceptTransactionUsingAllowance($transactionKey, $payer);
+        return parent::acceptTransactionUsingAllowance($transactionKey, $payer, $fundsSources);
     }
 
     public function getAllowanceForWallet($walletId = 'me')
