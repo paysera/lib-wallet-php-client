@@ -19,8 +19,8 @@ class Paysera_WalletApi_Listener_OAuthRequestSigner extends Paysera_WalletApi_Li
     protected $oauthClient;
 
     /**
-     * @param Paysera_WalletApi_Client_OAuthClient          $oauthClient related with client credentials
-     * @param Paysera_WalletApi_Entity_MacAccessToken $token
+     * @param Paysera_WalletApi_Client_OAuthClient      $oauthClient related with client credentials
+     * @param Paysera_WalletApi_Entity_MacAccessToken   $token
      */
     public function __construct(
         Paysera_WalletApi_Client_OAuthClient $oauthClient,

@@ -16,4 +16,4 @@ final class Paysera_WalletApi_Events
 
     const AFTER_OAUTH_TOKEN_REFRESH = 'paysera.wallet_api.oauth.after_token_refresh';
 
-} 
+}

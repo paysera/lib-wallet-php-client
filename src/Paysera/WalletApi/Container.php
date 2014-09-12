@@ -82,6 +82,7 @@ class Paysera_WalletApi_Container
         }
 
         $dispatcher->addSubscriber($requestSigner);
+        $dispatcher->addSubscriber($this->createInvalidResponseListener());
         return $dispatcher;
     }
 
@@ -133,6 +134,14 @@ class Paysera_WalletApi_Container
     public function createRequestSigner(Paysera_WalletApi_Auth_SignerInterface $signer)
     {
         return new Paysera_WalletApi_Listener_RequestSigner($signer);
+    }
+
+    /**
+     * @return Paysera_WalletApi_Listener_InvalidResponseListener
+     */
+    public function createInvalidResponseListener()
+    {
+        return new Paysera_WalletApi_Listener_InvalidResponseListener();
     }
 
     /**

@@ -165,7 +165,13 @@ class Paysera_WalletApi
         return $this->router;
     }
 
-
+    /**
+     * @param null                                    $basePath
+     * @param Paysera_WalletApi_Entity_MacAccessToken $token
+     * @param array                                   $parameters
+     *
+     * @return Paysera_WalletApi_EventDispatcher_EventDispatcher
+     */
     protected function dispatcher(
         $basePath = null,
         Paysera_WalletApi_Entity_MacAccessToken $token = null,
@@ -177,6 +183,11 @@ class Paysera_WalletApi
         } else {
             $requestSigner = $this->container->createOAuthRequestSigner($this->oauthClient(), $token);
         }
-        return $this->container->createDispatcherForClient($basePath, $requestSigner, $parameters);
+
+        return $this->container->createDispatcherForClient(
+            $basePath,
+            $requestSigner,
+            $parameters
+        );
     }
 }
