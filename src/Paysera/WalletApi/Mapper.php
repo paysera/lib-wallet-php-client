@@ -319,6 +319,25 @@ class Paysera_WalletApi_Mapper
     }
 
     /**
+     * @param array $data
+     * @return Paysera_WalletApi_Entity_Search_Result
+     */
+    public function decodePaymentSearchResult($data)
+    {
+        $payments = array();
+        foreach ($data['payments'] as $payment) {
+            $payments[] = $this->decodePayment($payment);
+        }
+
+        $result = new Paysera_WalletApi_Entity_Search_Result($payments);
+        $metadata = $data['_metadata'];
+        $this->setProperty($result, 'total', $metadata['total']);
+        $this->setProperty($result, 'offset', $metadata['offset']);
+        $this->setProperty($result, 'limit', $metadata['limit']);
+        return $result;
+    }
+
+    /**
      * Encodes payment commission to array
      *
      * @param Paysera_WalletApi_Entity_Commission $commission

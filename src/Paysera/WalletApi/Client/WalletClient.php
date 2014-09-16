@@ -134,29 +134,39 @@ class Paysera_WalletApi_Client_WalletClient extends Paysera_WalletApi_Client_Bas
     /**
      * Finds payments by provided parameters
      *
-     * @param string  $status
-     * @param integer $walletId
-     * @param integer $beneficiaryId
+     * @param string        $status
+     * @param integer       $walletId
+     * @param integer       $beneficiaryId
+     * @param array $params optional search parameters
      *
-     * @return integer[]        ID list of found payments
+     * @return Paysera_WalletApi_Entity_Search_Result
      *
      * @throws Paysera_WalletApi_Exception_ApiException
      */
-    public function findPayments($status = null, $walletId = null, $beneficiaryId = null)
-    {
+    public function findPayments(
+        $status = null,
+        $walletId = null,
+        $beneficiaryId = null,
+        $params = array()
+    ) {
         Paysera_WalletApi_Util_Assert::isIntOrNull($walletId);
         Paysera_WalletApi_Util_Assert::isIntOrNull($beneficiaryId);
-        $params = array();
+        $query = array();
         if ($status !== null) {
-            $params['status'] = $status;
+            $query['status'] = $status;
         }
         if ($walletId !== null) {
-            $params['wallet'] = $walletId;
+            $query['wallet'] = $walletId;
         }
         if ($beneficiaryId !== null) {
-            $params['beneficiary'] = $beneficiaryId;
+            $query['beneficiary'] = $beneficiaryId;
         }
-        return $this->get('payments/id' . (count($params) > 0 ? '?' . http_build_query($params) : ''));
+        if (count($params)) {
+            $query = array_merge($query, $params);
+        }
+        $result = $this->get('payments' . (count($query) > 0 ? '?' . http_build_query($query) : ''));
+
+        return $this->mapper->decodePaymentSearchResult($result);
     }
 
     /**
