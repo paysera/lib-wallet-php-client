@@ -132,6 +132,11 @@ class Paysera_WalletApi_Entity_Transaction
     protected $restrictions;
 
     /**
+     * @var integer $locationId
+     */
+    protected $locationId;
+
+    /**
      * Creates object, used for fluent interface
      *
      * @return self
@@ -809,5 +814,25 @@ class Paysera_WalletApi_Entity_Transaction
     public function getRestrictions()
     {
         return $this->restrictions;
+    }
+
+    /**
+     * @param integer $locationId
+     *
+     * @return $this
+     */
+    public function setLocationId($locationId)
+    {
+        $this->locationId = $locationId;
+
+        return $this;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getLocationId()
+    {
+        return $this->locationId;
     }
 }

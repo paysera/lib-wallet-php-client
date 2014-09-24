@@ -759,6 +759,9 @@ class Paysera_WalletApi_Mapper
         if (isset($data['user'])) {
             $transaction->setUserInformation($this->decodeUserInformation($data['user']));
         }
+        if (isset($data['location_id'])) {
+            $transaction->setLocationId($data['location_id']);
+        }
 
         return $transaction;
     }
