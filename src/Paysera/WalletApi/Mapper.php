@@ -1454,6 +1454,7 @@ class Paysera_WalletApi_Mapper
             'prices'        => $prices,
             'status'        => $object->getStatus(),
             'services'      => $services,
+            'public'        => $object->getPublic(),
         );
     }
 
@@ -1522,6 +1523,10 @@ class Paysera_WalletApi_Mapper
 
         if (!empty($data['status'])) {
             $location->setStatus($data['status']);
+        }
+
+        if (isset($data['public'])) {
+            $location->setPublic((bool)$data['public']);
         }
 
         return $location;

@@ -97,6 +97,11 @@ class Paysera_WalletApi_Entity_Location
     protected $status;
 
     /**
+     * @var bool
+     */
+    protected $public;
+
+    /**
      * Set id
      *
      * @param mixed $id
@@ -299,6 +304,28 @@ class Paysera_WalletApi_Entity_Location
     public function getPrices()
     {
         return $this->prices;
+    }
+
+    /**
+     * Set public
+     *
+     * @param boolean $public
+     *
+     * @return Paysera_WalletApi_Entity_Location
+     */
+    public function setPublic($public)
+    {
+        $this->public = $public;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getPublic()
+    {
+        return $this->public;
     }
 
     /**
