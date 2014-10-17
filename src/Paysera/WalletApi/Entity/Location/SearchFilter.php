@@ -19,9 +19,9 @@ class Paysera_WalletApi_Entity_Location_SearchFilter extends Paysera_WalletApi_E
     protected $distance;
 
     /**
-     * @var string
+     * @var array
      */
-    protected $status;
+    protected $statuses;
 
     /**
      * @var DateTime
@@ -139,27 +139,23 @@ class Paysera_WalletApi_Entity_Location_SearchFilter extends Paysera_WalletApi_E
     }
 
     /**
-     * @param string $status
-     *
-     * @return $this
+     * @param array $statuses
      */
-    public function setStatus($status)
+    public function setStatuses(array $statuses)
     {
-        $this->status = $status;
-
-        return $this;
+        $this->statuses = $statuses;
     }
 
     /**
-     * @return string
+     * @return array
      */
-    public function getStatus()
+    public function getStatuses()
     {
-        return $this->status;
+        return $this->statuses;
     }
 
     /**
-     * @param DateTime $updatedAfter
+     * @param \DateTime $updatedAfter
      *
      * @return $this
      */

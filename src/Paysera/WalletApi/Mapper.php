@@ -598,7 +598,7 @@ class Paysera_WalletApi_Mapper
                                 && in_array('identity', $data['account_owner']['requirements'])
                             )
                     )
-            ;
+                ;
         }
 
         return null;
@@ -1554,14 +1554,14 @@ class Paysera_WalletApi_Mapper
                 $data['distance'] = $filter->getDistance();
             }
         }
-        if ($filter->getStatus() !== null) {
-            $data['status'] = $filter->getStatus();
+        if (count($filter->getStatuses()) > 0) {
+            $data['status'] = implode(',', $filter->getStatuses());
         }
         if ($filter->getUpdatedAfter() !== null) {
-            $data['updated_after'] = $filter->getUpdatedAfter();
+            $data['updated_after'] = $filter->getUpdatedAfter()->getTimestamp();
         }
         if ($filter->getPayCategory() !== null) {
-            $data['pay_category'] = $filter->getPayCategory();
+            $data['pay_category'] = implode(',', $filter->getPayCategory());
         }
         if ($filter->getLocationServices() !== null) {
             $data['service'] = implode(',', $filter->getLocationServices());
@@ -1607,7 +1607,7 @@ class Paysera_WalletApi_Mapper
             $result[$payCategory->getId()] = $payCategory;
         }
 
-        /** @var $item Paysera_WalletApi_Entity_PayCategory*/
+        /** @var Paysera_WalletApi_Entity_PayCategory $cat */
         foreach ($result as $cat) {
             $cat->setParent($result[$cat->getParentId()]);
         }

@@ -723,12 +723,21 @@ class Paysera_WalletApi_Client_WalletClient extends Paysera_WalletApi_Client_Bas
      * Get project locations
      *
      * @param int $projectId
+     * @param Paysera_WalletApi_Entity_Location_SearchFilter $filter
      *
      * @return Paysera_WalletApi_Entity_Location[]
      */
-    public function getProjectLocations($projectId)
-    {
-        $responseData = $this->get('project/' . $projectId . '/locations');
+    public function getProjectLocations(
+        $projectId,
+        Paysera_WalletApi_Entity_Location_SearchFilter $filter = null
+    ) {
+        if ($filter !== null) {
+            $query = '?' . http_build_query($this->mapper->encodeLocationFilter($filter), null, '&');
+        } else {
+            $query = '';
+        }
+
+        $responseData = $this->get('project/' . $projectId . '/locations' . $query);
 
         $locations = array();
         foreach ($responseData as $item) {
