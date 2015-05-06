@@ -23,6 +23,11 @@ class Paysera_WalletApi_Container
     protected $eventDispatcher;
 
     /**
+     * @var Paysera_WalletApi_State_StatePersisterInterface
+     */
+    protected $statePersister;
+
+    /**
      * For customizing service. In normal cases this should not be called
      *
      * @param Paysera_WalletApi_Mapper $mapper
@@ -58,6 +63,19 @@ class Paysera_WalletApi_Container
     public function setEventDispatcher($eventDispatcher)
     {
         $this->eventDispatcher = $eventDispatcher;
+        return $this;
+    }
+
+    /**
+     * Sets statePersister
+     *
+     * @param Paysera_WalletApi_State_StatePersisterInterface $statePersister
+     *
+     * @return $this
+     */
+    public function setStatePersister($statePersister)
+    {
+        $this->statePersister = $statePersister;
         return $this;
     }
 
@@ -172,7 +190,7 @@ class Paysera_WalletApi_Container
             $clientId,
             $oauthClient,
             $router,
-            new Paysera_WalletApi_State_SessionStatePersister('Paysera_WalletApi_' . $clientId),
+            $this->getStatePersister('Paysera_WalletApi_' . $clientId),
             new Paysera_WalletApi_Util_RequestInfo($_SERVER)
         );
     }
@@ -250,4 +268,17 @@ class Paysera_WalletApi_Container
         return $this->webClient;
     }
 
+    /**
+     * Returns configured state persister. If not configured, creates default one with given prefix
+     *
+     * @return Paysera_WalletApi_State_StatePersisterInterface
+     */
+    protected function getStatePersister($prefix)
+    {
+        if ($this->statePersister !== null) {
+            return $this->statePersister;
+        }
+
+        return new Paysera_WalletApi_State_SessionStatePersister($prefix);
+    }
 }
