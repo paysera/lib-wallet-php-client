@@ -26,6 +26,11 @@ class Paysera_WalletApi_Entity_WalletIdentifier
     protected $card;
 
     /**
+     * @var string
+     */
+    protected $barcode;
+
+    /**
      * Creates object, used for fluent interface
      *
      * @return self
@@ -129,6 +134,26 @@ class Paysera_WalletApi_Entity_WalletIdentifier
     }
 
     /**
+     * @param string $barcode
+     *
+     * @return $this
+     */
+    public function setBarcode($barcode)
+    {
+        $this->barcode = $barcode;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBarcode()
+    {
+        return $this->barcode;
+    }
+
+    /**
      * Validation for wallet identifier entity
      *
      * @return boolean
@@ -137,7 +162,7 @@ class Paysera_WalletApi_Entity_WalletIdentifier
     public function validate()
     {
         $setValueCount = count(array_diff(
-            array($this->getId(), $this->getCard(), $this->getPhone(), $this->getEmail()),
+            array($this->getId(), $this->getCard(), $this->getPhone(), $this->getEmail(), $this->getBarcode()),
             array(null)
         ));
 

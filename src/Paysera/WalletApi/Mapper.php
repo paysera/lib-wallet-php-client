@@ -978,6 +978,8 @@ class Paysera_WalletApi_Mapper
             return array('email' => $walletIdentifier->getEmail());
         } elseif ($walletIdentifier->getPhone() !== null) {
             return array('phone' => $walletIdentifier->getPhone());
+        } elseif ($walletIdentifier->getBarcode() !== null) {
+            return array('barcode' => $walletIdentifier->getBarcode());
         } else {
             throw new InvalidArgumentException('Wallet identifier has no identifier set');
         }
