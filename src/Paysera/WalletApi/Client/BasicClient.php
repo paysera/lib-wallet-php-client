@@ -86,7 +86,7 @@ class Paysera_WalletApi_Client_BasicClient implements Paysera_WalletApi_Client_B
                 return $result;
             } else {
                 throw new Paysera_WalletApi_Exception_ResponseException(
-                    $result,
+                    is_array($result) ? $result : array(),
                     $response->getStatusCode(),
                     $response->getStatusCodeMessage()
                 );
