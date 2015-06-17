@@ -31,6 +31,11 @@ class Paysera_WalletApi_Exception_ResponseException extends Paysera_WalletApi_Ex
     protected $statusCodeMessage;
 
     /**
+     * @var mixed
+     */
+    protected $properties;
+
+    /**
      * Constructs object
      *
      * @param array     $error
@@ -57,6 +62,9 @@ class Paysera_WalletApi_Exception_ResponseException extends Paysera_WalletApi_Ex
         if (isset($error['error_uri'])) {
             $this->setErrorUri($error['error_uri']);
             $message .= '. See more at ' . $error['error_uri'];
+        }
+        if (isset($error['error_properties'])) {
+            $this->setProperties($error['error_properties']);
         }
         parent::__construct($message, 0, $previous);
     }
@@ -175,5 +183,25 @@ class Paysera_WalletApi_Exception_ResponseException extends Paysera_WalletApi_Ex
     public function getStatusCodeMessage()
     {
         return $this->statusCodeMessage;
+    }
+
+    /**
+     * Get properties
+     * 
+     * @return mixed
+     */
+    public function getProperties()
+    {
+        return $this->properties;
+    }
+
+    /**
+     * Set properties
+     *
+     * @param mixed $properties
+     */
+    public function setProperties($properties)
+    {
+        $this->properties = $properties;
     }
 }
