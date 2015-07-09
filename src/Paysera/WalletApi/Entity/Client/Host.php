@@ -200,7 +200,7 @@ class Paysera_WalletApi_Entity_Client_Host
      */
     public function buildRegexp()
     {
-        $regexp = preg_quote(rtrim($this->getHost(), '/'), '#');
+        $regexp = $hostname = preg_quote(rtrim($this->getHost(), '/'), '#');
         if ($this->isAnyPort()) {
             $regexp .= '(\:\d+)?';
         } elseif ($this->getPort() !== null) {
@@ -210,13 +210,17 @@ class Paysera_WalletApi_Entity_Client_Host
         if ($this->isAnySubdomain()) {
             $regexp = '(.+\.)*' . $regexp;
         }
-        $regexp .= $this->getPath() == '' ? '/' : '/' . trim($this->getPath(), '/') . '/';
+        $path = $this->getPath() == '' ? '/' : '/' . trim($this->getPath(), '/') . '(/.*)?';
+        if ($hostname === '') {
+            $path = ltrim($path, '/');
+        }
+        $regexp .= $path;
         if ($this->getProtocol() !== null) {
             $regexp = $this->getProtocol() . '\://' . $regexp;
         } else {
             $regexp = '[a-z]+\://' . $regexp;
         }
-        $regexp .= '.*';
+
         $regexp = '#^' . $regexp . '$#';
 
         return $regexp;
