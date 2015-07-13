@@ -200,28 +200,36 @@ class Paysera_WalletApi_Entity_Client_Host
      */
     public function buildRegexp()
     {
-        $regexp = $hostname = preg_quote(rtrim($this->getHost(), '/'), '#');
-        if ($this->isAnyPort()) {
-            $regexp .= '(\:\d+)?';
-        } elseif ($this->getPort() !== null) {
-            $regexp .= ':' . $this->getPort();
-        }
+        $regexpParts = array();
 
-        if ($this->isAnySubdomain()) {
-            $regexp = '(.+\.)*' . $regexp;
-        }
-        $path = $this->getPath() == '' ? '/' : '/' . trim($this->getPath(), '/') . '(/.*)?';
-        if ($hostname === '') {
-            $path = ltrim($path, '/');
-        }
-        $regexp .= $path;
         if ($this->getProtocol() !== null) {
-            $regexp = $this->getProtocol() . '\://' . $regexp;
+            $regexpParts[] = preg_quote($this->getProtocol(), '#') . '\://';
         } else {
-            $regexp = '[a-z]+\://' . $regexp;
+            $regexpParts[] = 'https?://';
         }
 
-        $regexp = '#^' . $regexp . '$#';
+        $hostname = rtrim($this->getHost(), '/');
+        if ($hostname) {
+            $hostnameRegexp = preg_quote($hostname, '#');
+            if ($this->isAnyPort()) {
+                $hostnameRegexp .= '(\:\d+)?';
+            } elseif ($this->getPort() !== null) {
+                $hostnameRegexp .= ':' . $this->getPort();
+            }
+
+            if ($this->isAnySubdomain()) {
+                $hostnameRegexp = '([a-zA-Z0-9\-]+\.)*' . $hostnameRegexp;
+            }
+
+            $hostnameRegexp .= '/';
+            $regexpParts[] = $hostnameRegexp;
+        }
+
+        if ($this->getPath()) {
+            $regexpParts[] = preg_quote(ltrim($this->getPath(), '/'), '#') . '([/?\\#]|$)';
+        }
+
+        $regexp = '#^' . implode('', $regexpParts) . '#';
 
         return $regexp;
     }

@@ -134,6 +134,16 @@ class Paysera_WalletApi_Entity_HostTest extends PHPUnit_Framework_TestCase
                 false,
                 false
             ),
+            array(
+                1,
+                'mobile.protocol://?someparam=1&status=error',
+                '',
+                null,
+                null,
+                'mobile.protocol',
+                true,
+                true
+            ),
         );
     }
 }
