@@ -511,17 +511,17 @@ class Paysera_WalletApi_Mapper
         }
 
         if ($allowance->hasLimits()) {
-            $limitList = array();
+            $result['limits'] = array();
             foreach ($allowance->getLimits() as $limit) {
-                if ($limit->getMaxPrice() === null || $limit->getPeriod() === null) {
-                    throw new Paysera_WalletApi_Exception_LogicException('At least one limit has no price or no period');
+                if ($limit->getMaxPrice() === null || $limit->getTime() === null) {
+                    throw new Paysera_WalletApi_Exception_LogicException('At least one limit has no price or no time');
                 }
-                $limitList[] = array(
+                $limitData = array(
                     'max_price' => $limit->getMaxPrice()->getAmountInCents(),
-                    'period' => $limit->getPeriod(),
+                    'time' => $limit->getTime(),
                 );
+                $result['limits'][] = $limitData;
             }
-            $result['limits'] = $limitList;
         }
 
         return $result;
@@ -569,8 +569,9 @@ class Paysera_WalletApi_Mapper
                     ->setCurrency($data['currency'])
                     ->setAmountInCents($limitInfo['max_price']);
                 $limit = Paysera_WalletApi_Entity_Limit::create()
-                    ->setPeriod($limitInfo['period'])
-                    ->setMaxPrice($price);
+                    ->setTime($limitInfo['time'])
+                    ->setMaxPrice($price)
+                ;
                 $allowance->addLimit($limit);
             }
         }
