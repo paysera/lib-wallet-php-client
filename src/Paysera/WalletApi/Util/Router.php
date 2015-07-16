@@ -11,6 +11,9 @@ class Paysera_WalletApi_Util_Router
     const ENDPOINT_API_PROD = 'https://wallet.paysera.com';
     const ENDPOINT_AUTH_PROD = 'https://www.paysera.com/frontend';
 
+    const ENDPOINT_API_SANDBOX = 'https://wallet-sandbox.paysera.com';
+    const ENDPOINT_AUTH_SANDBOX = 'https://sandbox.paysera.com/frontend';
+
     const OAUTH_API_PATH = '/oauth/v1/';
     const WALLET_API_PATH = '/rest/v1/';
     const PUBLIC_KEY_PATH = '/publickey';
@@ -25,6 +28,16 @@ class Paysera_WalletApi_Util_Router
     {
         $this->apiEndpoint = $apiEndpoint;
         $this->authEndpoint = $authEndpoint;
+    }
+
+    /**
+     * Creates router instance configured for sandbox environment
+     *
+     * @return Paysera_WalletApi_Util_Router
+     */
+    public static function createForSandbox()
+    {
+        return new self(self::ENDPOINT_API_SANDBOX, self::ENDPOINT_AUTH_SANDBOX);
     }
 
     /**
