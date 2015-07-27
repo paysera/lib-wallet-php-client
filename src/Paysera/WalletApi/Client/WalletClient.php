@@ -605,6 +605,21 @@ class Paysera_WalletApi_Client_WalletClient extends Paysera_WalletApi_Client_Bas
     }
 
     /**
+     * Gets wallet barcode by search parameters
+     *
+     * @param array $parameters
+     *
+     * @return string
+     *
+     * @throws Paysera_WalletApi_Exception_ApiException
+     */
+    public function getWalletBarcodeBy(array $parameters)
+    {
+        $responseData = $this->get('wallet/barcode?' . http_build_query($parameters, null, '&'));
+        return $responseData['barcode'];
+    }
+
+    /**
      * Gets user's address by id using API
      *
      * @param integer $userId
