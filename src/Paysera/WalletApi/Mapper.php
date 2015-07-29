@@ -1345,6 +1345,9 @@ class Paysera_WalletApi_Mapper
         if (isset($data['type'])) {
             $this->setProperty($user, 'type', $data['type']);
         }
+        if (isset($data['company_code'])) {
+            $this->setProperty($user, 'companyCode', $data['company_code']);
+        }
 
         return $user;
     }
