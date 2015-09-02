@@ -105,7 +105,7 @@ class Paysera_WalletApi_Util_Router
     protected function getLanguagePrefix($lang = null)
     {
         if (!$lang) {
-            return;
+            return '';
         }
         return '/' . $lang;
     }

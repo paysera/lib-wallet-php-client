@@ -90,6 +90,7 @@ class Paysera_WalletApi_OAuth_Consumer
      * @param array                              $scopes          can contain Paysera_WalletApi_OAuth_Consumer::SCOPE_* constants
      * @param string                             $redirectUri     takes current URI without authorization parameters if not passed
      * @param Paysera_WalletApi_Entity_UserInformation $userInformation if passed, creates OAuth session by API with confirmed user's information
+     * @param null $lang
      *
      * @return string
      *
@@ -99,18 +100,19 @@ class Paysera_WalletApi_OAuth_Consumer
     public function getAuthorizationUri(
         array $scopes = array(),
         $redirectUri = null,
-        Paysera_WalletApi_Entity_UserInformation $userInformation = null
+        Paysera_WalletApi_Entity_UserInformation $userInformation = null,
+        $lang = null
     ) {
         if ($redirectUri === null) {
             $redirectUri = $this->getCurrentUri();
         }
         if ($userInformation === null) {
             $query = http_build_query($this->getOAuthParameters($scopes, $redirectUri), null, '&');
-            return $this->router->getOAuthEndpoint() . '?' . $query;
+            return $this->router->getOAuthEndpoint($lang) . '?' . $query;
         } else {
             $parameters = $this->getOAuthParameters($scopes, $redirectUri);
             $responseData = $this->oauthClient->createSession($parameters, $userInformation);
-            return $this->router->getOAuthEndpoint() . '/' . $responseData['key'];
+            return $this->router->getOAuthEndpoint($lang) . '/' . $responseData['key'];
         }
     }
 
