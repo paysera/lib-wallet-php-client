@@ -763,6 +763,9 @@ class Paysera_WalletApi_Mapper
         if (isset($data['location_id'])) {
             $transaction->setLocationId($data['location_id']);
         }
+        if (isset($data['manager_id'])) {
+            $this->setProperty($transaction, 'managerId', $data['manager_id']);
+        }
 
         return $transaction;
     }
