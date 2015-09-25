@@ -42,34 +42,20 @@ class Paysera_WalletApi_Client_BasicClient implements Paysera_WalletApi_Client_B
         $options = array()
     ) {
         $originalRequest = clone $request;
-
-        $event = new Paysera_WalletApi_Event_RequestEvent($request, $options);
-        $this->eventDispatcher->dispatch(Paysera_WalletApi_Events::BEFORE_REQUEST, $event);
-        $options = $event->getOptions();
-
-        try {
-            $response = $this->webClient->makeRequest($request);
-        } catch (Paysera_WalletApi_Exception_HttpException $exception) {
-            $event = new Paysera_WalletApi_Event_HttpExceptionEvent($exception, $request, $options);
-            $this->eventDispatcher->dispatch(Paysera_WalletApi_Events::ON_HTTP_EXCEPTION, $event);
-            if ($event->getResponse() !== null) {
-                $response = $event->getResponse();
-            } else {
-                throw $event->getException();
-            }
-        }
-        $response->setRequest($request);
-
-        $event = new Paysera_WalletApi_Event_ResponseEvent($response, $options);
-        $this->eventDispatcher->dispatch(Paysera_WalletApi_Events::AFTER_RESPONSE, $event);
-        $options = $event->getOptions();
+        $response = $this->makePlainRequestWithReference($request, $options);
 
         try {
             $responseContent = $response->getContent();
 
-            $result = $responseContent !== '' ? json_decode($responseContent, true) : null;
+            $contentType = $response->getHeader('content-type');
+            if ($contentType === 'application/json') {
+                $result = $responseContent !== '' ? json_decode($responseContent, true) : null;
+            } else {
+                $result = $responseContent;
+            }
+
             if (
-                   ($response->getStatusCode() === 200 && $responseContent === '')
+                ($response->getStatusCode() === 200 && $responseContent === '')
                 || ($result === null && $responseContent !== '' && $responseContent !== 'null')
             ) {
                 throw new Paysera_WalletApi_Exception_ResponseException(
@@ -102,6 +88,64 @@ class Paysera_WalletApi_Client_BasicClient implements Paysera_WalletApi_Client_B
                 throw $event->getException();
             }
         }
+    }
+
+    /**
+     * Makes specified request.
+     * URI in request object can be relative to current context (without endpoint and API path).
+     * Content of request is not encoded or otherwise modified by the client
+     *
+     * @param Paysera_WalletApi_Http_Request $request
+     * @param array                          $options
+     *
+     * @return Paysera_WalletApi_Http_Response
+     *
+     * @throws Paysera_WalletApi_Exception_ResponseException
+     */
+    public function makePlainRequest(
+        Paysera_WalletApi_Http_Request $request,
+        $options = array()
+    ) {
+        return $this->makePlainRequestWithReference($request, $options);
+    }
+
+    /**
+     * Makes specified request with options reference.
+     * URI in request object can be relative to current context (without endpoint and API path).
+     * Content of request is not encoded or otherwise modified by the client
+     *
+     * @param Paysera_WalletApi_Http_Request $request
+     * @param array                          $options
+     *
+     * @return Paysera_WalletApi_Http_Response
+     *
+     * @throws Paysera_WalletApi_Exception_ResponseException
+     */
+    private function makePlainRequestWithReference(
+        Paysera_WalletApi_Http_Request $request,
+        &$options = array()
+    ) {
+        $event = new Paysera_WalletApi_Event_RequestEvent($request, $options);
+        $this->eventDispatcher->dispatch(Paysera_WalletApi_Events::BEFORE_REQUEST, $event);
+        $options = $event->getOptions();
+
+        try {
+            $response = $this->webClient->makeRequest($request);
+        } catch (Paysera_WalletApi_Exception_HttpException $exception) {
+            $event = new Paysera_WalletApi_Event_HttpExceptionEvent($exception, $request, $options);
+            $this->eventDispatcher->dispatch(Paysera_WalletApi_Events::ON_HTTP_EXCEPTION, $event);
+            if ($event->getResponse() !== null) {
+                $response = $event->getResponse();
+            } else {
+                throw $event->getException();
+            }
+        }
+        $response->setRequest($request);
+
+        $event = new Paysera_WalletApi_Event_ResponseEvent($response, $options);
+        $this->eventDispatcher->dispatch(Paysera_WalletApi_Events::AFTER_RESPONSE, $event);
+
+        return $response;
     }
 
     /**
