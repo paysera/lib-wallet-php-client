@@ -66,6 +66,11 @@ class Paysera_WalletApi_Entity_User
     protected $companyCode;
 
     /**
+     * @var string
+     */
+    protected $identificationLevel;
+
+    /**
      * Creates object, used for fluent interface
      *
      * @return self
@@ -259,5 +264,25 @@ class Paysera_WalletApi_Entity_User
     public function isGenderFemale()
     {
         return $this->gender !== null ? $this->gender === self::GENDER_FEMALE : null;
+    }
+
+    /**
+     * @param string $identificationLevel
+     *
+     * @return $this
+     */
+    public function setIdentificationLevel($identificationLevel)
+    {
+        $this->identificationLevel = $identificationLevel;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdentificationLevel()
+    {
+        return $this->identificationLevel;
     }
 }
