@@ -18,6 +18,8 @@ class Paysera_WalletApi_OAuth_Consumer
     const SCOPE_IDENTITY_OFFLINE = 'identity_offline';
     const SCOPE_FULL_NAME = 'full_name';
     const SCOPE_FULL_NAME_OFFLINE = 'full_name_offline';
+    const SCOPE_IDENTIFICATION_LEVEL = 'identification_level';
+    const SCOPE_IDENTIFICATION_LEVEL_OFFLINE = 'identification_level_offline';
     const SCOPE_WALLET_LIST = 'wallet_list';
     const SCOPE_WALLET_LIST_OFFLINE = 'wallet_list_offline';
     const SCOPE_DOB = 'dob';

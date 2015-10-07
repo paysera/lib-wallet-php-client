@@ -1351,6 +1351,9 @@ class Paysera_WalletApi_Mapper
         if (isset($data['company_code'])) {
             $this->setProperty($user, 'companyCode', $data['company_code']);
         }
+        if (isset($data['identification_level'])) {
+            $this->setProperty($user, 'identificationLevel', $data['identification_level']);
+        }
 
         return $user;
     }
