@@ -22,6 +22,10 @@ $secret = 'SECRET';
 
 // create main object to use for all functionality
 $api = new Paysera_WalletApi($clientId, $secret);
+
+// for sandbox environment, use the following code instead:
+// $api = new Paysera_WalletApi($clientId, $secret, Paysera_WalletApi_Util_Router::createForSandbox());
+
 // get service, responsible for OAuth code grant type integration
 $oauth = $api->oauthConsumer();
 

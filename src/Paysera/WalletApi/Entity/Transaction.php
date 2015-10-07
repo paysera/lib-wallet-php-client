@@ -137,6 +137,11 @@ class Paysera_WalletApi_Entity_Transaction
     protected $locationId;
 
     /**
+     * @var int|null
+     */
+    protected $managerId;
+
+    /**
      * Creates object, used for fluent interface
      *
      * @return self
@@ -834,5 +839,15 @@ class Paysera_WalletApi_Entity_Transaction
     public function getLocationId()
     {
         return $this->locationId;
+    }
+
+    /**
+     * Id of the user who created this transaction.
+     *
+     * @return int|null
+     */
+    public function getManagerId()
+    {
+        return $this->managerId;
     }
 }

@@ -61,6 +61,11 @@ class Paysera_WalletApi_Entity_User
     protected $type;
 
     /**
+     * @var string
+     */
+    protected $companyCode;
+
+    /**
      * Creates object, used for fluent interface
      *
      * @return self
@@ -226,6 +231,14 @@ class Paysera_WalletApi_Entity_User
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCompanyCode()
+    {
+        return $this->companyCode;
     }
 
     /**

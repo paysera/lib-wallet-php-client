@@ -47,6 +47,22 @@ abstract class Paysera_WalletApi_Client_BaseClient implements Paysera_WalletApi_
     }
 
     /**
+     * Makes specified request.
+     * URI in request object can be relative to current context (without endpoint and API path).
+     * Content of request is not encoded or otherwise modified by the client
+     *
+     * @param Paysera_WalletApi_Http_Request $request
+     * @param array                          $options
+     *
+     * @return Paysera_WalletApi_Http_Response
+     * @throws Paysera_WalletApi_Exception_ResponseException
+     */
+    public function makePlainRequest(Paysera_WalletApi_Http_Request $request, $options = array())
+    {
+        return $this->client->makePlainRequest($request, $options);
+    }
+
+    /**
      * Makes GET request, uri can be relative to current context (without endpoint and API path)
      *
      * @param string $uri
@@ -103,4 +119,4 @@ abstract class Paysera_WalletApi_Client_BaseClient implements Paysera_WalletApi_
     }
 
 
-} 
+}
