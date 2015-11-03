@@ -32,7 +32,7 @@ class Paysera_WalletApi_Listener_InvalidResponseListenerTest extends PHPUnit_Fra
     /**
      * @dataProvider dataProviderForTestInvalidResponseFallback
      */
-    public function testSingleInvalidResponseFallback($uri, $json, $array)
+    public function testSingleInvalidResponseFallback($uri, $json)
     {
         $this->webClient
             ->expects($this->at(0))
@@ -63,7 +63,7 @@ class Paysera_WalletApi_Listener_InvalidResponseListenerTest extends PHPUnit_Fra
 
         $this->assertSame(
             $this->service->makeRequest(new Paysera_WalletApi_Http_Request($uri)),
-            $array
+            $json
         );
     }
 
@@ -100,7 +100,7 @@ class Paysera_WalletApi_Listener_InvalidResponseListenerTest extends PHPUnit_Fra
         );
 
         return array(
-            array('user/me', json_encode($data), $data)
+            array('user/me', json_encode($data))
         );
     }
 }

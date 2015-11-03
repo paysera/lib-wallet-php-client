@@ -47,6 +47,16 @@ class Paysera_WalletApi_Http_CurlClient implements Paysera_WalletApi_Http_Client
     }
 
     /**
+     * Request timeout in seconds setter
+     *
+     * @param int $timeout
+     */
+    public function setTimeout($timeout)
+    {
+        $this->timeout = $timeout;
+    }
+
+    /**
      * Makes request to remote server using cURL
      *
      * @param Paysera_WalletApi_Http_Request $request
