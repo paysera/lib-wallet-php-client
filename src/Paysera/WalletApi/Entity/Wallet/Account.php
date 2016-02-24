@@ -30,6 +30,12 @@ class Paysera_WalletApi_Entity_Wallet_Account
     protected $description;
 
     /**
+     * @var string
+     * @readonly
+     */
+    protected $type;
+
+    /**
      * Creates object, used for fluent interface
      *
      * @return self
@@ -71,5 +77,19 @@ class Paysera_WalletApi_Entity_Wallet_Account
         return $this->ownerDisplayName;
     }
 
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
 
+    /**
+     * @param string $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
 }

@@ -1184,6 +1184,9 @@ class Paysera_WalletApi_Mapper
         if (isset($data['description'])) {
             $this->setProperty($account, 'description', $data['description']);
         }
+        if (isset($data['type'])) {
+            $this->setProperty($account, 'type', $data['type']);
+        }
 
         return $account;
     }
