@@ -36,6 +36,12 @@ class Paysera_WalletApi_Entity_Wallet_Account
     protected $type;
 
     /**
+     * @var string
+     * @readonly
+     */
+    protected $userId;
+
+    /**
      * Creates object, used for fluent interface
      *
      * @return self
@@ -91,5 +97,21 @@ class Paysera_WalletApi_Entity_Wallet_Account
     public function setType($type)
     {
         $this->type = $type;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUserId()
+    {
+        return $this->userId;
+    }
+
+    /**
+     * @param string $userId
+     */
+    public function setUserId($userId)
+    {
+        $this->userId = $userId;
     }
 }
