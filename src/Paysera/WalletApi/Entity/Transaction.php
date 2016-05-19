@@ -142,6 +142,16 @@ class Paysera_WalletApi_Entity_Transaction
     protected $managerId;
 
     /**
+     * @var Paysera_WalletApi_Entity_Inquiry_Inquiry[]
+     */
+    protected $inquiries;
+
+    public function __construct()
+    {
+        $this->inquiries = array();
+    }
+
+    /**
      * Creates object, used for fluent interface
      *
      * @return self
@@ -849,5 +859,33 @@ class Paysera_WalletApi_Entity_Transaction
     public function getManagerId()
     {
         return $this->managerId;
+    }
+
+    /**
+     * @return Paysera_WalletApi_Entity_Inquiry_Inquiry[]
+     */
+    public function getInquiries()
+    {
+        return $this->inquiries;
+    }
+
+    /**
+     * @param Paysera_WalletApi_Entity_Inquiry_Inquiry[] $inquiries
+     * @return $this
+     */
+    public function setInquiries($inquiries)
+    {
+        $this->inquiries = $inquiries;
+        return $this;
+    }
+
+    /**
+     * @param Paysera_WalletApi_Entity_Inquiry_Inquiry $inquiry
+     * @return $this
+     */
+    public function addInquiry($inquiry)
+    {
+        $this->inquiries[] = $inquiry;
+        return $this;
     }
 }

@@ -691,6 +691,11 @@ class Paysera_WalletApi_Mapper
         if ($transaction->getUserInformation() !== null) {
             $result['user'] = $this->encodeUserInformation($transaction->getUserInformation());
         }
+        if ($transaction->getInquiries() !== null && count($transaction->getInquiries()) > 0) {
+            foreach ($transaction->getInquiries() as $inquiry) {
+                $result['inquiries'][] = $this->encodeInquiry($inquiry);
+            }
+        }
 
         return $result;
     }
@@ -765,6 +770,11 @@ class Paysera_WalletApi_Mapper
         }
         if (isset($data['manager_id'])) {
             $this->setProperty($transaction, 'managerId', $data['manager_id']);
+        }
+        if (isset($data['inquiries'])) {
+            foreach ($data['inquiries'] as $inquiryData) {
+                $transaction->addInquiry($this->decodeInquiry($inquiryData));
+            }
         }
 
         return $transaction;
@@ -1958,5 +1968,74 @@ class Paysera_WalletApi_Mapper
         $dateTime = new DateTime();
         $dateTime->setTimestamp($timestamp);
         return $dateTime;
+    }
+
+    public function decodeInquiry(array $inquiryData)
+    {
+        $inquiry = new Paysera_WalletApi_Entity_Inquiry_Inquiry();
+
+        if (isset($inquiryData['key'])) {
+            $inquiry->setIdentifier($inquiryData['key']);
+        }
+        if (isset($inquiryData['type'])) {
+            $inquiry->setType($inquiryData['type']);
+        }
+        if (isset($inquiryData['description'])) {
+            $inquiry->setDescription($inquiryData['description']);
+        }
+        if (isset($inquiryData['status'])) {
+            $inquiry->setStatus($inquiryData['status']);
+        }
+        if (isset($inquiryData['items'])) {
+            foreach ($inquiryData['items'] as $itemData) {
+                $inquiry->addInquiryItem($this->decodeInquiryItem($itemData));
+            }
+        }
+
+        return $inquiry;
+    }
+
+    public function decodeInquiryItem(array $itemData)
+    {
+        $item = new Paysera_WalletApi_Entity_Inquiry_InquiryItem();
+
+        if (isset($itemData['key'])) {
+            $item->setIdentifier($itemData['key']);
+        }
+        if (isset($itemData['type'])) {
+            $item->setType($itemData['type']);
+        }
+        if (isset($itemData['title'])) {
+            $item->setTitle($itemData['title']);
+        }
+
+        return $item;
+    }
+
+    public function encodeInquiryItem(Paysera_WalletApi_Entity_Inquiry_InquiryItem $item)
+    {
+        $data = array(
+            'key' => $item->getIdentifier(),
+            'type' => $item->getType(),
+            'title' => $item->getTitle(),
+        );
+
+        return array_filter($data);
+    }
+
+    public function encodeInquiry(Paysera_WalletApi_Entity_Inquiry_Inquiry $inquiry)
+    {
+        $data = array(
+            'key' => $inquiry->getIdentifier(),
+            'type' => $inquiry->getType(),
+            'description' => $inquiry->getDescription(),
+            'status' => $inquiry->getStatus(),
+        );
+
+        foreach ($inquiry->getInquiryItems() as $item) {
+            $data['items'][] = $this->encodeInquiryItem($item);
+        }
+
+        return array_filter($data);
     }
 }
