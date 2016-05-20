@@ -691,7 +691,7 @@ class Paysera_WalletApi_Mapper
         if ($transaction->getUserInformation() !== null) {
             $result['user'] = $this->encodeUserInformation($transaction->getUserInformation());
         }
-        if ($transaction->getInquiries() !== null && count($transaction->getInquiries()) > 0) {
+        if (count($transaction->getInquiries()) > 0) {
             foreach ($transaction->getInquiries() as $inquiry) {
                 $result['inquiries'][] = $this->encodeInquiry($inquiry);
             }
@@ -1974,8 +1974,8 @@ class Paysera_WalletApi_Mapper
     {
         $inquiry = new Paysera_WalletApi_Entity_Inquiry_Inquiry();
 
-        if (isset($inquiryData['key'])) {
-            $inquiry->setIdentifier($inquiryData['key']);
+        if (isset($inquiryData['identifier'])) {
+            $inquiry->setIdentifier($inquiryData['identifier']);
         }
         if (isset($inquiryData['type'])) {
             $inquiry->setType($inquiryData['type']);
@@ -1999,8 +1999,8 @@ class Paysera_WalletApi_Mapper
     {
         $item = new Paysera_WalletApi_Entity_Inquiry_InquiryItem();
 
-        if (isset($itemData['key'])) {
-            $item->setIdentifier($itemData['key']);
+        if (isset($itemData['identifier'])) {
+            $item->setIdentifier($itemData['identifier']);
         }
         if (isset($itemData['type'])) {
             $item->setType($itemData['type']);
@@ -2015,7 +2015,7 @@ class Paysera_WalletApi_Mapper
     public function encodeInquiryItem(Paysera_WalletApi_Entity_Inquiry_InquiryItem $item)
     {
         $data = array(
-            'key' => $item->getIdentifier(),
+            'identifier' => $item->getIdentifier(),
             'type' => $item->getType(),
             'title' => $item->getTitle(),
         );
@@ -2026,10 +2026,9 @@ class Paysera_WalletApi_Mapper
     public function encodeInquiry(Paysera_WalletApi_Entity_Inquiry_Inquiry $inquiry)
     {
         $data = array(
-            'key' => $inquiry->getIdentifier(),
+            'identifier' => $inquiry->getIdentifier(),
             'type' => $inquiry->getType(),
             'description' => $inquiry->getDescription(),
-            'status' => $inquiry->getStatus(),
         );
 
         foreach ($inquiry->getInquiryItems() as $item) {
