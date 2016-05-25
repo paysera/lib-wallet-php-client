@@ -781,6 +781,48 @@ class Paysera_WalletApi_Mapper
     }
 
     /**
+     * @param array $data
+     *
+     * @return Paysera_WalletApi_Entity_Inquiry_InquiryResult
+     */
+    public function decodeInquiryResult($data)
+    {
+        $inquiry = new Paysera_WalletApi_Entity_Inquiry_InquiryResult();
+
+        if (isset($data['inquiry_identifier'])) {
+            $inquiry->setInquiryIdentifier($data['inquiry_identifier']);
+        }
+
+        if (isset($data['item_identifier'])) {
+            $inquiry->setItemIdentifier($data['item_identifier']);
+        }
+
+        if (isset($data['value'])) {
+            $inquiry->setValue($data['value']);
+        }
+
+        return $inquiry;
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return Paysera_WalletApi_Entity_Inquiry_InquiryResult[]
+     */
+    public function decodeInquiryResults($data)
+    {
+        $inquiryItems = array();
+
+        if (isset($data['items'])) {
+            foreach ($data['items'] as $item) {
+                $inquiryItems[] = $this->decodeInquiryResult($item);
+            }
+        }
+
+        return $inquiryItems;
+    }
+
+    /**
      * @param Paysera_WalletApi_Entity_TransactionPrice[] $transactionPrices
      *
      * @return array
