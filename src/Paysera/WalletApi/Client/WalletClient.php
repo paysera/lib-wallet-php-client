@@ -423,6 +423,21 @@ class Paysera_WalletApi_Client_WalletClient extends Paysera_WalletApi_Client_Bas
     }
 
     /**
+     * @param string $transactionKey
+     *
+     * @return Paysera_WalletApi_Entity_Inquiry_InquiryResult[]
+     *
+     * @throws Paysera_WalletApi_Exception_LogicException
+     * @throws Paysera_WalletApi_Exception_ApiException
+     */
+    public function getInquiredInformation($transactionKey)
+    {
+        Paysera_WalletApi_Util_Assert::isScalar($transactionKey);
+        $responseData = $this->get('transaction/' . $transactionKey . '/inquired-information');
+        return $this->mapper->decodeInquiryResults($responseData);
+    }
+
+    /**
      * Gets available types to accept transaction using API
      *
      * @param string  $transactionKey
