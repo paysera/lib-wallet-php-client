@@ -13,20 +13,20 @@ class Paysera_WalletApi_Entity_User_Identity_Mapper
     {
         $identity = new Paysera_WalletApi_Entity_User_Identity();
 
-        if (isset($identity['name'])) {
-            $identity->setName($identity['name']);
+        if (isset($data['name'])) {
+            $identity->setName($data['name']);
         }
 
-        if (isset($identity['surname'])) {
-            $identity->setSurname($identity['surname']);
+        if (isset($data['surname'])) {
+            $identity->setSurname($data['surname']);
         }
 
-        if (isset($identity['nationality'])) {
-            $identity->setNationality($identity['nationality']);
+        if (isset($data['nationality'])) {
+            $identity->setNationality($data['nationality']);
         }
 
-        if (isset($identity['code'])) {
-            $identity->setCode($identity['code']);
+        if (isset($data['code'])) {
+            $identity->setCode($data['code']);
         }
 
         return $identity;
