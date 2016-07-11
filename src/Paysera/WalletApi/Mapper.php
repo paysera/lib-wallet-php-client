@@ -787,7 +787,7 @@ class Paysera_WalletApi_Mapper
      */
     public function decodeInquiryResult($data)
     {
-        return (new Paysera_WalletApi_Entity_Inquiry_InquiryResult_Mapper())
+        return (new Paysera_WalletApi_Mapper_InquiryResultMapper())
             ->mapToEntity($data);
     }
 

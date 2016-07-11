@@ -1,7 +1,5 @@
 <?php
 
-namespace Paysera\WalletApi\Mappers;
-
 class InquiryResultMapperTest extends \PHPUnit_Framework_TestCase
 {
     public function testInquiryResultValueWithoutIdentity()
@@ -13,11 +11,8 @@ class InquiryResultMapperTest extends \PHPUnit_Framework_TestCase
             'item_identifier' => 'item identifier',
             'value' => $inquiryValue,
         ];
-        
-        $result = (new \Paysera_WalletApi_Entity_InquiryResult_Mapper())->mapToEntity($data);
 
-        $this->assertNotInstanceOf($result->getValue(), \Paysera_WalletApi_Entity_User_Identity::class);
-
+        $result = (new \Paysera_WalletApi_Mapper_InquiryResultMapper())->mapToEntity($data);
         $this->assertSame($result->getInquiryIdentifier(), $data['inquiry_identifier']);
         $this->assertSame($result->getItemIdentifier(), $data['item_identifier']);
         $this->assertNull($result->getItemType());
@@ -41,18 +36,17 @@ class InquiryResultMapperTest extends \PHPUnit_Framework_TestCase
             'value' => $inquiryValue,
         ];
 
-        $result = (new \Paysera_WalletApi_Entity_InquiryResult_Mapper())->mapToEntity($data);
+        $result = (new \Paysera_WalletApi_Mapper_InquiryResultMapper())->mapToEntity($data);
 
         $this->assertSame($result->getInquiryIdentifier(), $data['inquiry_identifier']);
         $this->assertSame($result->getItemIdentifier(), $data['item_identifier']);
-        $this->assertNull($result->getItemType());
         $this->assertNotNull($result->getValue());
         $this->assertSame($result->getItemType(), $data['item_type']);
 
         $identity = $result->getValue();
-        $this->assertInstanceOf($identity, \Paysera_WalletApi_Entity_User_Identity::class);
+        $this->assertInstanceOf(\Paysera_WalletApi_Entity_User_Identity::class, $identity);
         $this->assertSame($identity->getName(), $inquiryValue['name']);
-        $this->assertSame($identity->getSurname(), $inquiryValue['name']);
+        $this->assertSame($identity->getSurname(), $inquiryValue['surname']);
         $this->assertSame($identity->getNationality(), $inquiryValue['nationality']);
         $this->assertSame($identity->getCode(), $inquiryValue['code']);
 

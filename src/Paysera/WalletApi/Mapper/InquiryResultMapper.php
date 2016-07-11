@@ -1,6 +1,6 @@
 <?php
 
-class Paysera_WalletApi_Entity_Inquiry_InquiryResult_Mapper
+class Paysera_WalletApi_Mapper_InquiryResultMapper
 {
     /**
      * Maps array to Inquiry result entity
@@ -28,7 +28,7 @@ class Paysera_WalletApi_Entity_Inquiry_InquiryResult_Mapper
         if (isset($data['value'])) {
             $value = $data['value'];
             if ($inquiryResult->getItemType() == 'user_identity') {
-                $value = (new Paysera_WalletApi_Entity_User_Identity_Mapper())
+                $value = (new Paysera_WalletApi_Mapper_IdentityMapper())
                     ->mapToEntity($data['value']);
             }
             $inquiryResult->setValue($value);

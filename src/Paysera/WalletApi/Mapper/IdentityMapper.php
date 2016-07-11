@@ -1,6 +1,6 @@
 <?php
 
-class Paysera_WalletApi_Entity_User_Identity_Mapper
+class Paysera_WalletApi_Mapper_IdentityMapper
 {
     /**
      * Maps array to Identity entity
