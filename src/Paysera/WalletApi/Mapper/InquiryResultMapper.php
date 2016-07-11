@@ -28,12 +28,8 @@ class Paysera_WalletApi_Mapper_InquiryResultMapper
             $inquiryResult->setItemIdentifier($data['item_identifier']);
         }
 
-        if (isset($data['item_type'])) {
-            $inquiryResult->setItemType($data['item_type']);
-        }
-
         if (isset($data['value'])) {
-            $mapper = $this->getInquiryResultMapper($inquiryResult->getItemType());
+            $mapper = $this->getInquiryResultMapper($data['item_type']);
             $inquiryResult->setValue($mapper->mapToEntity($data['value']));
         }
 
@@ -53,7 +49,6 @@ class Paysera_WalletApi_Mapper_InquiryResultMapper
         return array(
             'inquiry_identifier' => $entity->getInquiryIdentifier(),
             'item_identifier' => $entity->getItemIdentifier(),
-            'item_type' => $entity->getItemType(),
             'value' => $mapper->mapFromEntity($entity->getValue())
         );
     }

@@ -54,7 +54,6 @@ class InquiryResultMapperTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($result->getInquiryIdentifier(), $data['inquiry_identifier']);
         $this->assertSame($result->getItemIdentifier(), $data['item_identifier']);
         $this->assertNotNull($result->getValue());
-        $this->assertSame($result->getItemType(), $data['item_type']);
 
         $identity = $result->getValue();
         $this->assertInstanceOf('\Paysera_WalletApi_Entity_User_Identity', $identity);
