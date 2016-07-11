@@ -2,16 +2,16 @@
 
 class InquiryResultMapperTest extends \PHPUnit_Framework_TestCase
 {
-    private $valueProviders;
+    private $inquiryResultMapper;
 
     public function setUp()
     {
-        $this->valueProviders = array(
+        $this->inquiryResultMapper = new \Paysera_WalletApi_Mapper_InquiryResultMapper(array(
             Paysera_WalletApi_Entity_Inquiry_InquiryItem::TYPE_USER_IDENTITY =>
                 new Paysera_WalletApi_Mapper_IdentityMapper(),
             Paysera_WalletApi_Entity_Inquiry_InquiryItem::TYPE_PERSON_CODE =>
                 new Paysera_WalletApi_Mapper_PlainValueMapper()
-        );
+        ));
     }
 
     public function testInquiryResultValueWithoutIdentity()
@@ -25,8 +25,7 @@ class InquiryResultMapperTest extends \PHPUnit_Framework_TestCase
             'value' => $inquiryValue,
         ];
 
-        $providers = (new \Paysera_WalletApi_Mapper_InquiryResultMapper($this->valueProviders));
-        $result = $providers->mapToEntity($data);
+        $result = $this->inquiryResultMapper->mapToEntity($data);
 
         $this->assertSame($result->getInquiryIdentifier(), $data['inquiry_identifier']);
         $this->assertSame($result->getItemIdentifier(), $data['item_identifier']);
@@ -50,8 +49,7 @@ class InquiryResultMapperTest extends \PHPUnit_Framework_TestCase
             'value' => $inquiryValue,
         ];
 
-        $providers = (new \Paysera_WalletApi_Mapper_InquiryResultMapper($this->valueProviders));
-        $result = $providers->mapToEntity($data);
+        $result = $this->inquiryResultMapper->mapToEntity($data);
 
         $this->assertSame($result->getInquiryIdentifier(), $data['inquiry_identifier']);
         $this->assertSame($result->getItemIdentifier(), $data['item_identifier']);
@@ -59,7 +57,7 @@ class InquiryResultMapperTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($result->getItemType(), $data['item_type']);
 
         $identity = $result->getValue();
-        $this->assertInstanceOf(\Paysera_WalletApi_Entity_User_Identity::class, $identity);
+        $this->assertInstanceOf('\Paysera_WalletApi_Entity_User_Identity', $identity);
         $this->assertSame($identity->getName(), $inquiryValue['name']);
         $this->assertSame($identity->getSurname(), $inquiryValue['surname']);
         $this->assertSame($identity->getNationality(), $inquiryValue['nationality']);

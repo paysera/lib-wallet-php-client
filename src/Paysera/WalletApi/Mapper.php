@@ -794,8 +794,8 @@ class Paysera_WalletApi_Mapper
                 new Paysera_WalletApi_Mapper_PlainValueMapper()
         );
 
-        return (new Paysera_WalletApi_Mapper_InquiryResultMapper($valueProviders))
-            ->mapToEntity($data);
+        $mapper = new Paysera_WalletApi_Mapper_InquiryResultMapper($valueProviders);
+        return $mapper->mapToEntity($data);
     }
 
     /**
@@ -933,7 +933,8 @@ class Paysera_WalletApi_Mapper
      */
     public function encodeUserIdentity(Paysera_WalletApi_Entity_User_Identity $identity)
     {
-        return (new Paysera_WalletApi_Mapper_IdentityMapper())->mapToArray($identity);
+        $mapper = new Paysera_WalletApi_Mapper_IdentityMapper();
+        return $mapper->mapToArray($identity);
     }
 
     /**
@@ -1423,7 +1424,8 @@ class Paysera_WalletApi_Mapper
      */
     public function decodeIdentity($data)
     {
-        return (new Paysera_WalletApi_Mapper_IdentityMapper())->mapToEntity($data);
+        $mapper = new Paysera_WalletApi_Mapper_IdentityMapper();
+        return $mapper->mapToEntity($data);
     }
 
     /**

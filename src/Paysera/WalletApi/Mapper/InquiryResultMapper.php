@@ -2,11 +2,11 @@
 
 class Paysera_WalletApi_Mapper_InquiryResultMapper
 {
-    private $valueProviders;
+    private $inquiryResultMapper;
 
-    public function __construct(array $valueProviders)
+    public function __construct(array $inquiryResultMapper)
     {
-        $this->valueProviders = $valueProviders;
+        $this->inquiryResultMapper = $inquiryResultMapper;
     }
 
     /**
@@ -59,12 +59,12 @@ class Paysera_WalletApi_Mapper_InquiryResultMapper
     }
 
     /**
-     * @param $type
+     * @param string $type
      *
-     * @return mixed
+     * @return Object
      */
     private function getValueProvider($type)
     {
-        return $this->valueProviders[$type];
+        return $this->inquiryResultMapper[$type];
     }
 }

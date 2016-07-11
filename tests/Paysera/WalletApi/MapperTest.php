@@ -20,14 +20,16 @@ class MapperTest extends \PHPUnit_Framework_TestCase
 
     public function testIdentityMapperEncoding()
     {
-        $identity = (new \Paysera_WalletApi_Entity_User_Identity())
+        $identity = new \Paysera_WalletApi_Entity_User_Identity();
+        $identity
             ->setName('Name')
             ->setSurname("Surname")
             ->setCode(9999999)
             ->setNationality("LT")
         ;
 
-        $result = (new \Paysera_WalletApi_Mapper_IdentityMapper())->mapToArray($identity);
+        $mapper = new \Paysera_WalletApi_Mapper_IdentityMapper();
+        $result = $mapper->mapToArray($identity);
 
         $this->assertSame($identity->getName(), $result['name']);
         $this->assertSame($identity->getSurname(), $result['surname']);
@@ -44,7 +46,8 @@ class MapperTest extends \PHPUnit_Framework_TestCase
             'nationality' => 'LT'
         );
 
-        $result = (new \Paysera_WalletApi_Mapper_IdentityMapper())->mapToEntity($identity);
+        $mapper = new \Paysera_WalletApi_Mapper_IdentityMapper();
+        $result = $mapper->mapToEntity($identity);
 
         $this->assertSame($identity['name'], $result->getName());
         $this->assertSame($identity['surname'], $result->getSurname());
