@@ -3,6 +3,31 @@
 class Paysera_WalletApi_Mapper_IdentityMapper
 {
     /**
+     * Maps Identity entity to array
+     *
+     * @param Paysera_WalletApi_Entity_User_Identity $identity
+     *
+     * @return Paysera_WalletApi_Entity_User_Identity
+     */
+    public function mapToArray(Paysera_WalletApi_Entity_User_Identity $identity)
+    {
+        $data = array();
+        if ($identity->getName() !== null) {
+            $data['name'] = $identity->getName();
+        }
+        if ($identity->getSurname() !== null) {
+            $data['surname'] = $identity->getSurname();
+        }
+        if ($identity->getNationality() !== null) {
+            $data['nationality'] = $identity->getNationality();
+        }
+        if ($identity->getCode() !== null) {
+            $data['code'] = $identity->getCode();
+        }
+        return $data;
+    }
+
+    /**
      * Maps array to Identity entity
      *
      * @param array $data

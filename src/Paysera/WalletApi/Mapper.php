@@ -933,20 +933,7 @@ class Paysera_WalletApi_Mapper
      */
     public function encodeUserIdentity(Paysera_WalletApi_Entity_User_Identity $identity)
     {
-        $data = array();
-        if ($identity->getName() !== null) {
-            $data['name'] = $identity->getName();
-        }
-        if ($identity->getSurname() !== null) {
-            $data['surname'] = $identity->getSurname();
-        }
-        if ($identity->getNationality() !== null) {
-            $data['nationality'] = $identity->getNationality();
-        }
-        if ($identity->getCode() !== null) {
-            $data['code'] = $identity->getCode();
-        }
-        return $data;
+        return (new Paysera_WalletApi_Mapper_IdentityMapper())->mapToArray($identity);
     }
 
     /**
@@ -1436,18 +1423,7 @@ class Paysera_WalletApi_Mapper
      */
     public function decodeIdentity($data)
     {
-        $identity = new Paysera_WalletApi_Entity_User_Identity();
-
-        $this->setProperty($identity, 'name', $data['name']);
-        $this->setProperty($identity, 'surname', $data['surname']);
-        if (isset($data['nationality'])) {
-            $this->setProperty($identity, 'nationality', $data['nationality']);
-        }
-        if (isset($data['code'])) {
-            $this->setProperty($identity, 'code', $data['code']);
-        }
-
-        return $identity;
+        return (new Paysera_WalletApi_Mapper_IdentityMapper())->mapToEntity($data);
     }
 
     /**
