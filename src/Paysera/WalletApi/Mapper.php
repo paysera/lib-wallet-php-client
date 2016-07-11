@@ -787,7 +787,12 @@ class Paysera_WalletApi_Mapper
      */
     public function decodeInquiryResult($data)
     {
-        return (new Paysera_WalletApi_Mapper_InquiryResultMapper())
+        $valueProviders = array(
+            'user_identity' => new Paysera_WalletApi_Mapper_IdentityMapper(),
+            'person_code' => new Paysera_WalletApi_Mapper_PlainValueMapper()
+        );
+
+        return (new Paysera_WalletApi_Mapper_InquiryResultMapper($valueProviders))
             ->mapToEntity($data);
     }
 

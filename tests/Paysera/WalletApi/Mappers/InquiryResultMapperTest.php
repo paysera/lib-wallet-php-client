@@ -2,6 +2,17 @@
 
 class InquiryResultMapperTest extends \PHPUnit_Framework_TestCase
 {
+    private $valueProviders;
+
+    public function setUp()
+    {
+        $this->valueProviders = array(
+            'user_identity' => new Paysera_WalletApi_Mapper_IdentityMapper(),
+            'person_code' => new Paysera_WalletApi_Mapper_PlainValueMapper()
+        );
+
+    }
+
     public function testInquiryResultValueWithoutIdentity()
     {
         $inquiryValue = 9999999;
@@ -9,13 +20,15 @@ class InquiryResultMapperTest extends \PHPUnit_Framework_TestCase
         $data = [
             'inquiry_identifier' => 'identifier',
             'item_identifier' => 'item identifier',
+            'item_type' => 'person_code',
             'value' => $inquiryValue,
         ];
 
-        $result = (new \Paysera_WalletApi_Mapper_InquiryResultMapper())->mapToEntity($data);
+        $providers = (new \Paysera_WalletApi_Mapper_InquiryResultMapper($this->valueProviders));
+        $result = $providers->mapToEntity($data);
+
         $this->assertSame($result->getInquiryIdentifier(), $data['inquiry_identifier']);
         $this->assertSame($result->getItemIdentifier(), $data['item_identifier']);
-        $this->assertNull($result->getItemType());
         $this->assertNotNull($result->getValue());
         $this->assertSame($result->getValue(), $inquiryValue);
     }
@@ -36,7 +49,8 @@ class InquiryResultMapperTest extends \PHPUnit_Framework_TestCase
             'value' => $inquiryValue,
         ];
 
-        $result = (new \Paysera_WalletApi_Mapper_InquiryResultMapper())->mapToEntity($data);
+        $providers = (new \Paysera_WalletApi_Mapper_InquiryResultMapper($this->valueProviders));
+        $result = $providers->mapToEntity($data);
 
         $this->assertSame($result->getInquiryIdentifier(), $data['inquiry_identifier']);
         $this->assertSame($result->getItemIdentifier(), $data['item_identifier']);

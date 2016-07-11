@@ -2,6 +2,13 @@
 
 class Paysera_WalletApi_Mapper_InquiryResultMapper
 {
+    private $valueProviders;
+
+    public function __construct(array $valueProviders)
+    {
+        $this->valueProviders = $valueProviders;
+    }
+
     /**
      * Maps array to Inquiry result entity
      *
@@ -26,14 +33,38 @@ class Paysera_WalletApi_Mapper_InquiryResultMapper
         }
 
         if (isset($data['value'])) {
-            $value = $data['value'];
-            if ($inquiryResult->getItemType() == 'user_identity') {
-                $value = (new Paysera_WalletApi_Mapper_IdentityMapper())
-                    ->mapToEntity($data['value']);
-            }
-            $inquiryResult->setValue($value);
+            $provider = $this->getValueProvider($inquiryResult->getItemType());
+            $inquiryResult->setValue($provider->mapToEntity($data['value']));
         }
 
         return $inquiryResult;
+    }
+
+    /**
+     * Maps Inquiry result entity to array
+     *
+     * @param Paysera_WalletApi_Entity_Inquiry_InquiryResult $entity
+     *
+     * @return array
+     */
+    public function mapFromEntity($entity)
+    {
+        $valueProvider = $this->getValueProvider($entity->getItemType());
+        return array(
+            'inquiry_identifier' => $entity->getInquiryIdentifier(),
+            'item_identifier' => $entity->getItemIdentifier(),
+            'item_type' => $entity->getItemType(),
+            'value' => $valueProvider->mapFromEntity($entity->getValue())
+        );
+    }
+
+    /**
+     * @param $type
+     *
+     * @return mixed
+     */
+    private function getValueProvider($type)
+    {
+        return $this->valueProviders[$type];
     }
 }
