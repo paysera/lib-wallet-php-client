@@ -7,7 +7,7 @@ class Paysera_WalletApi_Mapper_IdentityMapper
      *
      * @param Paysera_WalletApi_Entity_User_Identity $identity
      *
-     * @return Paysera_WalletApi_Entity_User_Identity
+     * @return array
      */
     public function mapFromEntity(Paysera_WalletApi_Entity_User_Identity $identity)
     {
