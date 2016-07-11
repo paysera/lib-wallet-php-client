@@ -787,21 +787,8 @@ class Paysera_WalletApi_Mapper
      */
     public function decodeInquiryResult($data)
     {
-        $inquiry = new Paysera_WalletApi_Entity_Inquiry_InquiryResult();
-
-        if (isset($data['inquiry_identifier'])) {
-            $inquiry->setInquiryIdentifier($data['inquiry_identifier']);
-        }
-
-        if (isset($data['item_identifier'])) {
-            $inquiry->setItemIdentifier($data['item_identifier']);
-        }
-
-        if (isset($data['value'])) {
-            $inquiry->setValue($data['value']);
-        }
-
-        return $inquiry;
+        return (new Paysera_WalletApi_Entity_Inquiry_InquiryResult_Mapper())
+            ->mapToEntity($data);
     }
 
     /**

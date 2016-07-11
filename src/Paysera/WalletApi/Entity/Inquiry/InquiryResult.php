@@ -15,6 +15,11 @@ class Paysera_WalletApi_Entity_Inquiry_InquiryResult
     private $itemIdentifier;
 
     /**
+     * @var string
+     */
+    private $itemType;
+    
+    /**
      * @var mixed
      */
     private $value;
@@ -75,6 +80,26 @@ class Paysera_WalletApi_Entity_Inquiry_InquiryResult
     public function setValue($value)
     {
         $this->value = $value;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getItemType()
+    {
+        return $this->itemType;
+    }
+
+    /**
+     * @param string $itemType
+     *
+     * @return $this
+     */
+    public function setItemType($itemType)
+    {
+        $this->itemType = $itemType;
 
         return $this;
     }
