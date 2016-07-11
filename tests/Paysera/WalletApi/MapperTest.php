@@ -29,7 +29,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
         ;
 
         $mapper = new \Paysera_WalletApi_Mapper_IdentityMapper();
-        $result = $mapper->mapToArray($identity);
+        $result = $mapper->mapFromEntity($identity);
 
         $this->assertSame($identity->getName(), $result['name']);
         $this->assertSame($identity->getSurname(), $result['surname']);

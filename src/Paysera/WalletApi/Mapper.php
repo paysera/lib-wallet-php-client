@@ -934,7 +934,7 @@ class Paysera_WalletApi_Mapper
     public function encodeUserIdentity(Paysera_WalletApi_Entity_User_Identity $identity)
     {
         $mapper = new Paysera_WalletApi_Mapper_IdentityMapper();
-        return $mapper->mapToArray($identity);
+        return $mapper->mapFromEntity($identity);
     }
 
     /**

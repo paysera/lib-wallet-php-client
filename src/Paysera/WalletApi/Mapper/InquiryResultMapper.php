@@ -33,8 +33,8 @@ class Paysera_WalletApi_Mapper_InquiryResultMapper
         }
 
         if (isset($data['value'])) {
-            $provider = $this->getValueProvider($inquiryResult->getItemType());
-            $inquiryResult->setValue($provider->mapToEntity($data['value']));
+            $mapper = $this->getInquiryResultMapper($inquiryResult->getItemType());
+            $inquiryResult->setValue($mapper->mapToEntity($data['value']));
         }
 
         return $inquiryResult;
@@ -49,12 +49,12 @@ class Paysera_WalletApi_Mapper_InquiryResultMapper
      */
     public function mapFromEntity($entity)
     {
-        $valueProvider = $this->getValueProvider($entity->getItemType());
+        $mapper = $this->getInquiryResultMapper($entity->getItemType());
         return array(
             'inquiry_identifier' => $entity->getInquiryIdentifier(),
             'item_identifier' => $entity->getItemIdentifier(),
             'item_type' => $entity->getItemType(),
-            'value' => $valueProvider->mapFromEntity($entity->getValue())
+            'value' => $mapper->mapFromEntity($entity->getValue())
         );
     }
 
@@ -63,7 +63,7 @@ class Paysera_WalletApi_Mapper_InquiryResultMapper
      *
      * @return Object
      */
-    private function getValueProvider($type)
+    private function getInquiryResultMapper($type)
     {
         return $this->inquiryResultMapper[$type];
     }
