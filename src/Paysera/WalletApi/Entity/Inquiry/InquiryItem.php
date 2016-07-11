@@ -4,6 +4,7 @@
 class Paysera_WalletApi_Entity_Inquiry_InquiryItem
 {
     const TYPE_PERSON_CODE = 'person_code';
+    const TYPE_USER_IDENTITY = 'user_identity';
 
     private $type;
     private $title;

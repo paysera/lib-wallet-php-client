@@ -787,21 +787,15 @@ class Paysera_WalletApi_Mapper
      */
     public function decodeInquiryResult($data)
     {
-        $inquiry = new Paysera_WalletApi_Entity_Inquiry_InquiryResult();
+        $valueProviders = array(
+            Paysera_WalletApi_Entity_Inquiry_InquiryItem::TYPE_USER_IDENTITY =>
+                new Paysera_WalletApi_Mapper_IdentityMapper(),
+            Paysera_WalletApi_Entity_Inquiry_InquiryItem::TYPE_PERSON_CODE =>
+                new Paysera_WalletApi_Mapper_PlainValueMapper()
+        );
 
-        if (isset($data['inquiry_identifier'])) {
-            $inquiry->setInquiryIdentifier($data['inquiry_identifier']);
-        }
-
-        if (isset($data['item_identifier'])) {
-            $inquiry->setItemIdentifier($data['item_identifier']);
-        }
-
-        if (isset($data['value'])) {
-            $inquiry->setValue($data['value']);
-        }
-
-        return $inquiry;
+        $mapper = new Paysera_WalletApi_Mapper_InquiryResultMapper($valueProviders);
+        return $mapper->mapToEntity($data);
     }
 
     /**
@@ -939,20 +933,8 @@ class Paysera_WalletApi_Mapper
      */
     public function encodeUserIdentity(Paysera_WalletApi_Entity_User_Identity $identity)
     {
-        $data = array();
-        if ($identity->getName() !== null) {
-            $data['name'] = $identity->getName();
-        }
-        if ($identity->getSurname() !== null) {
-            $data['surname'] = $identity->getSurname();
-        }
-        if ($identity->getNationality() !== null) {
-            $data['nationality'] = $identity->getNationality();
-        }
-        if ($identity->getCode() !== null) {
-            $data['code'] = $identity->getCode();
-        }
-        return $data;
+        $mapper = new Paysera_WalletApi_Mapper_IdentityMapper();
+        return $mapper->mapFromEntity($identity);
     }
 
     /**
@@ -1442,18 +1424,8 @@ class Paysera_WalletApi_Mapper
      */
     public function decodeIdentity($data)
     {
-        $identity = new Paysera_WalletApi_Entity_User_Identity();
-
-        $this->setProperty($identity, 'name', $data['name']);
-        $this->setProperty($identity, 'surname', $data['surname']);
-        if (isset($data['nationality'])) {
-            $this->setProperty($identity, 'nationality', $data['nationality']);
-        }
-        if (isset($data['code'])) {
-            $this->setProperty($identity, 'code', $data['code']);
-        }
-
-        return $identity;
+        $mapper = new Paysera_WalletApi_Mapper_IdentityMapper();
+        return $mapper->mapToEntity($data);
     }
 
     /**
