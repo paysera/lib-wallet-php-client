@@ -12,6 +12,9 @@ class Paysera_WalletApi_Entity_Statement
     const TYPE_TAX = 'tax';
     const TYPE_RETURN = 'return';
 
+    const DIRECTION_IN = 'in';
+    const DIRECTION_OUT = 'out';
+
     /**
      * @var integer
      */
@@ -21,6 +24,11 @@ class Paysera_WalletApi_Entity_Statement
      * @var Paysera_WalletApi_Entity_Money
      */
     protected $amount;
+
+    /**
+     * @var string
+     */
+    protected $direction;
 
     /**
      * @var DateTime
@@ -65,6 +73,16 @@ class Paysera_WalletApi_Entity_Statement
     public function getAmount()
     {
         return $this->amount;
+    }
+
+    /**
+     * Gets direction
+     *
+     * @return string
+     */
+    public function getDirection()
+    {
+        return $this->direction;
     }
 
     /**
@@ -116,6 +134,4 @@ class Paysera_WalletApi_Entity_Statement
     {
         return $this->type;
     }
-
-
 }
