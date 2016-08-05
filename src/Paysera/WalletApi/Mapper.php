@@ -1327,6 +1327,7 @@ class Paysera_WalletApi_Mapper
         $this->setProperty($statement, 'amount', new Paysera_WalletApi_Entity_Money($data['amount'], $data['currency']));
         $this->setProperty($statement, 'date', new DateTime('@' . $data['date']));
         $this->setProperty($statement, 'details', $data['details']);
+        $this->setProperty($statement, 'direction', $data['direction']);
         if (isset($data['type'])) {
             $this->setProperty($statement, 'type', $data['type']);
         }
@@ -1339,12 +1340,22 @@ class Paysera_WalletApi_Mapper
         return $statement;
     }
 
+    /**
+     * Decodes statement party object from array
+     *
+     * @param array $data
+     *
+     * @return Paysera_WalletApi_Entity_Statement_Party
+     */
     public function decodeStatementParty($data)
     {
         $party = new Paysera_WalletApi_Entity_Statement_Party();
         $this->setProperties($party, $data, array('name', 'code', 'bic'));
         if (isset($data['account_number'])) {
             $this->setProperty($party, 'accountNumber', $data['account_number']);
+        }
+        if (!empty($data['display_name']) && empty($data['name'])) {
+            $this->setProperty($party, 'name', $data['display_name']);
         }
         return $party;
     }
