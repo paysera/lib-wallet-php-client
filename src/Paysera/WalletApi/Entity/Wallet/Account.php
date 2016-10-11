@@ -42,6 +42,12 @@ class Paysera_WalletApi_Entity_Wallet_Account
     protected $userId;
 
     /**
+     * @var array
+     * @readonly
+     */
+    protected $ibans;
+
+    /**
      * Creates object, used for fluent interface
      *
      * @return self
@@ -113,5 +119,13 @@ class Paysera_WalletApi_Entity_Wallet_Account
     public function setUserId($userId)
     {
         $this->userId = $userId;
+    }
+
+    /**
+     * @return array
+     */
+    public function getIbans()
+    {
+        return $this->ibans;
     }
 }

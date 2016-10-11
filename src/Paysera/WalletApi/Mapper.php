@@ -1225,7 +1225,39 @@ class Paysera_WalletApi_Mapper
             $this->setProperty($account, 'userId', $data['user_id']);
         }
 
+        if (isset($data['ibans'])) {
+            $this->setProperty($account, 'ibans', $this->decodeIbans($data['ibans']));
+        }
+
         return $account;
+    }
+
+    /**
+     * @param $data
+     *
+     * @return array
+     */
+    public function decodeIbans($data)
+    {
+        $result = array();
+        foreach ($data as $key => $item) {
+            $result[$key] = $this->decodeIban($item);
+        }
+        return $result;
+    }
+
+    /**
+     * @param $data
+     *
+     * @return string
+     */
+    public function decodeIban($data)
+    {
+        if (is_string($data)) {
+            $data = trim($data);
+        }
+
+        return $data;
     }
 
     /**
