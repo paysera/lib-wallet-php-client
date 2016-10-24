@@ -1694,7 +1694,9 @@ class Paysera_WalletApi_Mapper
 
         /** @var Paysera_WalletApi_Entity_PayCategory $cat */
         foreach ($result as $cat) {
-            $cat->setParent($result[$cat->getParentId()]);
+            if ($cat->getParentId() !== null) {
+                $cat->setParent($result[$cat->getParentId()]);
+            }
         }
 
         return $result;
