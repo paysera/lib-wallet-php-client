@@ -1525,7 +1525,9 @@ class Paysera_WalletApi_Mapper
 
         $services = $this->encodeLocationServices(
             $object->getServices(),
-            $object->getPayCategories()
+            $object->getPayCategories(),
+            $object->getCashInTypes(),
+            $object->getCashOutTypes()
         );
         return array(
             'id'            => $object->getId(),
@@ -1601,8 +1603,20 @@ class Paysera_WalletApi_Mapper
                 }
             }
             $location->setServices($services);
-            if (!empty($data['services']['pay']['categories'])) {
-                $location->setPayCategories($data['services']['pay']['categories']);
+            if (!empty($data['services'][Paysera_WalletApi_Entity_Location::SERVICE_TYPE_PAY]['categories'])) {
+                $location->setPayCategories(
+                    $data['services'][Paysera_WalletApi_Entity_Location::SERVICE_TYPE_PAY]['categories']
+                );
+            }
+            if (!empty($data['services'][Paysera_WalletApi_Entity_Location::SERVICE_TYPE_CASH_IN]['types'])) {
+                $location->setCashInTypes(
+                    $data['services'][Paysera_WalletApi_Entity_Location::SERVICE_TYPE_CASH_IN]['types']
+                );
+            }
+            if (!empty($data['services'][Paysera_WalletApi_Entity_Location::SERVICE_TYPE_CASH_OUT]['types'])) {
+                $location->setCashOutTypes(
+                    $data['services'][Paysera_WalletApi_Entity_Location::SERVICE_TYPE_CASH_OUT]['types']
+                );
             }
         }
 
@@ -1786,19 +1800,32 @@ class Paysera_WalletApi_Mapper
      *
      * @param array $services
      * @param array $categories
+     * @param array $cashInTypes
+     * @param array $cashOutTypes
      *
      * @return array
      */
-    public function encodeLocationServices(array $services, array $categories)
-    {
+    public function encodeLocationServices(
+        array $services,
+        array $categories,
+        array $cashInTypes,
+        array $cashOutTypes
+    ) {
         $data = array();
         foreach ($services as $serviceName) {
             $data[$serviceName] = array('available' => true);
         }
 
-        if (isset($data['pay']) && sizeof($categories) > 0) {
-            $data['pay']['categories'] = $categories;
+        if (isset($data[Paysera_WalletApi_Entity_Location::SERVICE_TYPE_PAY]) && count($categories) > 0) {
+            $data[Paysera_WalletApi_Entity_Location::SERVICE_TYPE_PAY]['categories'] = $categories;
         }
+        if (isset($data[Paysera_WalletApi_Entity_Location::SERVICE_TYPE_CASH_IN]) && count($cashInTypes) > 0) {
+            $data[Paysera_WalletApi_Entity_Location::SERVICE_TYPE_CASH_IN]['types'] = $cashInTypes;
+        }
+        if (isset($data[Paysera_WalletApi_Entity_Location::SERVICE_TYPE_CASH_OUT]) && count($cashOutTypes) > 0) {
+            $data[Paysera_WalletApi_Entity_Location::SERVICE_TYPE_CASH_OUT]['types'] = $cashOutTypes;
+        }
+
         return $data;
     }
 
