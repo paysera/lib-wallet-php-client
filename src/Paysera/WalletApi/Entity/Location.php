@@ -13,7 +13,7 @@ class Paysera_WalletApi_Entity_Location
     const SERVICE_TYPE_IDENTIFICATION = 'identification';
     const SERVICE_TYPE_PAY = 'pay';
 
-    protected static $serviceTypes = array(
+    private static $serviceTypes = array(
         self::SERVICE_TYPE_CASH_IN,
         self::SERVICE_TYPE_CASH_OUT,
         self::SERVICE_TYPE_IDENTIFICATION,
@@ -24,82 +24,92 @@ class Paysera_WalletApi_Entity_Location
      * @var
      * @readonly
      */
-    protected $id;
+    private $id;
 
     /**
      * @var string
      */
-    protected $title;
+    private $title;
 
     /**
      * @var string
      */
-    protected $description;
+    private $description;
 
     /**
      * @var string
      */
-    protected $identifier;
+    private $identifier;
 
     /**
      * @var string
      */
-    protected $address;
+    private $address;
 
     /**
      * @var float
      */
-    protected $lat;
+    private $lat;
 
     /**
      * @var float
      */
-    protected $lng;
+    private $lng;
 
     /**
      * @var int
      */
-    protected $radius = 0;
+    private $radius = 0;
 
     /**
      * @var Paysera_WalletApi_Entity_Location_Price[]
      */
-    protected $prices = array();
+    private $prices = array();
 
     /**
      * @var Paysera_WalletApi_Entity_Location_DayWorkingHours[]
      */
-    protected $workingHours = array();
+    private $workingHours = array();
 
     /**
      * @var string
      */
-    protected $imagePinOpen;
+    private $imagePinOpen;
 
     /**
      * @var string
      */
-    protected $imagePinClosed;
+    private $imagePinClosed;
 
     /**
      * @var array
      */
-    protected $services = array();
+    private $services = array();
 
     /**
      * @var array
      */
-    protected $payCategories = array();
+    private $payCategories = array();
+
+    /**
+     * @var array
+     */
+    private $cashInTypes = array();
+
+    /**
+     * @var array
+     */
+    private $cashOutTypes = array();
 
     /**
      * @var string
      */
-    protected $status;
+    private $status;
 
     /**
      * @var bool
      */
-    protected $public;
+    private $public;
 
     /**
      * Set id
@@ -447,6 +457,46 @@ class Paysera_WalletApi_Entity_Location
     public function getPayCategories()
     {
         return $this->payCategories;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCashInTypes()
+    {
+        return $this->cashInTypes;
+    }
+
+    /**
+     * @param array $cashInTypes
+     *
+     * @return $this
+     */
+    public function setCashInTypes($cashInTypes)
+    {
+        $this->cashInTypes = $cashInTypes;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCashOutTypes()
+    {
+        return $this->cashOutTypes;
+    }
+
+    /**
+     * @param array $cashOutTypes
+     *
+     * @return $this
+     */
+    public function setCashOutTypes($cashOutTypes)
+    {
+        $this->cashOutTypes = $cashOutTypes;
+
+        return $this;
     }
 
     /**
