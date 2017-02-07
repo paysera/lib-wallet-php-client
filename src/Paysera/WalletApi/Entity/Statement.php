@@ -11,7 +11,8 @@ class Paysera_WalletApi_Entity_Statement
     const TYPE_CURRENCY = 'currency';
     const TYPE_TAX = 'tax';
     const TYPE_RETURN = 'return';
-
+    const TYPE_AUTOMATIC_PAYMENT = 'automatic_payment';
+    
     const DIRECTION_IN = 'in';
     const DIRECTION_OUT = 'out';
 
