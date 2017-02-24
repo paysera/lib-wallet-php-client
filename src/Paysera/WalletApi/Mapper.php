@@ -1670,6 +1670,27 @@ class Paysera_WalletApi_Mapper
     }
 
     /**
+     * @param Paysera_WalletApi_Entity_Client_SearchFilter $filter
+     * @return array
+     */
+    public function encodeClientFilter(Paysera_WalletApi_Entity_Client_SearchFilter $filter)
+    {
+        $data = array();
+        if ($filter->getLimit() !== null) {
+            $data['limit'] = $filter->getLimit();
+        }
+        if ($filter->getOffset() !== null) {
+            $data['offset'] = $filter->getOffset();
+        }
+
+        if ($filter->getProjectId() !== null) {
+            $data['project_id'] = $filter->getProjectId();
+        }
+
+        return $data;
+    }
+
+    /**
      * @param array $data
      * @return Paysera_WalletApi_Entity_Search_Result|Paysera_WalletApi_Entity_Location[]
      */
@@ -1685,6 +1706,26 @@ class Paysera_WalletApi_Mapper
         $this->setProperty($result, 'total', $metadata['total']);
         $this->setProperty($result, 'offset', $metadata['offset']);
         $this->setProperty($result, 'limit', $metadata['limit']);
+        return $result;
+    }
+
+    /**
+     * @param array $data
+     * @return Paysera_WalletApi_Entity_Search_Result|Paysera_WalletApi_Entity_Client[]
+     */
+    public function decodeClientSearchResult(array $data)
+    {
+        $clients = array();
+        foreach ($data['clients'] as $clientData) {
+            $clients[] = $this->decodeClient($clientData);
+        }
+
+        $result = new Paysera_WalletApi_Entity_Search_Result($clients);
+        $metadata = $data['_metadata'];
+        $this->setProperty($result, 'total', $metadata['total']);
+        $this->setProperty($result, 'offset', $metadata['offset']);
+        $this->setProperty($result, 'limit', $metadata['limit']);
+
         return $result;
     }
 
