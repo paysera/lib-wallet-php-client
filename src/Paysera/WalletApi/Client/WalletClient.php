@@ -826,6 +826,22 @@ class Paysera_WalletApi_Client_WalletClient extends Paysera_WalletApi_Client_Bas
     }
 
     /**
+     * Gets Clients by specified Filter
+     *
+     * @param Paysera_WalletApi_Entity_Client_SearchFilter $filter
+     *
+     * @return Paysera_WalletApi_Entity_Client[]
+     */
+    public function getClients(Paysera_WalletApi_Entity_Client_SearchFilter $filter)
+    {
+        $query = '?' . http_build_query($this->mapper->encodeClientFilter($filter), null, '&');
+
+         return $this->mapper->decodeClientSearchResult(
+            $this->get('clients' . $query)
+        );
+    }
+
+    /**
      * Create client
      *
      * @param Paysera_WalletApi_Entity_Client $client
