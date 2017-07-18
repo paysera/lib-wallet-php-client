@@ -46,6 +46,11 @@ class Paysera_WalletApi_Entity_Client
     protected $mainProjectId;
 
     /**
+     * @var int
+     */
+    protected $serviceAgreementId;
+
+    /**
      * @var Paysera_WalletApi_Entity_MacCredentials
      */
     protected $credentials;
@@ -239,5 +244,25 @@ class Paysera_WalletApi_Entity_Client
     public function getCredentials()
     {
         return $this->credentials;
+    }
+
+    /**
+     * @return int
+     */
+    public function getServiceAgreementId()
+    {
+        return $this->serviceAgreementId;
+    }
+
+    /**
+     * @param int $serviceAgreementId
+     *
+     * @return $this
+     */
+    public function setServiceAgreementId($serviceAgreementId)
+    {
+        $this->serviceAgreementId = $serviceAgreementId;
+
+        return $this;
     }
 }

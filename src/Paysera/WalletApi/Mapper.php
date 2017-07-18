@@ -1948,6 +1948,10 @@ class Paysera_WalletApi_Mapper
             $client->setCredentials($this->decodeMacCredentials($data['credentials']));
         }
 
+        if (!empty($data['service_agreement_id'])) {
+            $client->setServiceAgreementId($data['service_agreement_id']);
+        }
+
         return $client;
     }
 
@@ -1983,6 +1987,10 @@ class Paysera_WalletApi_Mapper
             foreach ($client->getHosts() as $host) {
                 $result['hosts'][] = $this->encodeHost($host);
             }
+        }
+
+        if ($client->getServiceAgreementId() !== null) {
+            $result['service_agreement_id'] = $client->getServiceAgreementId();
         }
 
         return $result;
