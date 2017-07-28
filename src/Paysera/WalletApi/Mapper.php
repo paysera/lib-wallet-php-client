@@ -2172,4 +2172,51 @@ class Paysera_WalletApi_Mapper
 
         return array_filter($data);
     }
+
+    /**
+     * Encodes MPOS Credential
+     *
+     * @param Paysera_WalletApi_Entity_MposCredential $mposCredential
+     *
+     * @return array
+     */
+    public function encodeMposCredential(Paysera_WalletApi_Entity_MposCredential $mposCredential)
+    {
+        $result = array();
+
+        if ($mposCredential->getPassword() !== null) {
+            $result['password'] = $mposCredential->getPassword();
+        }
+
+        if ($mposCredential->getUsername() !== null) {
+            $result['username'] = $mposCredential->getUsername();
+        }
+
+        if ($mposCredential->getProjectId() !== null) {
+            $result['project_id'] = $mposCredential->getProjectId();
+        }
+
+        if ($mposCredential->getId() !== null) {
+            $result['id'] = $mposCredential->getId();
+        }
+
+        return $result;
+    }
+
+    /**
+     * Decodes MPOS Credential
+     *
+     * @param array $data
+     *
+     * @return Paysera_WalletApi_Entity_MposCredential
+     */
+    public function decodeMposCredential(array $data)
+    {
+        return Paysera_WalletApi_Entity_MposCredential::create()
+            ->setUsername($data['username'])
+            ->setPassword($data['password'])
+            ->setProjectId($data['project_id'])
+            ->setId($data['id'])
+        ;
+    }
 }
