@@ -186,7 +186,8 @@ class Paysera_WalletApi_Mapper
 
             $result['account_owner'] = array(
                 'type' => $accountOwnerRestriction->getType(),
-                'requirements' => $requirements
+                'requirements' => $requirements,
+                'level' => $accountOwnerRestriction->getLevel(),
             );
         }
 
@@ -598,6 +599,7 @@ class Paysera_WalletApi_Mapper
                                 isset($data['account_owner']['requirements'])
                                 && in_array('identity', $data['account_owner']['requirements'])
                             )
+                            ->setLevel(isset($data['account_owner']['level']) ? $data['account_owner']['level'] : null)
                     )
                 ;
         }
