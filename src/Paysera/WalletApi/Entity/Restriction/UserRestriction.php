@@ -5,6 +5,11 @@ class Paysera_WalletApi_Entity_Restriction_UserRestriction
     const TYPE_LEGAL = 'legal';
     const TYPE_NATURAL = 'natural';
 
+    const LEVEL_UNIDENTIFIED = 'unidentified';
+    const LEVEL_SEMI_IDENTIFIED = 'semi_identified';
+    const LEVEL_IDENTIFIED = 'identified';
+    const LEVEL_FULLY_IDENTIFIED = 'fully_identified';
+
     /**
      * @var string
      */
@@ -14,6 +19,11 @@ class Paysera_WalletApi_Entity_Restriction_UserRestriction
      * @var bool
      */
     protected $identityRequired;
+
+    /**
+     * @var string
+     */
+    private $level;
 
     /**
      * Creates object, used for fluent interface
@@ -65,4 +75,15 @@ class Paysera_WalletApi_Entity_Restriction_UserRestriction
         return $this->type;
     }
 
+    public function setLevel($level)
+    {
+        $this->level = $level;
+
+        return $this;
+    }
+
+    public function getLevel()
+    {
+        return $this->level;
+    }
 }
