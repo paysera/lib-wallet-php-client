@@ -71,6 +71,11 @@ class Paysera_WalletApi_Entity_User
     protected $identificationLevel;
 
     /**
+     * @var string
+     */
+    protected $locale;
+
+    /**
      * Creates object, used for fluent interface
      *
      * @return self
@@ -284,5 +289,25 @@ class Paysera_WalletApi_Entity_User
     public function getIdentificationLevel()
     {
         return $this->identificationLevel;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLocale()
+    {
+        return $this->locale;
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return $this
+     */
+    public function setLocale($locale)
+    {
+        $this->locale = $locale;
+
+        return $this;
     }
 }

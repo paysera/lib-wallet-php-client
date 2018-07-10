@@ -868,4 +868,32 @@ class Paysera_WalletApi_Client_WalletClient extends Paysera_WalletApi_Client_Bas
 
         return $this->mapper->decodeClient($responseData);
     }
+
+    /**
+     * Create MPOS Credential
+     *
+     * @param Paysera_WalletApi_Entity_MposCredential $mposCredential
+     *
+     * @return Paysera_WalletApi_Entity_MposCredential
+     */
+    public function createMposCredential(Paysera_WalletApi_Entity_MposCredential $mposCredential)
+    {
+        $responseData = $this->post('project/mpos-credentials', $this->mapper->encodeMposCredential($mposCredential));
+
+        return $this->mapper->decodeMposCredential($responseData);
+    }
+
+    /**
+     * Get MPOS Credential
+     *
+     * @param int $mposCredentialId
+     *
+     * @return Paysera_WalletApi_Entity_MposCredential
+     */
+    public function getMposCredential($mposCredentialId)
+    {
+        $responseData = $this->get(sprintf('project/mpos-credentials/%s', urlencode($mposCredentialId)));
+
+        return $this->mapper->decodeMposCredential($responseData);
+    }
 }

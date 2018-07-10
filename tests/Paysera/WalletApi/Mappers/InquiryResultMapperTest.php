@@ -18,12 +18,12 @@ class InquiryResultMapperTest extends \PHPUnit_Framework_TestCase
     {
         $inquiryValue = 9999999;
         
-        $data = [
+        $data = array(
             'inquiry_identifier' => 'identifier',
             'item_identifier' => 'item identifier',
             'item_type' => 'person_code',
             'value' => $inquiryValue,
-        ];
+        );
 
         $result = $this->inquiryResultMapper->mapToEntity($data);
 
@@ -35,19 +35,19 @@ class InquiryResultMapperTest extends \PHPUnit_Framework_TestCase
 
     public function testInquiryResultValueWithIdentity()
     {
-        $inquiryValue = [
+        $inquiryValue = array(
             'name' => 'Name',
             'surname' => 'Surname',
             'nationality' => 'LT',
             'code' => 606060
-        ];
+        );
 
-        $data = [
+        $data = array(
             'inquiry_identifier' => 'identifier',
             'item_identifier' => 'item identifier',
             'item_type' => 'user_identity',
             'value' => $inquiryValue,
-        ];
+        );
 
         $result = $this->inquiryResultMapper->mapToEntity($data);
 

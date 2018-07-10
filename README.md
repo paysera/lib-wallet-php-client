@@ -1,4 +1,4 @@
-PHP client for Paysera.com Wallet API
+PHP client for Paysera.com Wallet API ![](https://travis-ci.org/paysera/lib-wallet-php-client.svg?branch=master)
 =========
 This is repository for PHP client, used with [Paysera.com Wallet API](https://developers.paysera.com/en/wallet).
 
