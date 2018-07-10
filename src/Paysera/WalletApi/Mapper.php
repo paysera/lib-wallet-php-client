@@ -186,7 +186,8 @@ class Paysera_WalletApi_Mapper
 
             $result['account_owner'] = array(
                 'type' => $accountOwnerRestriction->getType(),
-                'requirements' => $requirements
+                'requirements' => $requirements,
+                'level' => $accountOwnerRestriction->getLevel(),
             );
         }
 
@@ -598,6 +599,7 @@ class Paysera_WalletApi_Mapper
                                 isset($data['account_owner']['requirements'])
                                 && in_array('identity', $data['account_owner']['requirements'])
                             )
+                            ->setLevel(isset($data['account_owner']['level']) ? $data['account_owner']['level'] : null)
                     )
                 ;
         }
@@ -1948,6 +1950,10 @@ class Paysera_WalletApi_Mapper
             $client->setCredentials($this->decodeMacCredentials($data['credentials']));
         }
 
+        if (!empty($data['service_agreement_id'])) {
+            $client->setServiceAgreementId($data['service_agreement_id']);
+        }
+
         return $client;
     }
 
@@ -1983,6 +1989,10 @@ class Paysera_WalletApi_Mapper
             foreach ($client->getHosts() as $host) {
                 $result['hosts'][] = $this->encodeHost($host);
             }
+        }
+
+        if ($client->getServiceAgreementId() !== null) {
+            $result['service_agreement_id'] = $client->getServiceAgreementId();
         }
 
         return $result;
@@ -2163,5 +2173,52 @@ class Paysera_WalletApi_Mapper
         }
 
         return array_filter($data);
+    }
+
+    /**
+     * Encodes MPOS Credential
+     *
+     * @param Paysera_WalletApi_Entity_MposCredential $mposCredential
+     *
+     * @return array
+     */
+    public function encodeMposCredential(Paysera_WalletApi_Entity_MposCredential $mposCredential)
+    {
+        $result = array();
+
+        if ($mposCredential->getPassword() !== null) {
+            $result['password'] = $mposCredential->getPassword();
+        }
+
+        if ($mposCredential->getUsername() !== null) {
+            $result['username'] = $mposCredential->getUsername();
+        }
+
+        if ($mposCredential->getProjectId() !== null) {
+            $result['project_id'] = $mposCredential->getProjectId();
+        }
+
+        if ($mposCredential->getId() !== null) {
+            $result['id'] = $mposCredential->getId();
+        }
+
+        return $result;
+    }
+
+    /**
+     * Decodes MPOS Credential
+     *
+     * @param array $data
+     *
+     * @return Paysera_WalletApi_Entity_MposCredential
+     */
+    public function decodeMposCredential(array $data)
+    {
+        return Paysera_WalletApi_Entity_MposCredential::create()
+            ->setUsername($data['username'])
+            ->setPassword($data['password'])
+            ->setProjectId($data['project_id'])
+            ->setId($data['id'])
+        ;
     }
 }
