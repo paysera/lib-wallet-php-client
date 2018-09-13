@@ -9,7 +9,7 @@
 class Paysera_WalletApi_Util_Router
 {
     const ENDPOINT_API_PROD = 'https://wallet.paysera.com';
-    const ENDPOINT_AUTH_PROD = 'https://www.paysera.com/frontend';
+    const ENDPOINT_AUTH_PROD = 'https://bank.paysera.com/frontend';
 
     const ENDPOINT_API_SANDBOX = 'https://wallet-sandbox.paysera.com';
     const ENDPOINT_AUTH_SANDBOX = 'https://sandbox.paysera.com/frontend';
