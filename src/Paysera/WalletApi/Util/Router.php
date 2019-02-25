@@ -71,13 +71,24 @@ class Paysera_WalletApi_Util_Router
         return $this->authEndpoint . $this->getLanguagePrefix($lang) . self::REMIND_PASSWORD_PATH . '/' . $userId;
     }
 
+    /**
+     * @param null|string $path
+     *
+     * @return string
+     */
     public function getApiEndpoint($path = null)
     {
-        if (substr($path, 0, 7) !== 'http://' && substr($path, 0, 8) !== 'https://') {
-            return $this->apiEndpoint . $path;
-        } else {
-            return $path;
-        }
+        return $this->resolveEndpointPath($this->apiEndpoint, $path);
+    }
+
+    /**
+     * @param null|string $path
+     *
+     * @return string
+     */
+    public function getAuthEndpoint($path = null)
+    {
+        return $this->resolveEndpointPath($this->authEndpoint, $path);
     }
 
     public function getWalletApiEndpoint()
@@ -108,5 +119,20 @@ class Paysera_WalletApi_Util_Router
             return '';
         }
         return '/' . $lang;
+    }
+
+    /**
+     * @param string $endpoint
+     * @param string $path
+     *
+     * @return string
+     */
+    private function resolveEndpointPath($endpoint, $path)
+    {
+        if (substr($path, 0, 7) !== 'http://' && substr($path, 0, 8) !== 'https://') {
+            return $endpoint . $path;
+        } else {
+            return $path;
+        }
     }
 }
