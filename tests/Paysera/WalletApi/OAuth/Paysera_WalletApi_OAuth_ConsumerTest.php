@@ -13,10 +13,10 @@ class Paysera_WalletApi_OAuth_ConsumerTest extends PHPUnit_Framework_TestCase
 
         $this->consumer = new Paysera_WalletApi_OAuth_Consumer(
             123,
-            $this->getSimpleMockForClass(Paysera_WalletApi_Client_OAuthClient::class),
+            $this->getSimpleMockForClass('Paysera_WalletApi_Client_OAuthClient'),
             new Paysera_WalletApi_Util_Router(),
             new Paysera_WalletApi_State_SessionStatePersister('abc'),
-            $this->getSimpleMockForClass(Paysera_WalletApi_Util_RequestInfo::class)
+            $this->getSimpleMockForClass('Paysera_WalletApi_Util_RequestInfo')
         );
     }
 
@@ -37,7 +37,7 @@ class Paysera_WalletApi_OAuth_ConsumerTest extends PHPUnit_Framework_TestCase
         $parsedUrl = parse_url(
             $this->consumer->getAuthorizationWithTransactionConfirmationUri($transactionKey, $redirectUri, $scopes)
         );
-        $queryParams = [];
+        $queryParams = array();
         parse_str($parsedUrl['query'], $queryParams);
 
         $this->assertEquals($expected['response_type'], $queryParams['response_type']);
@@ -56,39 +56,39 @@ class Paysera_WalletApi_OAuth_ConsumerTest extends PHPUnit_Framework_TestCase
 
     public function testGetAuthorizationWithTransactionConfirmationUriDataProvider()
     {
-        return [
-            [
+        return array(
+            array(
                 'abc123',
                 'https://www.paysera.com',
-                ['scope'],
-                [
+                array('scope'),
+                array(
                     'response_type' => 'code',
                     'client_id' => '123',
                     'scope' => 'scope',
                     'redirect_uri' => 'https://www.paysera.com',
-                ],
-            ],
-            [
+                ),
+            ),
+            array(
                 'abc123',
                 'https://www.paysera.com',
-                ['scope_1', 'scope_2'],
-                [
+                array('scope_1', 'scope_2'),
+                array(
                     'response_type' => 'code',
                     'client_id' => '123',
                     'scope' => 'scope_1 scope_2',
-                ],
-            ],
-            [
+                ),
+            ),
+            array(
                 'abc123',
                 'https://www.paysera.com',
-                [],
-                [
+                array(),
+                array(
                     'response_type' => 'code',
                     'client_id' => '123',
                     'scope' => '',
-                ],
-            ],
-        ];
+                ),
+            ),
+        );
     }
 
     private function getSimpleMockForClass($class)
