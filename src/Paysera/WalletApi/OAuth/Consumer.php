@@ -120,6 +120,30 @@ class Paysera_WalletApi_OAuth_Consumer
     }
 
     /**
+     * @param string $transactionKey
+     * @param string|null $redirectUri
+     * @param array $scopes
+     *
+     * @return string
+     */
+    public function getAuthorizationWithTransactionConfirmationUri(
+        $transactionKey,
+        $redirectUri = null,
+        array $scopes = array()
+    ) {
+        if ($redirectUri === null) {
+            $redirectUri = $this->getCurrentUri();
+        }
+        $query = http_build_query(
+            $this->getOAuthParameters($scopes, $redirectUri),
+            null,
+            '&'
+        );
+
+        return $this->router->getAuthEndpoint('/transaction/confirm-with-oauth') . '/' . $transactionKey . '?' . $query;
+    }
+
+    /**
      * Gets OAuth access token from query parameters. Redirect URI must be the same as passed when getting the
      * authorization URI, otherwise authorization will fail
      * If no authorization parameters are passed, returns null
@@ -241,5 +265,4 @@ class Paysera_WalletApi_OAuth_Consumer
         }
         return $str;
     }
-
 }
