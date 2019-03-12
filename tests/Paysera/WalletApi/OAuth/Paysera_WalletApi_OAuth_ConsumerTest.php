@@ -50,7 +50,7 @@ class Paysera_WalletApi_OAuth_ConsumerTest extends PHPUnit_Framework_TestCase
         }
 
         $this->assertEquals($parsedUrl['scheme'], 'https');
-        $this->assertEquals($parsedUrl['host'], 'www.paysera.com');
+        $this->assertEquals($parsedUrl['host'], 'bank.paysera.com');
         $this->assertEquals($parsedUrl['path'], '/frontend/transaction/confirm-with-oauth/' . $transactionKey);
     }
 
@@ -59,18 +59,18 @@ class Paysera_WalletApi_OAuth_ConsumerTest extends PHPUnit_Framework_TestCase
         return array(
             array(
                 'abc123',
-                'https://www.paysera.com',
+                'https://bank.paysera.com',
                 array('scope'),
                 array(
                     'response_type' => 'code',
                     'client_id' => '123',
                     'scope' => 'scope',
-                    'redirect_uri' => 'https://www.paysera.com',
+                    'redirect_uri' => 'https://bank.paysera.com',
                 ),
             ),
             array(
                 'abc123',
-                'https://www.paysera.com',
+                'https://bank.paysera.com',
                 array('scope_1', 'scope_2'),
                 array(
                     'response_type' => 'code',
@@ -80,7 +80,7 @@ class Paysera_WalletApi_OAuth_ConsumerTest extends PHPUnit_Framework_TestCase
             ),
             array(
                 'abc123',
-                'https://www.paysera.com',
+                'https://bank.paysera.com',
                 array(),
                 array(
                     'response_type' => 'code',
