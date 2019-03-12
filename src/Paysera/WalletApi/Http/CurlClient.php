@@ -20,11 +20,18 @@ class Paysera_WalletApi_Http_CurlClient implements Paysera_WalletApi_Http_Client
     protected $userHeader;
 
     /**
+     * Connect timeout in seconds
+     *
+     * @var int
+     */
+    protected $connectTimeout = 2;
+
+    /**
      * Request timeout in seconds
      *
      * @var int
      */
-    protected $timeout = 60;
+    protected $requestTimeout = 60;
 
     /**
      * User agent setter
@@ -47,13 +54,23 @@ class Paysera_WalletApi_Http_CurlClient implements Paysera_WalletApi_Http_Client
     }
 
     /**
+     * Connection timeout in seconds setter
+     *
+     * @param int $connectTimeout
+     */
+    public function setConnectTimeout($connectTimeout)
+    {
+        $this->connectTimeout = $connectTimeout;
+    }
+
+    /**
      * Request timeout in seconds setter
      *
-     * @param int $timeout
+     * @param int $requestTimeout
      */
-    public function setTimeout($timeout)
+    public function setRequestTimeout($requestTimeout)
     {
-        $this->timeout = $timeout;
+        $this->requestTimeout = $requestTimeout;
     }
 
     /**
@@ -134,7 +151,8 @@ class Paysera_WalletApi_Http_CurlClient implements Paysera_WalletApi_Http_Client
         curl_setopt($curl, CURLOPT_FOLLOWLOCATION, false);
         curl_setopt($curl, CURLOPT_MAXREDIRS, 0);
         curl_setopt($curl, CURLOPT_AUTOREFERER, true);
-        curl_setopt($curl, CURLOPT_TIMEOUT, $this->timeout);
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $this->connectTimeout);
+        curl_setopt($curl, CURLOPT_TIMEOUT, $this->requestTimeout);
 
         $this->setSslOptions($curl);
 
