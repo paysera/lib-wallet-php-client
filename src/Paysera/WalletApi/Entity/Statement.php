@@ -12,7 +12,7 @@ class Paysera_WalletApi_Entity_Statement
     const TYPE_TAX = 'tax';
     const TYPE_RETURN = 'return';
     const TYPE_AUTOMATIC_PAYMENT = 'automatic_payment';
-    
+
     const DIRECTION_IN = 'in';
     const DIRECTION_OUT = 'out';
 
@@ -55,6 +55,11 @@ class Paysera_WalletApi_Entity_Statement
      * @var integer
      */
     protected $transferId;
+
+    /**
+     * @var string
+     */
+    protected $referenceNumber;
 
     /**
      * Gets id
@@ -134,5 +139,15 @@ class Paysera_WalletApi_Entity_Statement
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * Gets ReferenceNumber
+     *
+     * @return string
+     */
+    public function getReferenceNumber()
+    {
+        return $this->referenceNumber;
     }
 }
