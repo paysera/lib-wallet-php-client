@@ -1371,6 +1371,10 @@ class Paysera_WalletApi_Mapper
         if (isset($data['transfer_id'])) {
             $this->setProperty($statement, 'transferId', $data['transfer_id']);
         }
+        if (isset($data['reference_number'])) {
+            $this->setProperty($statement, 'referenceNumber', $data['reference_number']);
+        }
+
         return $statement;
     }
 
