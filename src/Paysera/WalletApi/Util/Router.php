@@ -65,6 +65,8 @@ class Paysera_WalletApi_Util_Router
      * @param string $lang
      *
      * @return string
+     *
+     * @deprecated
      */
     public function getRemindPasswordUri($userId, $lang = null)
     {
