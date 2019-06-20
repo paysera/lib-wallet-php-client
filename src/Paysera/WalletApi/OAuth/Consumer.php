@@ -219,6 +219,8 @@ class Paysera_WalletApi_OAuth_Consumer
      * @param string $redirectUri
      *
      * @return string
+     *
+     * @deprecated
      */
     public function getResetPasswordUri($userId, $lang = null, $redirectUri = null)
     {
