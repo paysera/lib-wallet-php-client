@@ -2228,4 +2228,139 @@ class Paysera_WalletApi_Mapper
             ->setId($data['id'])
         ;
     }
+
+    public function encodeTransferInput(Paysera_WalletApi_Entity_TransferInput $transferInput)
+    {
+        $result = array();
+
+        if ($transferInput->getAmount() !== null) {
+            $result['amount'] = $transferInput->getAmount();
+        }
+
+        if ($transferInput->getBeneficiary() !== null) {
+            $result['beneficiary'] = $transferInput->getBeneficiary();
+        }
+
+        if ($transferInput->getCallback() !== null) {
+            $result['callback'] = $transferInput->getCallback();
+        }
+
+        if ($transferInput->getChargeType() !== null) {
+            $result['charge_type'] = $transferInput->getChargeType();
+        }
+
+        if ($transferInput->getFinalBeneficiary() !== null) {
+            $result['final_beneficiary'] = $transferInput->getFinalBeneficiary();
+        }
+
+        if ($transferInput->getNotifications() !== null) {
+            $result['notification'] = $transferInput->getNotifications();
+        }
+
+        if ($transferInput->getPassword() !== null) {
+            $result['password'] = $transferInput->getPassword();
+        }
+
+        if ($transferInput->getPayer() !== null) {
+            $result['payer'] = $transferInput->getPayer();
+        }
+
+        if ($transferInput->getPerformAt() !== null) {
+            $result['perform_at'] = $transferInput->getPerformAt();
+        }
+
+        if ($transferInput->getPurpose() !== null) {
+            $result['purpose'] = $transferInput->getPurpose();
+        }
+
+        if ($transferInput->getReserveUntil() !== null) {
+            $result['reserve_until'] = $transferInput->getReserveUntil();
+        }
+
+        if ($transferInput->getUrgency() !== null) {
+            $result['urgency'] = $transferInput->getUrgency();
+        }
+
+        return $result;
+    }
+
+    /**
+     * Decodes Transfer Output
+     *
+     * @param array $data
+     *
+     * @return Paysera_WalletApi_Entity_TransferOutput
+     */
+    public function decodeTransferOutput(array $data)
+    {
+        $transferOutput = new Paysera_WalletApi_Entity_TransferOutput();
+
+        if (isset($data['status'])) {
+            $transferOutput->setStatus($data['status']);
+        }
+
+        if (isset($data['password'])) {
+            $transferOutput->setPassword($data['password']);
+        }
+
+        if (isset($data['created_at'])) {
+            $transferOutput->setCreatedAt($data['created_at']);
+        }
+
+        if (isset($data['failure_status'])) {
+            $transferOutput->setFailureStatus($data['failure_status']);
+        }
+
+        if (isset($data['initiator'])) {
+            $transferOutput->setInitiator($data['initiator']);
+        }
+
+        if (isset($data['out_commission'])) {
+            $transferOutput->setOutCommission($data['out_commission']);
+        }
+
+        if (isset($data['performed_at'])) {
+            $transferOutput->setPerformedAt($data['performed_at']);
+        }
+
+        if (isset($data['id'])) {
+            $transferOutput->setId($data['id']);
+        }
+
+        return $transferOutput;
+    }
+
+    /**
+     *
+     *
+     * @param array
+     *
+     * @return Paysera_WalletApi_Entity_SufficientAmountResponse
+     */
+    public function decodeSufficientAmountResponse(array $data)
+    {
+        $sufficientAmountResponse = new Paysera_WalletApi_Entity_SufficientAmountResponse();
+
+        if (isset($data['in_sufficient'])) {
+            $sufficientAmountResponse->setSufficient($data['in_sufficient']);
+        }
+
+        return $sufficientAmountResponse;
+    }
+
+    /**
+     * @param Paysera_WalletApi_Entity_SufficientAmountRequest $sufficientAmountRequest
+     *
+     * @return array
+     */
+    public function encodeSufficientAmountRequest(Paysera_WalletApi_Entity_SufficientAmountRequest $sufficientAmountRequest)
+    {
+        $result = array();
+        if ($sufficientAmountRequest->getAmount() !== null) {
+            $result['amount'] = $sufficientAmountRequest->getAmount()->getAmountInCents();
+            $result['currency'] = $sufficientAmountRequest->getAmount()->getCurrency();
+        }
+
+        return $result;
+    }
 }

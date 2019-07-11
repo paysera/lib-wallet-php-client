@@ -14,6 +14,7 @@
         "phpunit/phpunit": "^4.7"
     },
     "require": {
-        "php": ">=5.3 || >=7.0"
+        "php": ">=5.3 || >=7.0",
+        "paysera/lib-wallet-transfer-rest-client": "^0.2.0"
     }
 }

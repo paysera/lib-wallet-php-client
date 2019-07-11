@@ -896,4 +896,55 @@ class Paysera_WalletApi_Client_WalletClient extends Paysera_WalletApi_Client_Bas
 
         return $this->mapper->decodeMposCredential($responseData);
     }
+
+    /**
+     * Get Transfer
+     *
+     * @param int $transferId
+     *
+     * @return Paysera_WalletApi_Entity_TransferOutput $transferId
+     */
+    public function getTransfer($transferId)
+    {
+        $responseData = $this->get(sprintf('payment-initiation/transfers/%s', urlencode($transferId)));
+
+        return $this->mapper->decodeTransferOutput($responseData);
+    }
+
+    /**
+     * Create Transfer
+     *
+     * @param Paysera_WalletApi_Entity_TransferInput $transferInput
+     *
+     * @return Paysera_WalletApi_Entity_TransferOutput
+     */
+    public function createTransfer(Paysera_WalletApi_Entity_TransferInput $transferInput)
+    {
+        $responseData = $this->post(sprintf('payment-initiation/transfers'), $this->mapper->encodeTransferInput($transferInput));
+
+        return $this->mapper->decodeTransferOutput($responseData);
+    }
+
+    /**
+     * Confirm account balance is sufficient
+     *
+     * @param $walletId
+     * @param Paysera_WalletApi_Entity_SufficientAmountRequest $sufficientAmountRequest
+     *
+     * @return Paysera_WalletApi_Entity_SufficientAmountResponse
+     */
+    public function hasSufficientAmount(
+        $walletId,
+        Paysera_WalletApi_Entity_SufficientAmountRequest $sufficientAmountRequest
+    ) {
+        $query = '?' . http_build_query(
+            $this->mapper->encodeSufficientAmountRequest($sufficientAmountRequest),
+            null,
+            '&'
+        );
+
+        $responseData = $this->get(sprintf('wallet/%s/sufficient-amount', $walletId) . $query);
+
+        return $this->mapper->decodeSufficientAmountResponse($responseData);
+    }
 }
