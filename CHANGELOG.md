@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `::createTransfer()` method to `WalletClient`.
 - `::hasSufficientFunds()` method to `WalletClient`.
 - requires `paysera/lib-wallet-transfer-rest-client` to make use of existing entities.`
+- bumped minimal required php version by minor `>=5.3 -> >=5.5`
 
 ## 1.21.1
 ### Deprecated
