@@ -2228,4 +2228,57 @@ class Paysera_WalletApi_Mapper
             ->setId($data['id'])
         ;
     }
+
+    public function encodeTransferInput(Paysera_WalletApi_Entity_TransferInput $transferInput)
+    {
+        return $transferInput->getData();
+    }
+
+    /**
+     * Decodes Transfer Output
+     *
+     * @param array $data
+     *
+     * @return Paysera_WalletApi_Entity_TransferOutput
+     */
+    public function decodeTransferOutput(array $data)
+    {
+        $transferOutput = new Paysera_WalletApi_Entity_TransferOutput();
+
+        return $transferOutput->setData($data);
+    }
+
+    /**
+     *
+     *
+     * @param array
+     *
+     * @return Paysera_WalletApi_Entity_SufficientAmountResponse
+     */
+    public function decodeSufficientAmountResponse(array $data)
+    {
+        $sufficientAmountResponse = new Paysera_WalletApi_Entity_SufficientAmountResponse();
+
+        if (isset($data['in_sufficient'])) {
+            $sufficientAmountResponse->setSufficient($data['in_sufficient']);
+        }
+
+        return $sufficientAmountResponse;
+    }
+
+    /**
+     * @param Paysera_WalletApi_Entity_SufficientAmountRequest $sufficientAmountRequest
+     *
+     * @return array
+     */
+    public function encodeSufficientAmountRequest(Paysera_WalletApi_Entity_SufficientAmountRequest $sufficientAmountRequest)
+    {
+        $result = array();
+        if ($sufficientAmountRequest->getAmount() !== null) {
+            $result['amount'] = $sufficientAmountRequest->getAmount()->getAmountInCents();
+            $result['currency'] = $sufficientAmountRequest->getAmount()->getCurrency();
+        }
+
+        return $result;
+    }
 }
