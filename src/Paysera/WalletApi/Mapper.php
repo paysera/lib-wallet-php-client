@@ -2249,7 +2249,7 @@ class Paysera_WalletApi_Mapper
     }
 
     /**
-     *
+     * Decodes Sufficient Amount response
      *
      * @param array
      *
@@ -2259,8 +2259,8 @@ class Paysera_WalletApi_Mapper
     {
         $sufficientAmountResponse = new Paysera_WalletApi_Entity_SufficientAmountResponse();
 
-        if (isset($data['in_sufficient'])) {
-            $sufficientAmountResponse->setSufficient($data['in_sufficient']);
+        if (isset($data['is_sufficient'])) {
+            $sufficientAmountResponse->setSufficient($data['is_sufficient']);
         }
 
         return $sufficientAmountResponse;
