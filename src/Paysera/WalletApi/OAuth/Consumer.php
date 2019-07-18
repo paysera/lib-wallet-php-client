@@ -147,6 +147,22 @@ class Paysera_WalletApi_OAuth_Consumer
     }
 
     /**
+     * Gets redirect uri for transfer sign.
+     *
+     * @param string $transferId
+     *
+     * @return string
+     */
+    public function getTransferSignRedirectUri($transferId)
+    {
+        return sprintf(
+            '%s/%s',
+            $this->router->getAuthEndpoint('/wallet/transfer-sign'),
+            urlencode($transferId)
+        );
+    }
+
+    /**
      * Gets OAuth access token from query parameters. Redirect URI must be the same as passed when getting the
      * authorization URI, otherwise authorization will fail
      * If no authorization parameters are passed, returns null
