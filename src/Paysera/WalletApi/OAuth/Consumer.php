@@ -150,15 +150,21 @@ class Paysera_WalletApi_OAuth_Consumer
      * Gets redirect uri for transfer sign.
      *
      * @param string $transferId
+     * @param string $redirectUri
      *
      * @return string
      */
-    public function getTransferSignRedirectUri($transferId)
+    public function getTransferSignRedirectUri($transferId, $redirectUri = null)
     {
+        if ($redirectUri === null) {
+            $redirectUri = $this->getCurrentUri();
+        }
+
         return sprintf(
-            '%s/%s',
+            '%s/%s?%s',
             $this->router->getAuthEndpoint('/wallet/transfer-sign'),
-            urlencode($transferId)
+            urlencode($transferId),
+            http_build_query(['redirect_uri' => $redirectUri])
         );
     }
 
