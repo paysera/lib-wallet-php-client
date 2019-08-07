@@ -30,6 +30,7 @@ class Paysera_WalletApi_OAuth_Consumer
     const SCOPE_IDENTIFICATION_DATA = 'identification_data';
     const SCOPE_IDENTIFICATION_DATA_OFFLINE = 'identification_data_offline';
     const SCOPE_INITIATE_TRANSFERS = 'initiate_transfers';
+    const SCOPE_CHECK_HAS_SUFFICIENT_BALANCE = 'check_has_sufficient_balance';
 
     /**
      * @var array all query parameters which can be used in OAuth authentication
