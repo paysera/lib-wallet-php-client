@@ -15,6 +15,7 @@
     },
     "require": {
         "php": ">=5.5 || >=7.0",
+        "ext-json": "*",
         "paysera/lib-wallet-transfer-rest-client": "^0.2.0"
     }
 }

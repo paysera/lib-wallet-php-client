@@ -912,6 +912,29 @@ class Paysera_WalletApi_Client_WalletClient extends Paysera_WalletApi_Client_Bas
     }
 
     /**
+     * Get Transfers
+     *
+     * @param Paysera_WalletApi_Entity_TransferFilter $filter
+     *
+     * @return Paysera_WalletApi_Entity_TransferOutputResult $transferId
+     */
+    public function getTransfers(Paysera_WalletApi_Entity_TransferFilter $filter)
+    {
+        $query = http_build_query(
+                $this->mapper->encodeFilter($filter),
+                null,
+                '&'
+        );
+
+        $responseData = $this->get(sprintf(
+            'payment-initiation/transfers%s',
+            $query !== '' ? '?' . $query : ''
+        ));
+
+        return $this->mapper->decodeTransferOutputArray($responseData);
+    }
+
+    /**
      * Create Transfer
      *
      * @param Paysera_WalletApi_Entity_TransferInput $transferInput
