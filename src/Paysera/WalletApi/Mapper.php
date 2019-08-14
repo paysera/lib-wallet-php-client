@@ -1301,6 +1301,26 @@ class Paysera_WalletApi_Mapper
     /**
      * Encodes statement filter entity to an array
      *
+     * @param Paysera_WalletApi_Entity_Search_Filter $filter
+     *
+     * @return array
+     */
+    public function encodeFilter(Paysera_WalletApi_Entity_Search_Filter $filter)
+    {
+        $data = array();
+        if ($filter->getLimit() !== null) {
+            $data['limit'] = $filter->getLimit();
+        }
+        if ($filter->getOffset() !== null) {
+            $data['offset'] = $filter->getOffset();
+        }
+
+        return $data;
+    }
+
+    /**
+     * Encodes statement filter entity to an array
+     *
      * @param Paysera_WalletApi_Entity_Statement_SearchFilter $filter
      *
      * @return array
@@ -2246,6 +2266,20 @@ class Paysera_WalletApi_Mapper
         $transferOutput = new Paysera_WalletApi_Entity_TransferOutput();
 
         return $transferOutput->setData($data);
+    }
+
+    /**
+     * Decodes Transfer Output
+     *
+     * @param array $content
+     *
+     * @return Paysera_WalletApi_Entity_TransferOutputResult
+     */
+    public function decodeTransferOutputArray($content)
+    {
+        $transferOutputResult = new Paysera_WalletApi_Entity_TransferOutputResult();
+
+        return $transferOutputResult->setData($content);
     }
 
     /**
