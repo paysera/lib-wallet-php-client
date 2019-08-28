@@ -5,6 +5,7 @@ class Paysera_WalletApi_OAuth_Consumer
     const SCOPE_BALANCE = 'balance';
     const SCOPE_BALANCE_OFFLINE = 'balance_offline';
     const SCOPE_STATEMENTS = 'statements';
+    const SCOPE_RECENT_STATEMENTS = 'recent_statements';
     const SCOPE_STATEMENTS_OFFLINE = 'statements_offline';
     const SCOPE_PHONE_CONFIRMATION = 'phone_confirmation';
     const SCOPE_PHONE_CONFIRMATION_OFFLINE = 'phone_confirmation_offline';
