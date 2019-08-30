@@ -5,7 +5,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## 1.26.0
-- Added `Paysera_WalletApi_Listener_PayseraUserIpSetter` listener.
+- Added `Paysera_WalletApi_Listener_AppendHeadersListener` listener.
 - Added `Paysera_WalletApi_OAuth_Consumer::SCOPE_RECENT_STATEMENTS` scope.
 
 ## 1.25.0
