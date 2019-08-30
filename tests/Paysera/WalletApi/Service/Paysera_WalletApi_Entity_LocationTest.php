@@ -54,9 +54,9 @@ class Paysera_WalletApi_Service_LocationManagerTest extends PHPUnit_Framework_Te
     }
 
     /**
-     * @dataProvider dataProviderForTestIsLocationOpen2
+     * @dataProvider dataProviderForTestIsLocationClosed
      */
-    public function testIsLocationOpen_working_hours_empty($expected, $date)
+    public function testIsLocationClosed_working_hours_empty($expected, $date)
     {
         $location = new Paysera_WalletApi_Entity_Location();
 
@@ -97,13 +97,12 @@ class Paysera_WalletApi_Service_LocationManagerTest extends PHPUnit_Framework_Te
         );
     }
 
-    public function dataProviderForTestIsLocationOpen2()
+    public function dataProviderForTestIsLocationClosed()
     {
         return array(
-            array(true, new \DateTime('2014-03-01 10:00')),
-            array(true, new \DateTime('2014-03-03 03:00')),
+            array(false, new \DateTime('2014-03-01 10:00')),
+            array(false, new \DateTime('2014-03-03 03:00')),
         );
     }
 
 }
- 
