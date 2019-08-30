@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 1.25.1
+- Fixed a bug where code assumed if location doesn't have any opened hours is opened at all times.
+
 ## 1.25.0
 - Added `Paysera_WalletApi_Client_WalletClient::getTransfers` endpoint.
 
