@@ -97,6 +97,12 @@ class Paysera_WalletApi_Container
 
         if (count($parameters) > 0) {
             $dispatcher->addSubscriber(new Paysera_WalletApi_Listener_ParameterSetter($parameters));
+
+            if (isset($parameters['headers'])) {
+                $dispatcher->addSubscriber(
+                    new Paysera_WalletApi_Listener_AppendHeadersListener($parameters['headers'])
+                );
+            }
         }
 
         $dispatcher->addSubscriber($requestSigner);
