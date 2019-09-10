@@ -2,14 +2,21 @@
 
 namespace Paysera\WalletApi;
 
+use DateTime;
+use Paysera_WalletApi_Entity_Location_SearchFilter;
+use Paysera_WalletApi_Entity_Transaction;
+use Paysera_WalletApi_Entity_User_Identity;
+use Paysera_WalletApi_Mapper;
+use Paysera_WalletApi_Mapper_IdentityMapper;
+
 class MapperTest extends \PHPUnit_Framework_TestCase
 {
     public function testMapperJoinsLocationSearchFilterStatusesArray()
     {
-        $filter = new \Paysera_WalletApi_Entity_Location_SearchFilter();
-        $filter->setStatuses(array('a','b'));
+        $filter = new Paysera_WalletApi_Entity_Location_SearchFilter();
+        $filter->setStatuses(['a','b']);
 
-        $mapper = new \Paysera_WalletApi_Mapper();
+        $mapper = new Paysera_WalletApi_Mapper();
         $encoded = $mapper->encodeLocationFilter($filter);
 
         $statuses = explode(',', $encoded['status']);
@@ -20,7 +27,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
 
     public function testIdentityMapperEncoding()
     {
-        $identity = new \Paysera_WalletApi_Entity_User_Identity();
+        $identity = new Paysera_WalletApi_Entity_User_Identity();
         $identity
             ->setName('Name')
             ->setSurname("Surname")
@@ -28,7 +35,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
             ->setNationality("LT")
         ;
 
-        $mapper = new \Paysera_WalletApi_Mapper_IdentityMapper();
+        $mapper = new Paysera_WalletApi_Mapper_IdentityMapper();
         $result = $mapper->mapFromEntity($identity);
 
         $this->assertSame($identity->getName(), $result['name']);
@@ -39,19 +46,55 @@ class MapperTest extends \PHPUnit_Framework_TestCase
 
     public function testIdentityMapperDecoding()
     {
-        $identity = array (
+        $identity = [
             'name' => 'Name',
             'surname' => 'Surname',
             'code' => 9999999,
             'nationality' => 'LT'
-        );
+        ];
 
-        $mapper = new \Paysera_WalletApi_Mapper_IdentityMapper();
+        $mapper = new Paysera_WalletApi_Mapper_IdentityMapper();
         $result = $mapper->mapToEntity($identity);
 
         $this->assertSame($identity['name'], $result->getName());
         $this->assertSame($identity['surname'], $result->getSurname());
         $this->assertSame($identity['code'], $result->getCode());
         $this->assertSame($identity['nationality'], $result->getNationality());
+    }
+
+    public function testDecodesTransactionWithReserveUntil()
+    {
+        $until = new DateTime('+1 day');
+        $data = [
+            'transaction_key' => 'abc',
+            'created_at' => (new DateTime('-1 day'))->getTimestamp(),
+            'status' => Paysera_WalletApi_Entity_Transaction::STATUS_NEW,
+            'reserve' => [
+                'until' => $until->getTimestamp(),
+            ],
+        ];
+
+        $mapper = new Paysera_WalletApi_Mapper();
+        $transaction = $mapper->decodeTransaction($data);
+
+        $this->assertEquals($until->getTimestamp(), $transaction->getReserveUntil()->getTimestamp());
+    }
+
+    public function testDecodesTransactionWithReserveFor()
+    {
+        $for = 10;
+        $data = [
+            'transaction_key' => 'abc',
+            'created_at' => (new DateTime('-1 day'))->getTimestamp(),
+            'status' => Paysera_WalletApi_Entity_Transaction::STATUS_NEW,
+            'reserve' => [
+                'for' => $for,
+            ],
+        ];
+
+        $mapper = new Paysera_WalletApi_Mapper();
+        $transaction = $mapper->decodeTransaction($data);
+
+        $this->assertEquals($for, $transaction->getReserveFor());
     }
 }

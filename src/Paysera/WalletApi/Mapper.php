@@ -778,6 +778,16 @@ class Paysera_WalletApi_Mapper
                 $transaction->addInquiry($this->decodeInquiry($inquiryData));
             }
         }
+        if (isset($data['reserve']) && is_array($data['reserve'])) {
+            $reserve = $data['reserve'];
+            if (isset($reserve['until'])) {
+                $reserveUntil = (new DateTime())->setTimestamp($reserve['until']);
+                $this->setProperty($transaction, 'reserveUntil', $reserveUntil);
+            }
+            if (isset($reserve['for'])) {
+                $this->setProperty($transaction, 'reserveFor', $reserve['for']);
+            }
+        }
 
         return $transaction;
     }
