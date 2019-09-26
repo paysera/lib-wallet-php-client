@@ -78,7 +78,7 @@ class Paysera_WalletApi_Callback_SignChecker
         while (openssl_error_string()) {
             // empty error buffer
         }
-        $result = openssl_verify(hash('sha256', $data, true), base64_decode($sign), $publicKey);
+        $result = openssl_verify($data, base64_decode($sign), $publicKey, 'sha256');
         if ($result === -1) {
             throw new Paysera_WalletApi_Exception_CallbackException(
                 'OpenSSL error, probably incorrect public key from Wallet system: ' . openssl_error_string()
@@ -87,5 +87,4 @@ class Paysera_WalletApi_Callback_SignChecker
             return $result === 1;
         }
     }
-
 }
