@@ -15,6 +15,10 @@ class Paysera_WalletApi_Entity_Wallet_Balance
      */
     protected $reserved = array();
 
+    protected $balanceAtDisposalDecimal = array();
+
+    protected $reservedDecimal = array();
+
     /**
      * Creates object, used for fluent interface
      *
@@ -42,6 +46,22 @@ class Paysera_WalletApi_Entity_Wallet_Balance
     }
 
     /**
+     * Sets balance for some currency. Overwrites any previous balance of same currency
+     *
+     * @param string $currency
+     * @param string|null $amountAtDisposalDecimal
+     * @param string|null $amountReservedDecimal
+     *
+     * @return self
+     */
+    public function setCurrencyBalanceDecimal($currency, $amountAtDisposalDecimal, $amountReservedDecimal)
+    {
+        $this->balanceAtDisposalDecimal[$currency] = $amountAtDisposalDecimal;
+        $this->reservedDecimal[$currency] = $amountReservedDecimal;
+        return $this;
+    }
+
+    /**
      * Gets balance at disposal for provided currency in cents
      *
      * @param string $currency
@@ -54,6 +74,19 @@ class Paysera_WalletApi_Entity_Wallet_Balance
     }
 
     /**
+     * Gets balance at disposal for provided currency
+     *
+     * @param string $currency
+     *
+     * @return string|null
+     */
+    public function getBalanceAtDisposalDecimal($currency)
+    {
+        return isset($this->balanceAtDisposalDecimal[$currency]) ? $this->balanceAtDisposalDecimal[$currency] : null;
+    }
+
+
+    /**
      * Gets reserved amount for provided currency in cents
      *
      * @param string $currency
@@ -64,6 +97,19 @@ class Paysera_WalletApi_Entity_Wallet_Balance
     {
         return isset($this->reserved[$currency]) ? $this->reserved[$currency] : 0;
     }
+
+    /**
+     * Gets reserved amount for provided currency
+     *
+     * @param string $currency
+     *
+     * @return string|null
+     */
+    public function getReservedDecimal($currency)
+    {
+        return isset($this->reservedDecimal[$currency]) ? $this->reservedDecimal[$currency] : null;
+    }
+
 
     /**
      * Gets all currently available currencies for this balance

@@ -1298,6 +1298,14 @@ class Paysera_WalletApi_Mapper
         $balance = new Paysera_WalletApi_Entity_Wallet_Balance();
 
         foreach ($data as $currency => $balanceData) {
+            if (isset($balanceData['at_disposal_decimal']) && isset($balanceData['reserved_decimal'])) {
+                $balance->setCurrencyBalanceDecimal(
+                    $currency,
+                    isset($balanceData['at_disposal_decimal']) ? $balanceData['at_disposal_decimal'] : null,
+                    isset($balanceData['reserved_decimal']) ? $balanceData['reserved_decimal'] : null
+                );
+            }
+
             $balance->setCurrencyBalance(
                 $currency,
                 isset($balanceData['at_disposal']) ? $balanceData['at_disposal'] : 0,
