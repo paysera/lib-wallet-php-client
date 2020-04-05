@@ -47,7 +47,7 @@ class Paysera_WalletApi_Mapper
         }
         $price = $payment->getPrice();
         if ($price !== null) {
-            $result['price'] = $price->getAmountInCents();
+            $result['price_decimal'] = $price->getAmount();
             $result['currency'] = $price->getCurrency();
         }
         $commission = $payment->getCommission();
@@ -59,7 +59,7 @@ class Paysera_WalletApi_Mapper
             if ($price !== null && $price->getCurrency() !== $cashback->getCurrency()) {
                 throw new Paysera_WalletApi_Exception_LogicException('Price and cashback currency must be the same');
             }
-            $result['cashback'] = $cashback->getAmountInCents();
+            $result['cashback_decimal'] = $cashback->getAmount();
             $result['currency'] = $cashback->getCurrency();
         }
         if ($payment->hasItems()) {
@@ -91,7 +91,7 @@ class Paysera_WalletApi_Mapper
             $result['funds_source'] = $this->encodeFundsSource($fundsSource);
         }
 
-        if (!(isset($result['description']) && isset($result['price']) || isset($result['items']))) {
+        if (!(isset($result['description']) && isset($result['price_decimal']) || isset($result['items']))) {
             throw new Paysera_WalletApi_Exception_LogicException(
                 'Description and price are required if items are not set'
             );
@@ -265,14 +265,14 @@ class Paysera_WalletApi_Mapper
         $this->setProperty($payment, 'status', $data['status']);
 
         $payment->setPrice(
-            Paysera_WalletApi_Entity_Money::create()->setAmountInCents($data['price'])->setCurrency($data['currency'])
+            Paysera_WalletApi_Entity_Money::create()->setAmount($data['price_decimal'])->setCurrency($data['currency'])
         );
         if (isset($data['commission'])) {
             $payment->setCommission($this->decodeCommission($data['commission'], $data['currency']));
         }
-        if (isset($data['cashback'])) {
+        if (isset($data['cashback_decimal'])) {
             $payment->setCashback(
-                Paysera_WalletApi_Entity_Money::create()->setAmountInCents($data['cashback'])->setCurrency($data['currency'])
+                Paysera_WalletApi_Entity_Money::create()->setAmount($data['cashback_decimal'])->setCurrency($data['currency'])
             );
         }
         if (isset($data['wallet'])) {
@@ -356,11 +356,11 @@ class Paysera_WalletApi_Mapper
         $result = array();
 
         if ($commission->getOutCommission() !== null) {
-            $result['out_commission'] = $commission->getOutCommission()->getAmountInCents();
+            $result['out_commission_decimal'] = $commission->getOutCommission()->getAmount();
         }
 
         if ($commission->getInCommission() !== null) {
-            $result['in_commission'] = $commission->getInCommission()->getAmountInCents();
+            $result['in_commission_decimal'] = $commission->getInCommission()->getAmount();
         }
 
         return $result;
@@ -378,15 +378,15 @@ class Paysera_WalletApi_Mapper
     {
         $commission = new Paysera_WalletApi_Entity_Commission();
 
-        if (isset($data['in_commission'])) {
+        if (isset($data['in_commission_decimal'])) {
             $commission->setInCommission(
-                Paysera_WalletApi_Entity_Money::create()->setAmountInCents($data['in_commission'])->setCurrency($currency)
+                Paysera_WalletApi_Entity_Money::create()->setAmount($data['in_commission_decimal'])->setCurrency($currency)
             );
         }
 
-        if (isset($data['out_commission'])) {
+        if (isset($data['out_commission_decimal'])) {
             $commission->setOutCommission(
-                Paysera_WalletApi_Entity_Money::create()->setAmountInCents($data['out_commission'])->setCurrency($currency)
+                Paysera_WalletApi_Entity_Money::create()->setAmount($data['out_commission_decimal'])->setCurrency($currency)
             );
         }
 
@@ -415,14 +415,14 @@ class Paysera_WalletApi_Mapper
         if (($imageUri = $item->getImageUri()) !== null) {
             $result['image_uri'] = $imageUri;
         }
-        $result['price'] = $item->getPrice()->getAmountInCents();
+        $result['price_decimal'] = $item->getPrice()->getAmount();
         $result['currency'] = $item->getPrice()->getCurrency();
         $result['quantity'] = $item->getQuantity();
         if (($parameters = $item->getParameters()) !== null) {
             $result['parameters'] = $parameters;
         }
         if ($item->getTotalPrice() !== null) {
-            $result['total_price'] = $item->getTotalPrice()->getAmountInCents();
+            $result['total_price_decimal'] = $item->getTotalPrice()->getAmount();
         }
         return $result;
     }
@@ -439,7 +439,7 @@ class Paysera_WalletApi_Mapper
         $item = new Paysera_WalletApi_Entity_Item();
         $item->setTitle($data['title']);
         $price = Paysera_WalletApi_Entity_Money::create()
-            ->setAmountInCents($data['price'])
+            ->setAmount($data['price_decimal'])
             ->setCurrency($data['currency']);
         $item->setPrice($price);
         $item->setQuantity($data['quantity']);
@@ -452,10 +452,10 @@ class Paysera_WalletApi_Mapper
         if (isset($data['parameters'])) {
             $item->setParameters($data['parameters']);
         }
-        if (isset($data['total_price'])) {
+        if (isset($data['total_price_decimal'])) {
             $item->setTotalPrice(
                 Paysera_WalletApi_Entity_Money::create()
-                    ->setAmountInCents($data['total_price'])
+                    ->setAmount($data['total_price_decimal'])
                     ->setCurrency($data['currency'])
             );
         }
