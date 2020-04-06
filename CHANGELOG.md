@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 2.2.0
+- Changed keys by how transaction is being encoded to use plain amount instead of cents
+- Changed decoding to use decimals instead of cents
+
 ## 2.1.0
 - Added `\Paysera_WalletApi_Mapper::decodeWalletBalance` mapping from decimal
 
