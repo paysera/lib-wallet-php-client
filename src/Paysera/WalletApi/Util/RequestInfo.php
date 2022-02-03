@@ -72,10 +72,11 @@ class Paysera_WalletApi_Util_RequestInfo
      *
      * @return array
      */
-    protected function parseHttpQuery($query) {
+    protected function parseHttpQuery($query)
+    {
         $params = array();
         parse_str($query, $params);
-        if (get_magic_quotes_gpc()) {
+        if ($this->checkMagicQuotesOption()) {
             $params = $this->stripSlashesRecursively($params);
         }
         return $params;
@@ -98,5 +99,14 @@ class Paysera_WalletApi_Util_RequestInfo
         } else {
             return stripslashes($data);
         }
+    }
+
+    private function checkMagicQuotesOption()
+    {
+        if (version_compare(PHP_VERSION, '5.4.0') >= 0) {
+            return false;
+        }
+
+        return get_magic_quotes_gpc();
     }
 }
