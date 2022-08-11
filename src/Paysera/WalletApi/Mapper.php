@@ -1482,8 +1482,33 @@ class Paysera_WalletApi_Mapper
         if (isset($data['locale'])) {
             $this->setProperty($user, 'locale', $data['locale']);
         }
+        if (isset($data['pep'])) {
+            $this->setProperty($user, 'politicallyExposedPersons', $this->decodePep($data['pep']));
+        }
 
         return $user;
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return Paysera_WalletApi_Entity_PoliticallyExposedPerson[]
+     */
+    public function decodePep($data)
+    {
+        $politicallyExposedPersons = [];
+        foreach ($data as $item) {
+            $politicallyExposedPerson = new Paysera_WalletApi_Entity_PoliticallyExposedPerson();
+
+            $this->setProperty($politicallyExposedPerson, 'name', $data['name']);
+            $this->setProperty($politicallyExposedPerson, 'relation', $data['relation']);
+            $this->setProperty($politicallyExposedPerson, 'positions', $data['positions']);
+
+            $politicallyExposedPersons[] = $politicallyExposedPerson;
+        }
+
+
+        return $politicallyExposedPersons;
     }
 
     /**
