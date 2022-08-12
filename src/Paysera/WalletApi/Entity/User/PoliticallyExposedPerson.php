@@ -1,6 +1,6 @@
 <?php
 
-class Paysera_WalletApi_Entity_PoliticallyExposedPerson
+class Paysera_WalletApi_Entity_User_PoliticallyExposedPerson
 {
     /**
      * @var string

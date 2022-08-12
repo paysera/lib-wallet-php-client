@@ -1492,13 +1492,13 @@ class Paysera_WalletApi_Mapper
     /**
      * @param array $data
      *
-     * @return Paysera_WalletApi_Entity_PoliticallyExposedPerson[]
+     * @return Paysera_WalletApi_Entity_User_PoliticallyExposedPerson[]
      */
     public function decodePep($data)
     {
         $politicallyExposedPersons = [];
         foreach ($data as $item) {
-            $politicallyExposedPerson = new Paysera_WalletApi_Entity_PoliticallyExposedPerson();
+            $politicallyExposedPerson = new Paysera_WalletApi_Entity_User_PoliticallyExposedPerson();
 
             $this->setProperty($politicallyExposedPerson, 'name', $item['name']);
             $this->setProperty($politicallyExposedPerson, 'relation', $item['relation']);

@@ -317,7 +317,7 @@ class Paysera_WalletApi_Entity_User
     }
 
     /**
-     * @return Paysera_WalletApi_Entity_PoliticallyExposedPerson[]
+     * @return Paysera_WalletApi_Entity_User_PoliticallyExposedPerson[]
      */
     public function getPoliticallyExposedPersons()
     {
