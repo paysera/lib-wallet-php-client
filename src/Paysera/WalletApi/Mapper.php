@@ -1500,9 +1500,9 @@ class Paysera_WalletApi_Mapper
         foreach ($data as $item) {
             $politicallyExposedPerson = new Paysera_WalletApi_Entity_PoliticallyExposedPerson();
 
-            $this->setProperty($politicallyExposedPerson, 'name', $data['name']);
-            $this->setProperty($politicallyExposedPerson, 'relation', $data['relation']);
-            $this->setProperty($politicallyExposedPerson, 'positions', $data['positions']);
+            $this->setProperty($politicallyExposedPerson, 'name', $item['name']);
+            $this->setProperty($politicallyExposedPerson, 'relation', $item['relation']);
+            $this->setProperty($politicallyExposedPerson, 'positions', $item['positions']);
 
             $politicallyExposedPersons[] = $politicallyExposedPerson;
         }
