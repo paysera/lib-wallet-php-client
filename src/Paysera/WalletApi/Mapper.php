@@ -1510,6 +1510,22 @@ class Paysera_WalletApi_Mapper
     }
 
     /**
+     * @param array $data
+     *
+     * @return Paysera_WalletApi_Entity_User_PoliticallyExposedPerson[]
+     */
+    public function decodePes($data)
+    {
+        $result = [];
+
+        foreach ($data as $item) {
+            $result[] = $this->decodePep($item);
+        }
+
+        return $result;
+    }
+
+    /**
      * @param $data
      *
      * @return Paysera_WalletApi_Entity_User_Address
