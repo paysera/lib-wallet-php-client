@@ -1483,7 +1483,11 @@ class Paysera_WalletApi_Mapper
             $this->setProperty($user, 'locale', $data['locale']);
         }
         if (isset($data['pep'])) {
-            $this->setProperty($user, 'politicallyExposedPersons', $this->decodePep($data['pep']));
+            $result = array();
+            foreach ($data['pep'] as $pep) {
+                $result[] = $this->decodePep($pep);
+            }
+            $this->setProperty($user, 'politicallyExposedPersons', $result);
         }
 
         return $user;
@@ -1492,23 +1496,17 @@ class Paysera_WalletApi_Mapper
     /**
      * @param array $data
      *
-     * @return Paysera_WalletApi_Entity_User_PoliticallyExposedPerson[]
+     * @return Paysera_WalletApi_Entity_User_PoliticallyExposedPerson
      */
     public function decodePep($data)
     {
-        $politicallyExposedPersons = [];
-        foreach ($data as $item) {
-            $politicallyExposedPerson = new Paysera_WalletApi_Entity_User_PoliticallyExposedPerson();
+        $politicallyExposedPerson = new Paysera_WalletApi_Entity_User_PoliticallyExposedPerson();
 
-            $this->setProperty($politicallyExposedPerson, 'name', $item['name']);
-            $this->setProperty($politicallyExposedPerson, 'relation', $item['relation']);
-            $this->setProperty($politicallyExposedPerson, 'positions', $item['positions']);
+        $this->setProperty($politicallyExposedPerson, 'name', $data['name']);
+        $this->setProperty($politicallyExposedPerson, 'relation', $data['relation']);
+        $this->setProperty($politicallyExposedPerson, 'positions', $data['positions']);
 
-            $politicallyExposedPersons[] = $politicallyExposedPerson;
-        }
-
-
-        return $politicallyExposedPersons;
+        return $politicallyExposedPerson;
     }
 
     /**
