@@ -1483,11 +1483,11 @@ class Paysera_WalletApi_Mapper
             $this->setProperty($user, 'locale', $data['locale']);
         }
         if (isset($data['pep'])) {
-            $result = array();
+            $peps = [];
             foreach ($data['pep'] as $pep) {
-                $result[] = $this->decodePep($pep);
+                $peps[] = $this->decodePep($pep);
             }
-            $this->setProperty($user, 'politicallyExposedPersons', $result);
+            $this->setProperty($user, 'politicallyExposedPersons', $peps);
         }
 
         return $user;
@@ -1516,13 +1516,13 @@ class Paysera_WalletApi_Mapper
      */
     public function decodePes($data)
     {
-        $result = [];
+        $pes = [];
 
         foreach ($data as $item) {
-            $result[] = $this->decodePep($item);
+            $pes[] = $this->decodePep($item);
         }
 
-        return $result;
+        return $pes;
     }
 
     /**
