@@ -1518,6 +1518,10 @@ class Paysera_WalletApi_Mapper
     {
         $pes = [];
 
+        if (empty($data)) {
+            return $pes;
+        }
+
         foreach ($data as $item) {
             $pes[] = $this->decodePep($item);
         }
