@@ -97,4 +97,21 @@ class MapperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($for, $transaction->getReserveFor());
     }
+
+    public function testDecodesPep()
+    {
+        $data = [
+            'name' => 'nameValue',
+            'relation' => 'relationValue',
+            'positions' => [
+                'positionAValue',
+            ],
+        ];
+
+        $mapper = new Paysera_WalletApi_Mapper();
+        $pepObj = $mapper->decodePep($data);
+        self::assertEquals('nameValue', $pepObj->getName());
+        self::assertEquals('relationValue', $pepObj->getRelation());
+        self::assertEquals('positionAValue', $pepObj->getPositions()[0]);
+    }
 }

@@ -970,4 +970,11 @@ class Paysera_WalletApi_Client_WalletClient extends Paysera_WalletApi_Client_Bas
 
         return $this->mapper->decodeSufficientAmountResponse($responseData);
     }
+
+    public function getPes($userId)
+    {
+        $responseData = $this->get(sprintf('user/%s/pes', $userId));
+
+        return $this->mapper->decodePes($responseData);
+    }
 }
