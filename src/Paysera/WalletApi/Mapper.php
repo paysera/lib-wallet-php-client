@@ -2374,4 +2374,13 @@ class Paysera_WalletApi_Mapper
 
         return $result;
     }
+
+    /**
+     * @param Paysera_WalletApi_Entity_TransferConfiguration $transferConfiguration
+     * @return array
+     */
+    public function encodeTransferConfiguration(Paysera_WalletApi_Entity_TransferConfiguration $transferConfiguration)
+    {
+        return (new Paysera_WalletApi_Mapper_TransferConfigurationMapper())->mapFromEntity($transferConfiguration);
+    }
 }
