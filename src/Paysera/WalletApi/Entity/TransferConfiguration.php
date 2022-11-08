@@ -18,7 +18,7 @@ class Paysera_WalletApi_Entity_TransferConfiguration
     private $clientId;
 
     /**
-     * @param $walletId int
+     * @param int $walletId
      * @return $this
      */
     public function setWalletId($walletId)
@@ -37,7 +37,7 @@ class Paysera_WalletApi_Entity_TransferConfiguration
     }
 
     /**
-     * @param $applicationClientId int
+     * @param int $applicationClientId
      * @return $this
      */
     public function setApplicationClientId($applicationClientId)
@@ -56,7 +56,7 @@ class Paysera_WalletApi_Entity_TransferConfiguration
     }
 
     /**
-     * @param $clientId int
+     * @param int $clientId
      * @return $this
      */
     public function setClientId($clientId)
