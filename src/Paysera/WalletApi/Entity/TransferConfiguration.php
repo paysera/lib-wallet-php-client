@@ -3,19 +3,26 @@
 class Paysera_WalletApi_Entity_TransferConfiguration
 {
     /**
-     * @var int
+     * @var int|null
      */
     private $walletId;
 
     /**
-     * @var int
+     * @var int|null
      */
     private $applicationClientId;
 
     /**
-     * @var int
+     * @var int|null
      */
     private $clientId;
+
+    public function __construct()
+    {
+        $this->walletId = null;
+        $this->applicationClientId = null;
+        $this->clientId = null;
+    }
 
     /**
      * @param int $walletId
@@ -29,7 +36,7 @@ class Paysera_WalletApi_Entity_TransferConfiguration
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getWalletId()
     {
@@ -48,7 +55,7 @@ class Paysera_WalletApi_Entity_TransferConfiguration
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getApplicationClientId()
     {
@@ -67,7 +74,7 @@ class Paysera_WalletApi_Entity_TransferConfiguration
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getClientId()
     {

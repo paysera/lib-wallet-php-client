@@ -11,7 +11,7 @@ class Paysera_WalletApi_Mapper_TransferConfigurationMapper
      */
     public function mapFromEntity(Paysera_WalletApi_Entity_TransferConfiguration $transferConfiguration)
     {
-        $data = array();
+        $data = [];
         if ($transferConfiguration->getClientId() !== null) {
             $data['clientId'] = $transferConfiguration->getClientId();
         }
