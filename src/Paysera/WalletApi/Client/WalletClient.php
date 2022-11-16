@@ -998,7 +998,7 @@ class Paysera_WalletApi_Client_WalletClient extends Paysera_WalletApi_Client_Bas
      */
     public function deleteTransferConfiguration($clientId)
     {
-        $responseData = $this->delete('/client/' . $clientId . '/configuration/transfer');
+        $responseData = $this->delete(sprintf('client/%s/configuration/transfer', $clientId));
 
         return $this->mapper->decodeClient($responseData);
     }
