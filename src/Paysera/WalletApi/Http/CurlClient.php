@@ -85,6 +85,7 @@ class Paysera_WalletApi_Http_CurlClient implements Paysera_WalletApi_Http_Client
      */
     public function makeRequest(Paysera_WalletApi_Http_Request $request)
     {
+        var_dump($request->getFullUri());
         $curl = $this->getCurl();
         curl_setopt($curl, CURLOPT_URL, $request->getFullUri());
         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $request->getMethod());
