@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 2.3.2
+- Fixed deleteTransferConfiguration endpoint
+
+## 2.3.1
+- Added two new endpoints for creating and deleting API configs
+
+## 2.3.0
+- Added politically exposed person model
+- Added new endpoint to client to get politically exposed person data
+
 ## 2.2.1
 - Fixed method get_magic_quotes_gpc method usage
 

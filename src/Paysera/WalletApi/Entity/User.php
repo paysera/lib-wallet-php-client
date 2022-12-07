@@ -76,6 +76,11 @@ class Paysera_WalletApi_Entity_User
     protected $locale;
 
     /**
+     * @var array
+     */
+    protected $politicallyExposedPersons;
+
+    /**
      * Creates object, used for fluent interface
      *
      * @return self
@@ -309,5 +314,13 @@ class Paysera_WalletApi_Entity_User
         $this->locale = $locale;
 
         return $this;
+    }
+
+    /**
+     * @return Paysera_WalletApi_Entity_User_PoliticallyExposedPerson[]
+     */
+    public function getPoliticallyExposedPersons()
+    {
+        return $this->politicallyExposedPersons;
     }
 }

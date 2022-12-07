@@ -130,6 +130,11 @@ class Paysera_WalletApi_Client_TokenRelatedWalletClient extends Paysera_WalletAp
         return parent::getUserWallets($userId);
     }
 
+    public function getPes($userId = 'me')
+    {
+        return parent::getPes($userId);
+    }
+
     /**
      * Gets currentAccessToken
      *

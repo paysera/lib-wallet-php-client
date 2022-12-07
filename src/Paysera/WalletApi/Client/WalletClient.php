@@ -970,4 +970,36 @@ class Paysera_WalletApi_Client_WalletClient extends Paysera_WalletApi_Client_Bas
 
         return $this->mapper->decodeSufficientAmountResponse($responseData);
     }
+
+    public function getPes($userId)
+    {
+        $responseData = $this->get(sprintf('user/%s/pes', $userId));
+
+        return $this->mapper->decodePes($responseData);
+    }
+
+    /**
+     * @param Paysera_WalletApi_Entity_TransferConfiguration $transferConfiguration
+     * @return Paysera_WalletApi_Entity_Client
+     */
+    public function createTransferConfiguration(Paysera_WalletApi_Entity_TransferConfiguration $transferConfiguration)
+    {
+        $responseData = $this->post(
+            'client/configuration/transfer',
+            $this->mapper->encodeTransferConfiguration($transferConfiguration)
+        );
+
+        return $this->mapper->decodeClient($responseData);
+    }
+
+    /**
+     * @param int $clientId
+     * @return Paysera_WalletApi_Entity_Client
+     */
+    public function deleteTransferConfiguration($clientId)
+    {
+        $responseData = $this->delete(sprintf('client/%s/configuration/transfer', $clientId));
+
+        return $this->mapper->decodeClient($responseData);
+    }
 }
