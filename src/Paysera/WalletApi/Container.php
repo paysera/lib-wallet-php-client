@@ -133,16 +133,6 @@ class Paysera_WalletApi_Container
     /**
      * @param Paysera_WalletApi_Client_BasicClient $basicClient
      *
-     * @return Paysera_WalletApi_Client_TokenRelatedOAuthClient
-     */
-    public function createOAuthClientWithToken(Paysera_WalletApi_Client_BasicClient $basicClient)
-    {
-        return new Paysera_WalletApi_Client_TokenRelatedOAuthClient($basicClient, $this->getMapper());
-    }
-
-    /**
-     * @param Paysera_WalletApi_Client_BasicClient $basicClient
-     *
      * @return Paysera_WalletApi_Client_WalletClient
      */
     public function createWalletClient(Paysera_WalletApi_Client_BasicClient $basicClient)
