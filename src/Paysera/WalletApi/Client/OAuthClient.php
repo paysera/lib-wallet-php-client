@@ -88,6 +88,12 @@ class Paysera_WalletApi_Client_OAuthClient extends Paysera_WalletApi_Client_Base
         return $this->mapper->decodeAccessToken($responseData);
     }
 
+    public function revokeAccessToken($token)
+    {
+        Paysera_WalletApi_Util_Assert::isScalar($token);
+        $this->delete(sprintf('token?access_token=%s', $token));
+    }
+
     /**
      * Creates OAuth session. Used for passing confirmed user information, if available
      *
@@ -143,4 +149,4 @@ class Paysera_WalletApi_Client_OAuthClient extends Paysera_WalletApi_Client_Base
     }
 
 
-} 
+}
