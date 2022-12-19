@@ -142,8 +142,8 @@ class Paysera_WalletApi
      */
     public function oauthClientWithToken(
         Paysera_WalletApi_Entity_MacAccessToken $token,
-        array $parameters = array())
-    {
+        array $parameters = array()
+    ) {
         $dispatcher = $this->dispatcher($this->router->getOAuthApiEndpoint(), $token, $parameters);
         $client = $this->container->createOAuthClientWithToken($this->container->createBasicClient($dispatcher));
         $client->setCurrentAccessToken($token);
