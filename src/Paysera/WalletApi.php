@@ -135,23 +135,6 @@ class Paysera_WalletApi
     }
 
     /**
-     * Creates OAuth client, responsible for getting access token.
-     * If "code" grant type is used, usually OAuth consumer is enough for all purposes, client itself is not needed
-     *
-     * @return Paysera_WalletApi_Client_OAuthClient
-     */
-    public function oauthClientWithToken(
-        Paysera_WalletApi_Entity_MacAccessToken $token,
-        array $parameters = array()
-    ) {
-        $dispatcher = $this->dispatcher($this->router->getOAuthApiEndpoint(), $token, $parameters);
-        $client = $this->container->createOAuthClientWithToken($this->container->createBasicClient($dispatcher));
-        $client->setCurrentAccessToken($token);
-        $dispatcher->addSubscriber(new Paysera_WalletApi_Listener_AccessTokenSetter($client));
-        return $client;
-    }
-
-    /**
      * Creates basic client for making custom requests.
      * Returned client is responsible for signing the requests etc., but no specific methods are defined
      * and no mapping done.
