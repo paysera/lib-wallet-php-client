@@ -31,6 +31,6 @@ class Paysera_WalletApi_Client_TokenRelatedOAuthClient extends Paysera_WalletApi
     public function deleteAccessToken($token)
     {
         Paysera_WalletApi_Util_Assert::isScalar($token);
-        $this->delete('token?access_token=' . $token);
+        $this->delete(sprintf('token?access_token=%s', $token));
     }
 }
