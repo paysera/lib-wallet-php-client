@@ -154,10 +154,11 @@ class Paysera_WalletApi_OAuth_Consumer
      *
      * @param string $transferId
      * @param string $redirectUri
+     * @param string $cancelUri
      *
      * @return string
      */
-    public function getTransferSignRedirectUri($transferId, $redirectUri = null)
+    public function getTransferSignRedirectUri($transferId, $redirectUri = null, $cancelUri = null)
     {
         if ($redirectUri === null) {
             $redirectUri = $this->getCurrentUri();
@@ -167,7 +168,10 @@ class Paysera_WalletApi_OAuth_Consumer
             '%s/%s?%s',
             $this->router->getAuthEndpoint('/wallet/transfer-sign'),
             urlencode($transferId),
-            http_build_query(['redirect_uri' => $redirectUri])
+            http_build_query([
+                'redirect_uri' => $redirectUri,
+                'cancel_uri' => $cancelUri,
+            ])
         );
     }
 

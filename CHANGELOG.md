@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 2.4.1
+- Added optional `cancel_url` argument to `Paysera_WalletApi_OAuth_Consumer::getTransferSignRedirectUri`, which appends its value as query parameter to resulting redirect uri
+
 ## 2.4.0
 - Added endpoint to revoke access token
 

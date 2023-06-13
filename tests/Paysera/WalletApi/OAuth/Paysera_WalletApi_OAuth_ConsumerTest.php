@@ -2,6 +2,11 @@
 
 class Paysera_WalletApi_OAuth_ConsumerTest extends PHPUnit_Framework_TestCase
 {
+    const CURRENT_URI = 'https://current.bank.paysera.com';
+    const REDIRECT_URI = 'https://redirect.com';
+    const CANCEL_URI = 'https://cancel.com';
+    const TRANSFER_ID = 'TEST123';
+
     /**
      * @var Paysera_WalletApi_OAuth_Consumer
      */
@@ -11,12 +16,18 @@ class Paysera_WalletApi_OAuth_ConsumerTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
+        $requestInfo = $this->getSimpleMockForClass('Paysera_WalletApi_Util_RequestInfo');
+        $requestInfo
+            ->method('getCurrentUri')
+            ->willReturn(self::CURRENT_URI)
+        ;
+
         $this->consumer = new Paysera_WalletApi_OAuth_Consumer(
             123,
             $this->getSimpleMockForClass('Paysera_WalletApi_Client_OAuthClient'),
             new Paysera_WalletApi_Util_Router(),
             new Paysera_WalletApi_State_SessionStatePersister('abc'),
-            $this->getSimpleMockForClass('Paysera_WalletApi_Util_RequestInfo')
+            $requestInfo
         );
     }
 
@@ -89,6 +100,61 @@ class Paysera_WalletApi_OAuth_ConsumerTest extends PHPUnit_Framework_TestCase
                 ),
             ),
         );
+    }
+
+    /**
+     * @param string $transferId
+     * @param string $redirectUri
+     * @param string $cancelUri
+     * @param array $expected
+
+     * @dataProvider testGetTransferSignRedirectUrlDataProvider
+     */
+    public function testGetTransferSignRedirectUrl($transferId, $redirectUri, $cancelUri, $expected)
+    {
+        $parsedUrl = parse_url(
+            $this->consumer->getTransferSignRedirectUri($transferId, $redirectUri, $cancelUri)
+        );
+
+        $queryParams = array();
+        parse_str($parsedUrl['query'], $queryParams);
+
+        $this->assertEquals($expected['redirect_uri'], $queryParams['redirect_uri']);
+
+        if ($cancelUri !== null) {
+            $this->assertEquals($expected['cancel_uri'], $queryParams['cancel_uri']);
+        }
+    }
+
+    public function testGetTransferSignRedirectUrlDataProvider()
+    {
+        return [
+            'No redirect url' => [
+                self::TRANSFER_ID,
+                null,
+                null,
+                [
+                    'redirect_uri' => self::CURRENT_URI
+                ]
+            ],
+            'With redirect url' => [
+                self::TRANSFER_ID,
+                self::REDIRECT_URI,
+                null,
+                [
+                    'redirect_uri' => self::REDIRECT_URI
+                ]
+            ],
+            'With cancel url' => [
+                self::TRANSFER_ID,
+                self::REDIRECT_URI,
+                self::CANCEL_URI,
+                [
+                    'redirect_uri' => self::REDIRECT_URI,
+                    'cancel_uri' => self::CANCEL_URI
+                ]
+            ]
+        ];
     }
 
     private function getSimpleMockForClass($class)
