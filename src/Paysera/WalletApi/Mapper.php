@@ -1241,6 +1241,10 @@ class Paysera_WalletApi_Mapper
             $this->setProperty($account, 'ibans', $this->decodeIbans($data['ibans']));
         }
 
+        if (isset($data['main_account_iban'])) {
+            $this->setProperty($account, 'mainAccountIban', $data['main_account_iban']);
+        }
+
         return $account;
     }
 
