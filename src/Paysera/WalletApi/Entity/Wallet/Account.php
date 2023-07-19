@@ -51,7 +51,7 @@ class Paysera_WalletApi_Entity_Wallet_Account
      * @var string
      * @readonly
      */
-    protected $mainAccountIban;
+    protected $mainIban;
 
     /**
      * Creates object, used for fluent interface
@@ -138,8 +138,8 @@ class Paysera_WalletApi_Entity_Wallet_Account
     /**
      * @return string
      */
-    public function getMainAccountIban()
+    public function getMainIban()
     {
-        return $this->mainAccountIban;
+        return $this->mainIban;
     }
 }
