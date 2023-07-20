@@ -67,7 +67,7 @@ try {
 If you have any further questions feel free to contact us:
 
 „Paysera LT“, UAB \
-Mėnulio g. 7 \
-LT-04326 Vilnius \
-Email: pagalba@paysera.lt \
-Tel. +370 (5) 2 07 15 58
+Pilaitės pr. 16 \
+LT-04352 Vilnius \
+Email: info@paysera.lt \
+Tel. +37052071558
