@@ -620,6 +620,21 @@ class Paysera_WalletApi_Client_WalletClient extends Paysera_WalletApi_Client_Bas
     }
 
     /**
+     * Gets user's confirmed phone numbers by id using API
+     *
+     * @param integer $userId
+     *
+     * @return array
+     *
+     * @throws Paysera_WalletApi_Exception_ApiException
+     */
+    public function getUserConfirmedPhoneNumbers($userId)
+    {
+        Paysera_WalletApi_Util_Assert::isId($userId);
+        return $this->get('user/' . $userId . '/confirmed-phones');
+    }
+
+    /**
      * Gets wallet barcode by search parameters
      *
      * @param array $parameters
