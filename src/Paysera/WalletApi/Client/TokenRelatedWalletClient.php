@@ -115,6 +115,12 @@ class Paysera_WalletApi_Client_TokenRelatedWalletClient extends Paysera_WalletAp
         return parent::getUserPhone($userId);
     }
 
+    public function getUserConfirmedPhoneNumbers($userId = 'me')
+    {
+        return parent::getUserConfirmedPhoneNumbers($userId);
+    }
+
+
     public function getUserAddress($userId = 'me')
     {
         return parent::getUserAddress($userId);

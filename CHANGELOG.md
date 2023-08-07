@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## 2.4.1
+### Added
+- Added `Paysera_WalletApi_Client_WalletClient::getUserConfirmedPhoneNumbers`
+- Added `Paysera_WalletApi_Client_TokenRelatedWalletClient::getUserConfirmedPhoneNumbers`
+
+## 2.4.1
 - Added main_iban field to Account
 
 ## 2.4.0
