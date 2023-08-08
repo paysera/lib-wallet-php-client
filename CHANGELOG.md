@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added `Paysera_WalletApi_Client_WalletClient::getUserConfirmedPhoneNumbers`
 - Added `Paysera_WalletApi_Client_TokenRelatedWalletClient::getUserConfirmedPhoneNumbers`
 
+## Removed
+- Removed composer.json Authors
+
 ## 2.4.1
 - Added main_iban field to Account
 
