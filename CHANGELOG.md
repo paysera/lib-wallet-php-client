@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 2.6.0
+- Added `Paysera_WalletApi_Client_WalletClient::getPermissionsToWallets` endpoint
+- Added `Paysera_WalletApi_Entity_ClientPermissionsTpWallet` entity
+- Added `Paysera_WalletApi_Mapper::decodeClientPermissionsToWallets` method
+- Added `Paysera_WalletApi_Mapper::decodeClientPermissionsToWallet` method
+- Added `Paysera_WalletApi_Mapper::encodeClientPermissionsToWallet` method
+- Changed `Paysera_WalletApi_Mapper::decodeClient` added decoding `permissions_to_wallets`
+- Changed `Paysera_WalletApi_Mapper::encodeClient` added encoding `permissions_to_wallets`
+- Added `Paysera_WalletApi_Entity_Client::permissionsToWallets` property
+- Added `Paysera_WalletApi_Entity_Client::getPermissionsToWallets` method
+- Added `Paysera_WalletApi_Entity_Client::setPermissionsToWallets` method
+- Added `Paysera_WalletApi_Entity_Client::addPermissionsToWallet` method
+
 ## 2.5.1
 ### Fixed
 - Fixed typo in `Paysera_WalletApi_Mapper::decodeStatementParty`. There was typo for !isset instead of isset when mapping ibans
