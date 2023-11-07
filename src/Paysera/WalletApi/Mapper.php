@@ -2042,6 +2042,12 @@ class Paysera_WalletApi_Mapper
         }
         $client->setHosts($hosts);
 
+        if (isset($data['permissions_to_wallets'])) {
+            foreach ($data['permissions_to_wallets'] as $clientPermissionsToWallet) {
+                $client->addPermissionsToWallet($this->decodeClientPermissionsToWallet($clientPermissionsToWallet));
+            }
+        }
+
         if (!empty($data['credentials'])) {
             $client->setCredentials($this->decodeMacCredentials($data['credentials']));
         }
@@ -2076,6 +2082,14 @@ class Paysera_WalletApi_Mapper
             $result['permissions'] = $this->encodeClientPermissions($client->getPermissions());
 
         }
+
+        if (count($client->getPermissionsToWallets()) > 0) {
+            $result['permissions_to_wallets'] = [];
+            foreach ($client->getPermissionsToWallets() as $permissionsToWallet) {
+                $result['permissions_to_wallets'][] = $this->encodeClientPermissionsToWallet($permissionsToWallet);
+            }
+        }
+
         if (!empty($projectId)) {
             $result['project_id'] = $projectId;
         }
@@ -2392,5 +2406,62 @@ class Paysera_WalletApi_Mapper
     public function encodeTransferConfiguration(Paysera_WalletApi_Entity_TransferConfiguration $transferConfiguration)
     {
         return (new Paysera_WalletApi_Mapper_TransferConfigurationMapper())->mapFromEntity($transferConfiguration);
+    }
+
+    /**
+     * @param array $clientPermissionsToWallets
+     * @return Paysera_WalletApi_Entity_ClientPermissionsToWallet[]
+     */
+    public function decodeClientPermissionsToWallets(array $clientPermissionsToWallets)
+    {
+        $result = [];
+
+        foreach ($clientPermissionsToWallets as $clientPermissionsToWallet) {
+            $result[] = $this->decodeClientPermissionsToWallet($clientPermissionsToWallet);
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param array $clientPermissionsToWallet
+     * @return Paysera_WalletApi_Entity_ClientPermissionsToWallet
+     */
+    public function decodeClientPermissionsToWallet(array $clientPermissionsToWallet)
+    {
+        return Paysera_WalletApi_Entity_ClientPermissionsToWallet::create()
+            ->setWallet($this->decodeWallet($clientPermissionsToWallet['wallet']))
+            ->setScopes($clientPermissionsToWallet['scopes'])
+        ;
+    }
+
+    /**
+     * @param Paysera_WalletApi_Entity_ClientPermissionsToWallet $walletPermissions
+     * @return array
+     * @throws Paysera_WalletApi_Exception_LogicException
+     */
+    public function encodeClientPermissionsToWallet(Paysera_WalletApi_Entity_ClientPermissionsToWallet $walletPermissions)
+    {
+        if ($walletPermissions->getWallet() === null) {
+            throw new Paysera_WalletApi_Exception_LogicException('Wallet must be provided');
+        }
+
+        if ($walletPermissions->getWallet()->getId() === null) {
+            throw new Paysera_WalletApi_Exception_LogicException('Wallet ID must be provided');
+        }
+
+        if ($walletPermissions->getWallet()->getAccount() === null) {
+            throw new Paysera_WalletApi_Exception_LogicException('Account must be provided');
+        }
+
+        if ($walletPermissions->getWallet()->getAccount()->getNumber() === null) {
+            throw new Paysera_WalletApi_Exception_LogicException('Account number must be provided');
+        }
+
+        return [
+            'wallet_id' => $walletPermissions->getWallet()->getId(),
+            'account_number' => $walletPermissions->getWallet()->getAccount()->getNumber(),
+            'scopes' => $walletPermissions->getScopes(),
+        ];
     }
 }
