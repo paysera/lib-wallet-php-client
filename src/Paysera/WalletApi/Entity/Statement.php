@@ -62,6 +62,11 @@ class Paysera_WalletApi_Entity_Statement
     protected $referenceNumber;
 
     /**
+     * @var array
+     */
+    protected $ibans;
+
+    /**
      * Gets id
      *
      * @return int
@@ -149,5 +154,15 @@ class Paysera_WalletApi_Entity_Statement
     public function getReferenceNumber()
     {
         return $this->referenceNumber;
+    }
+
+    /**
+     * Gets ibans
+     *
+     * @return array
+     */
+    public function getIbans()
+    {
+        return $this->ibans;
     }
 }
