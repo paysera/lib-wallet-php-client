@@ -27,6 +27,11 @@ class Paysera_WalletApi_Entity_Statement_Party
     protected $bic;
 
     /**
+     * @var array
+     */
+    protected $ibans;
+
+    /**
      * Gets accountNumber
      *
      * @return string
@@ -66,5 +71,13 @@ class Paysera_WalletApi_Entity_Statement_Party
         return $this->name;
     }
 
-
+    /**
+     * Gets ibans
+     *
+     * @return array
+     */
+    public function getIbans()
+    {
+        return $this->ibans;
+    }
 }
