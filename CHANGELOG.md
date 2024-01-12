@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 2.5.1
+### Fixed
+- Fixed typo in `Paysera_WalletApi_Mapper::decodeStatementParty`. There was typo for !isset instead of isset when mapping ibans
+
 ## 2.5.0
 ### Added
 - Added `Paysera_WalletApi_Entity_Statement::getIbans`

@@ -1438,7 +1438,7 @@ class Paysera_WalletApi_Mapper
         if (!empty($data['display_name']) && empty($data['name'])) {
             $this->setProperty($party, 'name', $data['display_name']);
         }
-        if (!isset($data['ibans'])) {
+        if (isset($data['ibans'])) {
             $this->setProperty($party, 'ibans', $data['ibans']);
         }
         return $party;
