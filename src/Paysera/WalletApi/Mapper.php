@@ -2429,7 +2429,7 @@ class Paysera_WalletApi_Mapper
      */
     public function decodeClientPermissionsToWallet(array $clientPermissionsToWallet)
     {
-        return Paysera_WalletApi_Entity_ClientPermissionsToWallet::create()
+        return (new Paysera_WalletApi_Entity_ClientPermissionsToWallet())
             ->setWallet($this->decodeWallet($clientPermissionsToWallet['wallet']))
             ->setScopes($clientPermissionsToWallet['scopes'])
         ;
