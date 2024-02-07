@@ -16,14 +16,6 @@ class Paysera_WalletApi_Entity_ClientPermissionsToWallet
     private $scopes = [];
 
     /**
-     * @return self
-     */
-    public static function create()
-    {
-        return new self();
-    }
-
-    /**
      * @param Paysera_WalletApi_Entity_Wallet $wallet
      * @return self
      */

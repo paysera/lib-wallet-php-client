@@ -334,10 +334,10 @@ class MapperTest extends \PHPUnit_Framework_TestCase
                     ->setMainProjectId(1)
                     ->setPermissionsToWallets(
                         [
-                            Paysera_WalletApi_Entity_ClientPermissionsToWallet::create()
+                            (new Paysera_WalletApi_Entity_ClientPermissionsToWallet())
                                 ->setWallet($this->createWallet(1, 1, $this->createAccount('EVP1')))
                                 ->setScopes(['balance']),
-                            Paysera_WalletApi_Entity_ClientPermissionsToWallet::create()
+                            (new Paysera_WalletApi_Entity_ClientPermissionsToWallet())
                                 ->setWallet($this->createWallet(2, 2, $this->createAccount('EVP2')))
                                 ->setScopes(['statements']),
                         ]
@@ -422,10 +422,10 @@ class MapperTest extends \PHPUnit_Framework_TestCase
                     ->setMainProjectId(1)
                     ->setPermissionsToWallets(
                         [
-                            Paysera_WalletApi_Entity_ClientPermissionsToWallet::create()
+                            (new Paysera_WalletApi_Entity_ClientPermissionsToWallet())
                                 ->setWallet($this->createWallet(1, 1, $this->createAccount('EVP1')))
                                 ->setScopes(['balance']),
-                            Paysera_WalletApi_Entity_ClientPermissionsToWallet::create()
+                            (new Paysera_WalletApi_Entity_ClientPermissionsToWallet())
                                 ->setWallet($this->createWallet(2, 2, $this->createAccount('EVP2')))
                                 ->setScopes(['statements']),
                         ]
@@ -517,10 +517,10 @@ class MapperTest extends \PHPUnit_Framework_TestCase
                     ->setMainProjectId(1)
                     ->setPermissionsToWallets(
                         [
-                            Paysera_WalletApi_Entity_ClientPermissionsToWallet::create()
+                            (new Paysera_WalletApi_Entity_ClientPermissionsToWallet())
                                 ->setWallet($this->createWallet(1, 1, $this->createAccount('EVP1')))
                                 ->setScopes(['balance']),
-                            Paysera_WalletApi_Entity_ClientPermissionsToWallet::create()
+                            (new Paysera_WalletApi_Entity_ClientPermissionsToWallet())
                                 ->setWallet($this->createWallet(2, 2, $this->createAccount('EVP2')))
                                 ->setScopes(['statements']),
                         ]
@@ -631,10 +631,10 @@ class MapperTest extends \PHPUnit_Framework_TestCase
                     )
                     ->setPermissionsToWallets(
                         [
-                            Paysera_WalletApi_Entity_ClientPermissionsToWallet::create()
+                            (new Paysera_WalletApi_Entity_ClientPermissionsToWallet())
                                 ->setWallet($this->createWallet(1, 1, $this->createAccount('EVP1')))
                                 ->setScopes(['balance']),
-                            Paysera_WalletApi_Entity_ClientPermissionsToWallet::create()
+                            (new Paysera_WalletApi_Entity_ClientPermissionsToWallet())
                                 ->setWallet($this->createWallet(2, 2, $this->createAccount('EVP2')))
                                 ->setScopes(['statements']),
                         ]
@@ -685,10 +685,10 @@ class MapperTest extends \PHPUnit_Framework_TestCase
                     )
                     ->setPermissionsToWallets(
                         [
-                            Paysera_WalletApi_Entity_ClientPermissionsToWallet::create()
+                            (new Paysera_WalletApi_Entity_ClientPermissionsToWallet())
                                 ->setWallet($this->createWallet(1, 1, $this->createAccount('EVP1')))
                                 ->setScopes(['balance']),
-                            Paysera_WalletApi_Entity_ClientPermissionsToWallet::create()
+                            (new Paysera_WalletApi_Entity_ClientPermissionsToWallet())
                                 ->setWallet($this->createWallet(2, 2, $this->createAccount('EVP2')))
                                 ->setScopes(['statements']),
                         ]
@@ -790,7 +790,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
                     ],
                     'scopes' => [],
                 ],
-                'expectedPermission' => Paysera_WalletApi_Entity_ClientPermissionsToWallet::create()
+                'expectedPermission' => (new Paysera_WalletApi_Entity_ClientPermissionsToWallet())
                     ->setWallet($this->getWallet(1, $this->getAccount('EVP1')))
                     ->setScopes([]),
                 'isBalanceGranted' => false,
@@ -809,7 +809,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
                         'balance'
                     ],
                 ],
-                'expectedPermission' => Paysera_WalletApi_Entity_ClientPermissionsToWallet::create()
+                'expectedPermission' => (new Paysera_WalletApi_Entity_ClientPermissionsToWallet())
                     ->setWallet($this->getWallet(2, $this->getAccount('EVP2')))
                     ->setScopes([Paysera_WalletApi_OAuth_Consumer::SCOPE_BALANCE]),
                 'isBalanceGranted' => true,
@@ -828,7 +828,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
                         'statements'
                     ],
                 ],
-                'expectedPermission' => Paysera_WalletApi_Entity_ClientPermissionsToWallet::create()
+                'expectedPermission' => (new Paysera_WalletApi_Entity_ClientPermissionsToWallet())
                     ->setWallet($this->getWallet(3, $this->getAccount('EVP3')))
                     ->setScopes([Paysera_WalletApi_OAuth_Consumer::SCOPE_STATEMENTS]),
                 'isBalanceGranted' => false,
@@ -848,7 +848,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
                         'statements',
                     ],
                 ],
-                'expectedPermission' => Paysera_WalletApi_Entity_ClientPermissionsToWallet::create()
+                'expectedPermission' => (new Paysera_WalletApi_Entity_ClientPermissionsToWallet())
                     ->setWallet($this->getWallet(4, $this->getAccount('EVP4')))
                     ->setScopes([
                         Paysera_WalletApi_OAuth_Consumer::SCOPE_BALANCE,
@@ -870,7 +870,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
                         'unknown'
                     ],
                 ],
-                'expectedPermission' => Paysera_WalletApi_Entity_ClientPermissionsToWallet::create()
+                'expectedPermission' => (new Paysera_WalletApi_Entity_ClientPermissionsToWallet())
                     ->setWallet($this->getWallet(5, $this->getAccount('EVP5')))
                     ->setScopes([
                         'unknown'
@@ -885,30 +885,30 @@ class MapperTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'Case 1 Expect empty wallet exception' => [
-                'input' => Paysera_WalletApi_Entity_ClientPermissionsToWallet::create()
+                'input' => (new Paysera_WalletApi_Entity_ClientPermissionsToWallet())
                     ->setScopes([]),
                 'expected' => new Paysera_WalletApi_Exception_LogicException('Wallet must be provided'),
             ],
             'Case 2 Expect empty wallet ID exception' => [
-                'input' => Paysera_WalletApi_Entity_ClientPermissionsToWallet::create()
+                'input' => (new Paysera_WalletApi_Entity_ClientPermissionsToWallet())
                     ->setWallet($this->getWallet(null, null))
                     ->setScopes([]),
                 'expected' => new Paysera_WalletApi_Exception_LogicException('Wallet ID must be provided'),
             ],
             'Case 3 Expect empty account exception' => [
-                'input' => Paysera_WalletApi_Entity_ClientPermissionsToWallet::create()
+                'input' => (new Paysera_WalletApi_Entity_ClientPermissionsToWallet())
                     ->setWallet($this->getWallet(1, null))
                     ->setScopes([]),
                 'expected' => new Paysera_WalletApi_Exception_LogicException('Account must be provided'),
             ],
             'Case 4 Expect empty account number exception' => [
-                'input' => Paysera_WalletApi_Entity_ClientPermissionsToWallet::create()
+                'input' => (new Paysera_WalletApi_Entity_ClientPermissionsToWallet())
                     ->setWallet($this->getWallet(1, $this->getAccount(null)))
                     ->setScopes([]),
                 'expected' => new Paysera_WalletApi_Exception_LogicException('Account number must be provided'),
             ],
             'Case 3 No scopes' => [
-                'input' => Paysera_WalletApi_Entity_ClientPermissionsToWallet::create()
+                'input' => (new Paysera_WalletApi_Entity_ClientPermissionsToWallet())
                     ->setWallet($this->getWallet(2, $this->getAccount('EVP2')))
                     ->setScopes([]),
                 'expected' => [
@@ -918,7 +918,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             'Case 4 Balance only' => [
-                'input' => Paysera_WalletApi_Entity_ClientPermissionsToWallet::create()
+                'input' => (new Paysera_WalletApi_Entity_ClientPermissionsToWallet())
                     ->setWallet($this->getWallet(3, $this->getAccount('EVP3')))
                     ->setScopes([Paysera_WalletApi_OAuth_Consumer::SCOPE_BALANCE]),
                 'expected' => [
@@ -928,7 +928,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             'Case 5 Statements only' => [
-                'input' => Paysera_WalletApi_Entity_ClientPermissionsToWallet::create()
+                'input' => (new Paysera_WalletApi_Entity_ClientPermissionsToWallet())
                     ->setWallet($this->getWallet(4, $this->getAccount('EVP4')))
                     ->setScopes([Paysera_WalletApi_OAuth_Consumer::SCOPE_STATEMENTS]),
                 'expected' => [
@@ -938,7 +938,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             'Case 6 Both balance and statements' => [
-                'input' => Paysera_WalletApi_Entity_ClientPermissionsToWallet::create()
+                'input' => (new Paysera_WalletApi_Entity_ClientPermissionsToWallet())
                     ->setWallet($this->getWallet(5, $this->getAccount('EVP5')))
                     ->setScopes([
                         Paysera_WalletApi_OAuth_Consumer::SCOPE_BALANCE,
