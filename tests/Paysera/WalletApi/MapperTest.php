@@ -632,6 +632,80 @@ class MapperTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @dataProvider decodeAllowanceDataProvider
+     */
+    public function testDecodeAllowance($data, $expectedOutput)
+    {
+        $result = $this->mapper->decodeAllowance($data);
+        $this->assertEquals($expectedOutput, $result);
+    }
+
+    public function decodeAllowanceDataProvider()
+    {
+        $allowance1 = new Paysera_WalletApi_Entity_Allowance();
+        $allowance1->setDescription("Test allowance");
+        $allowance1->setMaxPrice(new Paysera_WalletApi_Entity_Money(100, 'USD'));
+        $allowance1->setValidFor(3600);
+        $this->setPropertyThroughReflexion($allowance1, 'wallet', 1);
+        $this->setPropertyThroughReflexion($allowance1, 'id', 1);
+        $this->setPropertyThroughReflexion($allowance1, 'transactionKey', 'key');
+        $this->setPropertyThroughReflexion($allowance1, 'createdAt', DateTime::createFromFormat('U', 123));
+        $this->setPropertyThroughReflexion($allowance1, 'status', 'status');
+
+        $allowance2 = new Paysera_WalletApi_Entity_Allowance();
+        $allowance2->setDescription("Test allowance");
+        $this->setPropertyThroughReflexion($allowance2, 'id', 1);
+        $this->setPropertyThroughReflexion($allowance2, 'transactionKey', 'key');
+        $this->setPropertyThroughReflexion($allowance2, 'createdAt', DateTime::createFromFormat('U', 123));
+        $this->setPropertyThroughReflexion($allowance2, 'status', 'status');
+
+        return [
+            'all data' => [
+                [
+                    'description' => 'Test allowance',
+                    'max_price' => 10000,
+                    'currency' => 'USD',
+                    'valid_for' => 3600,
+                    'wallet' => 1,
+                    'transaction_key' => 'key',
+                    'created_at' => 123,
+                    'status' => 'status',
+                    'id' => 1,
+                ],
+                $allowance1,
+            ],
+            'necessary data' => [
+                [
+                    'description' => 'Test allowance',
+                    'transaction_key' => 'key',
+                    'created_at' => 123,
+                    'status' => 'status',
+                    'id' => 1,
+                ],
+                $allowance2,
+            ],
+        ];
+    }
+
+    public function testDecodeRestrictions()
+    {
+        $data = array(
+            'account_owner' => array(
+                'type' => 'test_type',
+                'requirements' => array('identity'),
+                'level' => 'test_level',
+            ),
+        );
+
+        $restrictions = $this->mapper->decodeRestrictions($data);
+
+        $this->assertInstanceOf(Paysera_WalletApi_Entity_Restrictions::class, $restrictions);
+        $this->assertEquals('test_type', $restrictions->getAccountOwnerRestriction()->getType());
+        $this->assertTrue($restrictions->getAccountOwnerRestriction()->isIdentityRequired());
+        $this->assertEquals('test_level', $restrictions->getAccountOwnerRestriction()->getLevel());
+    }
+
     public function testMapperJoinsLocationSearchFilterStatusesArray()
     {
         $filter = new Paysera_WalletApi_Entity_Location_SearchFilter();
