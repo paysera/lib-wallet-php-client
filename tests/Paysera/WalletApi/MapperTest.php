@@ -711,8 +711,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
         $filter = new Paysera_WalletApi_Entity_Location_SearchFilter();
         $filter->setStatuses(['a','b']);
 
-        $mapper = new Paysera_WalletApi_Mapper();
-        $encoded = $mapper->encodeLocationFilter($filter);
+        $encoded = $this->mapper->encodeLocationFilter($filter);
 
         $statuses = explode(',', $encoded['status']);
         $this->assertCount(2, $statuses);
@@ -769,8 +768,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $mapper = new Paysera_WalletApi_Mapper();
-        $transaction = $mapper->decodeTransaction($data);
+        $transaction = $this->mapper->decodeTransaction($data);
 
         $this->assertEquals($until->getTimestamp(), $transaction->getReserveUntil()->getTimestamp());
     }
@@ -787,8 +785,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $mapper = new Paysera_WalletApi_Mapper();
-        $transaction = $mapper->decodeTransaction($data);
+        $transaction = $this->mapper->decodeTransaction($data);
 
         $this->assertEquals($for, $transaction->getReserveFor());
     }
@@ -803,8 +800,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $mapper = new Paysera_WalletApi_Mapper();
-        $pepObj = $mapper->decodePep($data);
+        $pepObj = $this->mapper->decodePep($data);
         self::assertEquals('nameValue', $pepObj->getName());
         self::assertEquals('relationValue', $pepObj->getRelation());
         self::assertEquals('positionAValue', $pepObj->getPositions()[0]);
