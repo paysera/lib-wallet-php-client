@@ -21,18 +21,15 @@ use Paysera_WalletApi_Entity_Restriction_UserRestriction;
 use Paysera_WalletApi_Entity_Restrictions;
 use Paysera_WalletApi_Entity_Search_Result;
 use Paysera_WalletApi_Entity_MacCredentials;
-use Paysera_WalletApi_Entity_Project;
 use Paysera_WalletApi_Entity_Transaction;
 use Paysera_WalletApi_Entity_User_Identity;
 use Paysera_WalletApi_Exception_LogicException;
 use Paysera_WalletApi_Entity_Wallet;
 use Paysera_WalletApi_Entity_Wallet_Account;
-use Paysera_WalletApi_Exception_LogicException;
 use Paysera_WalletApi_Mapper;
 use Paysera_WalletApi_Mapper_IdentityMapper;
 use ReflectionProperty;
 use Paysera_WalletApi_OAuth_Consumer;
-use ReflectionProperty;
 
 class MapperTest extends \PHPUnit_Framework_TestCase
 {
@@ -67,7 +64,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'valid data' => [
-                [
+                'data' => [
                     'token_type' => 'mac',
                     'mac_algorithm' => 'hmac-sha-256',
                     'expires_in' => 3600,
@@ -75,14 +72,14 @@ class MapperTest extends \PHPUnit_Framework_TestCase
                     'mac_key' => 'test_key',
                     'refresh_token' => 'test_refresh_token',
                 ],
-                null,
-                Paysera_WalletApi_Entity_MacAccessToken::create()
+                'expectedException' => null,
+                'expectedResult' => Paysera_WalletApi_Entity_MacAccessToken::create()
                     ->setMacId('test_token')
                     ->setMacKey('test_key')
                     ->setRefreshToken('test_refresh_token')
             ],
             'invalid token type' => [
-                [
+                'data' => [
                     'token_type' => 'invalid',
                     'mac_algorithm' => 'hmac-sha-256',
                     'expires_in' => 3600,
@@ -90,11 +87,11 @@ class MapperTest extends \PHPUnit_Framework_TestCase
                     'mac_key' => 'test_key',
                     'refresh_token' => 'test_refresh_token',
                 ],
-                InvalidArgumentException::class,
-                null
+                'expectedException' => InvalidArgumentException::class,
+                'expectedResult' => null
             ],
             'invalid mac_algorithm' => [
-                [
+                'data' => [
                     'token_type' => 'mac',
                     'mac_algorithm' => 'invalid',
                     'expires_in' => 3600,
@@ -102,8 +99,8 @@ class MapperTest extends \PHPUnit_Framework_TestCase
                     'mac_key' => 'test_key',
                     'refresh_token' => 'test_refresh_token',
                 ],
-                InvalidArgumentException::class,
-                null
+                'expectedException' => InvalidArgumentException::class,
+                'expectedResult' => null
             ],
         ];
     }
@@ -143,8 +140,8 @@ class MapperTest extends \PHPUnit_Framework_TestCase
 
         return [
             'valid data' => [
-                $payment1,
-                [
+                'payment'=> $payment1,
+                'expectedOutput' => [
                     'description' => 'Test payment',
                     'price_decimal' => 100,
                     'currency' => 'USD',
@@ -152,22 +149,22 @@ class MapperTest extends \PHPUnit_Framework_TestCase
                 ]
             ],
             [
-                $payment2,
-                [
+                'payment'=> $payment2,
+                'expectedOutput' => [
                     'description' => 'Test payment',
                     'price_decimal' => 100,
                     'currency' => 'USD',
                 ]
             ],
             'Price and cashback currency must be the same' => [
-                $payment3,
-                null,
-                'Paysera_WalletApi_Exception_LogicException'
+                'payment'=> $payment3,
+                'expectedOutput' => null,
+                'expectedException' => 'Paysera_WalletApi_Exception_LogicException'
             ],
             'Description and price are required if items are not set' => [
-                $payment4,
-                null,
-                'Paysera_WalletApi_Exception_LogicException'
+                'payment'=> $payment4,
+                'expectedOutput' => null,
+                'expectedException' => 'Paysera_WalletApi_Exception_LogicException'
             ],
         ];
     }
@@ -228,16 +225,16 @@ class MapperTest extends \PHPUnit_Framework_TestCase
 
         return [
             [
-                $fundsSource1,
-                [
+                'fundsSource' => $fundsSource1,
+                'expectedOutput' => [
                     'type' => 'Credit Card',
                     'details' => 'Test details',
                 ]
             ],
             [
-                $fundsSource2,
-                null,
-                'Paysera_WalletApi_Exception_LogicException'
+                'fundsSource' => $fundsSource2,
+                'expectedOutput' => null,
+                'expectedException' => 'Paysera_WalletApi_Exception_LogicException'
             ],
         ];
     }
@@ -245,18 +242,13 @@ class MapperTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider fundsSourceDataProvider
      */
-    public function testDecodeFundsSource($data, $expectedOutput, $expectedException = null)
+    public function testDecodeFundsSource($data, $expectedOutput)
     {
-        if ($expectedException !== null) {
-            $this->setExpectedException($expectedException);
-        }
-
         $result = $this->mapper->decodeFundsSource($data);
 
-        if ($expectedOutput !== null) {
-            $this->assertEquals($expectedOutput->getType(), $result->getType());
-            $this->assertEquals($expectedOutput->getDetails(), $result->getDetails());
-        }
+        $this->assertEquals($expectedOutput->getType(), $result->getType());
+        $this->assertEquals($expectedOutput->getDetails(), $result->getDetails());
+
     }
 
     public function fundsSourceDataProvider()
@@ -273,23 +265,23 @@ class MapperTest extends \PHPUnit_Framework_TestCase
 
         return [
             'all data' => [
-                [
+                'data' => [
                     'type' => 'Credit Card',
                     'details' => 'Test details',
                 ],
-                $fundsSource1,
+                'expectedOutput' => $fundsSource1,
             ],
             'empty type' => [
-                [
+                'data' => [
                     'details' => 'Test details',
                 ],
-                $fundsSource2,
+                'expectedOutput' => $fundsSource2,
             ],
             'empty details' => [
-                [
+                'data' => [
                     'type' => 'Credit Card',
                 ],
-                $fundsSource3,
+                'expectedOutput' => $fundsSource3,
             ],
         ];
     }
@@ -323,8 +315,8 @@ class MapperTest extends \PHPUnit_Framework_TestCase
 
         return [
             'restriction with identity required' => [
-                $restriction1,
-                [
+                'restrictions' => $restriction1,
+                'expected' => [
                     'account_owner' => [
                         'type' => 'type1',
                         'requirements' => ['identity'],
@@ -333,8 +325,8 @@ class MapperTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             'restriction without identity required' => [
-                $restriction2,
-                [
+                'restrictions' => $restriction2,
+                'expected' => [
                     'account_owner' => [
                         'type' => 'type2',
                         'requirements' => [],
@@ -343,8 +335,8 @@ class MapperTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             'no restriction' => [
-                $restriction3,
-                [],
+                'restrictions' => $restriction3,
+                'expected' => [],
             ],
         ];
     }
@@ -388,34 +380,34 @@ class MapperTest extends \PHPUnit_Framework_TestCase
 
         return [
             'all data' => [
-                $project1,
-                [
+                'project' => $project1,
+                'expectedOutput' => [
                     'title' => 'Test project',
                     'description' => 'Test description',
                     'wallet_id' => 12345,
                 ],
-                null
+                'expectedException' => null
             ],
             'title null' => [
-                $project2,
-                [],
-                Paysera_WalletApi_Exception_LogicException::class
+                'project' => $project2,
+                'expectedOutput' => [],
+                'expectedException' => Paysera_WalletApi_Exception_LogicException::class
             ],
             'no description' => [
-                $project3,
-                [
+                'project' => $project3,
+                'expectedOutput' => [
                     'title' => 'Test project',
                     'wallet_id' => 12345,
                 ],
-                null
+                'expectedException' => null
             ],
             'no wallet_id' => [
-                $project4,
-                [
+                'project' => $project4,
+                'expectedOutput' => [
                     'title' => 'Test project',
                     'description' => 'Test description',
                 ],
-                null
+                'expectedException' => null
             ],
         ];
     }
@@ -455,29 +447,29 @@ class MapperTest extends \PHPUnit_Framework_TestCase
 
         return [
             'all data' => [
-                [
+                'data' => [
                     'id' => 1,
                     'title' => 'Test project',
                     'description' => 'Test description',
                     'wallet_id' => 12345,
                 ],
-                $project1,
+                'expectedOutput' => $project1,
             ],
             'empty description' => [
-                [
+                'data' => [
                     'id' => 2,
                     'title' => 'Test project',
                     'wallet_id' => 12345,
                 ],
-                $project2,
+                'expectedOutput' => $project2,
             ],
             'empty wallet_id' => [
-                [
+                'data' => [
                     'id' => 3,
                     'title' => 'Test project',
                     'description' => 'Test description',
                 ],
-                $project3,
+                'expectedOutput' => $project3,
             ],
         ];
     }
@@ -592,7 +584,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
         $allowance1->setValidFor(3600);
 
         $allowance2 = clone $allowance1;
-        $this->setPropertyThroughReflexion($allowance2, 'id', 1);
+        $this->setProperty($allowance2, 'id', 1);
 
         $allowance3 = clone $allowance1;
         $limit = new Paysera_WalletApi_Entity_Limit();
@@ -610,8 +602,8 @@ class MapperTest extends \PHPUnit_Framework_TestCase
 
         return [
             'all valid data' => [
-                $allowance1,
-                [
+                'allowance' => $allowance1,
+                'expectedOutput' => [
                     'description' => 'Test allowance',
                     'max_price' => 10000,
                     'currency' => 'USD',
@@ -619,28 +611,28 @@ class MapperTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             'exception on non null id' => [
-                $allowance2,
-                null,
-                'Paysera_WalletApi_Exception_LogicException',
-                'Cannot create already existing allowance',
+                'allowance' => $allowance2,
+                'expectedOutput' => null,
+                'expectedException' => 'Paysera_WalletApi_Exception_LogicException',
+                'expectedExceptionMessage' => 'Cannot create already existing allowance',
             ],
             'exception on different currency on allowance and limits' => [
-                $allowance3,
-                null,
-                'Paysera_WalletApi_Exception_LogicException',
-                'All sums in allowance must have the same currency',
+                'allowance' => $allowance3,
+                'expectedOutput' => null,
+                'expectedException' => 'Paysera_WalletApi_Exception_LogicException',
+                'expectedExceptionMessage' => 'All sums in allowance must have the same currency',
             ],
             'exception on non null validfor and validUntil' => [
-                $allowance4,
-                null,
-                'Paysera_WalletApi_Exception_LogicException',
-                'Only one of validFor and validUntil can be provided',
+                'allowance' => $allowance4,
+                'expectedOutput' => null,
+                'expectedException' => 'Paysera_WalletApi_Exception_LogicException',
+                'expectedExceptionMessage' => 'Only one of validFor and validUntil can be provided',
             ],
             'exception on at least one limit no price or not time' => [
-                $allowance5,
-                null,
-                'Paysera_WalletApi_Exception_LogicException',
-                'At least one limit has no price or no time',
+                'allowance' => $allowance5,
+                'expectedOutput' => null,
+                'expectedException' => 'Paysera_WalletApi_Exception_LogicException',
+                'expectedExceptionMessage' => 'At least one limit has no price or no time',
             ],
         ];
     }
@@ -660,22 +652,22 @@ class MapperTest extends \PHPUnit_Framework_TestCase
         $allowance1->setDescription("Test allowance");
         $allowance1->setMaxPrice(new Paysera_WalletApi_Entity_Money(100, 'USD'));
         $allowance1->setValidFor(3600);
-        $this->setPropertyThroughReflexion($allowance1, 'wallet', 1);
-        $this->setPropertyThroughReflexion($allowance1, 'id', 1);
-        $this->setPropertyThroughReflexion($allowance1, 'transactionKey', 'key');
-        $this->setPropertyThroughReflexion($allowance1, 'createdAt', DateTime::createFromFormat('U', 123));
-        $this->setPropertyThroughReflexion($allowance1, 'status', 'status');
+        $this->setProperty($allowance1, 'wallet', 1);
+        $this->setProperty($allowance1, 'id', 1);
+        $this->setProperty($allowance1, 'transactionKey', 'key');
+        $this->setProperty($allowance1, 'createdAt', DateTime::createFromFormat('U', 123));
+        $this->setProperty($allowance1, 'status', 'status');
 
         $allowance2 = new Paysera_WalletApi_Entity_Allowance();
         $allowance2->setDescription("Test allowance");
-        $this->setPropertyThroughReflexion($allowance2, 'id', 1);
-        $this->setPropertyThroughReflexion($allowance2, 'transactionKey', 'key');
-        $this->setPropertyThroughReflexion($allowance2, 'createdAt', DateTime::createFromFormat('U', 123));
-        $this->setPropertyThroughReflexion($allowance2, 'status', 'status');
+        $this->setProperty($allowance2, 'id', 1);
+        $this->setProperty($allowance2, 'transactionKey', 'key');
+        $this->setProperty($allowance2, 'createdAt', DateTime::createFromFormat('U', 123));
+        $this->setProperty($allowance2, 'status', 'status');
 
         return [
             'all data' => [
-                [
+                'data' => [
                     'description' => 'Test allowance',
                     'max_price' => 10000,
                     'currency' => 'USD',
@@ -686,17 +678,17 @@ class MapperTest extends \PHPUnit_Framework_TestCase
                     'status' => 'status',
                     'id' => 1,
                 ],
-                $allowance1,
+                'expectedOutput' => $allowance1,
             ],
             'necessary data' => [
-                [
+                'data' => [
                     'description' => 'Test allowance',
                     'transaction_key' => 'key',
                     'created_at' => 123,
                     'status' => 'status',
                     'id' => 1,
                 ],
-                $allowance2,
+                'expectedOutput' => $allowance2,
             ],
         ];
     }
@@ -1701,12 +1693,5 @@ class MapperTest extends \PHPUnit_Framework_TestCase
         $numberProperty->setValue($account, $number);
 
         return $account;
-    }
-
-    private function setPropertyThroughReflexion($object, $property, $value)
-    {
-        $reflection = new ReflectionProperty(get_class($object), $property);
-        $reflection->setAccessible(true);
-        $reflection->setValue($object, $value);
     }
 }
