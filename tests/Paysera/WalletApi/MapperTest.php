@@ -486,10 +486,10 @@ class MapperTest extends PHPUnit_Framework_TestCase
             'transaction_key' => 'key',
             'created_at' => time(),
             'status' => 'status',
-            'price_decimal' => '10.00',
+            'price_decimal' => '10',
             'currency' => 'USD',
             'commission' => ['amount' => '1.00'],
-            'cashback_decimal' => '2.00',
+            'cashback_decimal' => '2',
             'wallet' => 'wallet_id',
             'confirmed_at' => time(),
             'freeze_until' => time(),
@@ -515,20 +515,20 @@ class MapperTest extends PHPUnit_Framework_TestCase
 
         $payment = $this->mapper->decodePayment($data);
 
-        $this->assertSame('1', $payment->getId());
-        $this->assertSame('key', $payment->getTransactionKey());
-        $this->assertSame('status', $payment->getStatus());
-        $this->assertSame('10', $payment->getPrice()->getAmount());
-        $this->assertSame('USD', $payment->getPrice()->getCurrency());
-        $this->assertSame('2', $payment->getCashback()->getAmount());
-        $this->assertSame('USD', $payment->getCashback()->getCurrency());
-        $this->assertSame('wallet_id', $payment->getWalletId());
-        $this->assertSame('description', $payment->getDescription());
-        $this->assertSame('item1', $payment->getItems()[0]->getTitle());
-        $this->assertSame('test@example.com', $payment->getBeneficiary()->getEmail());
-        $this->assertSame('value', $payment->getParameters()['param']);
-        $this->assertSame('purpose', $payment->getPurpose());
-        $this->assertSame('type', $payment->getFundsSource()->getType());
+        $this->assertSame($data['id'], $payment->getId());
+        $this->assertSame($data['transaction_key'], $payment->getTransactionKey());
+        $this->assertSame($data['status'], $payment->getStatus());
+        $this->assertSame($data['price_decimal'], $payment->getPrice()->getAmount());
+        $this->assertSame($data['currency'], $payment->getPrice()->getCurrency());
+        $this->assertSame($data['cashback_decimal'], $payment->getCashback()->getAmount());
+        $this->assertSame($data['currency'], $payment->getCashback()->getCurrency());
+        $this->assertSame($data['wallet'], $payment->getWalletId());
+        $this->assertSame($data['description'], $payment->getDescription());
+        $this->assertSame($data['items'][0]['title'], $payment->getItems()[0]->getTitle());
+        $this->assertSame($data['beneficiary']['email'], $payment->getBeneficiary()->getEmail());
+        $this->assertSame($data['parameters']['param'], $payment->getParameters()['param']);
+        $this->assertSame($data['purpose'], $payment->getPurpose());
+        $this->assertSame($data['funds_source']['type'], $payment->getFundsSource()->getType());
     }
 
     public function testDecodePaymentMandatoryData()
@@ -544,11 +544,11 @@ class MapperTest extends PHPUnit_Framework_TestCase
 
         $minPayment = $this->mapper->decodePayment($minData);
 
-        $this->assertEquals('2', $minPayment->getId());
-        $this->assertEquals('key2', $minPayment->getTransactionKey());
-        $this->assertEquals('status2', $minPayment->getStatus());
-        $this->assertEquals('20.00', $minPayment->getPrice()->getAmount());
-        $this->assertEquals('EUR', $minPayment->getPrice()->getCurrency());
+        $this->assertEquals($minData['id'], $minPayment->getId());
+        $this->assertEquals($minData['transaction_key'], $minPayment->getTransactionKey());
+        $this->assertEquals($minData['status'], $minPayment->getStatus());
+        $this->assertEquals($minData['price_decimal'], $minPayment->getPrice()->getAmount());
+        $this->assertEquals($minData['currency'], $minPayment->getPrice()->getCurrency());
     }
 
     public function testDecodePaymentSearchResult()
