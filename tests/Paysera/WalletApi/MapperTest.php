@@ -113,7 +113,9 @@ class MapperTest extends \PHPUnit_Framework_TestCase
         if ($expectedException !== null) {
             $this->setExpectedException($expectedException);
         }
+
         $result = $this->mapper->encodePayment($payment);
+
         if ($expectedOutput !== null) {
             $this->assertEquals($expectedOutput, $result);
         }
@@ -292,6 +294,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
     public function testEncodeRestrictions($restrictions, $expected)
     {
         $result = $this->mapper->encodeRestrictions($restrictions);
+
         $this->assertEquals($expected, $result);
     }
 
@@ -506,7 +509,9 @@ class MapperTest extends \PHPUnit_Framework_TestCase
                 'type' => 'type',
             ],
         ];
+
         $payment = $this->mapper->decodePayment($data);
+
         $this->assertSame('1', $payment->getId());
         $this->assertSame('key', $payment->getTransactionKey());
         $this->assertSame('status', $payment->getStatus());
@@ -533,7 +538,9 @@ class MapperTest extends \PHPUnit_Framework_TestCase
             'price_decimal' => '20.00',
             'currency' => 'EUR',
         ];
+
         $minPayment = $this->mapper->decodePayment($minData);
+
         $this->assertEquals('2', $minPayment->getId());
         $this->assertEquals('key2', $minPayment->getTransactionKey());
         $this->assertEquals('status2', $minPayment->getStatus());
