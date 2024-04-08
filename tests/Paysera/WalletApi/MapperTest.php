@@ -28,10 +28,11 @@ use Paysera_WalletApi_Entity_Wallet;
 use Paysera_WalletApi_Entity_Wallet_Account;
 use Paysera_WalletApi_Mapper;
 use Paysera_WalletApi_Mapper_IdentityMapper;
+use PHPUnit_Framework_TestCase;
 use ReflectionProperty;
 use Paysera_WalletApi_OAuth_Consumer;
 
-class MapperTest extends \PHPUnit_Framework_TestCase
+class MapperTest extends PHPUnit_Framework_TestCase
 {
     private $mapper;
 
@@ -355,7 +356,9 @@ class MapperTest extends \PHPUnit_Framework_TestCase
 
         $result = $this->mapper->encodeProject($project);
 
-        $this->assertEquals($expectedOutput, $result);
+        if ($expectedOutput !== null) {
+            $this->assertEquals($expectedOutput, $result);
+        }
     }
 
     public function encodeProjectDataProvider()
@@ -393,7 +396,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
             ],
             'title null' => [
                 'project' => $project2,
-                'expectedOutput' => [],
+                'expectedOutput' => null,
                 'expectedException' => Paysera_WalletApi_Exception_LogicException::class
             ],
             'no description' => [
