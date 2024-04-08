@@ -3,32 +3,722 @@
 namespace Paysera\WalletApi;
 
 use DateTime;
+use InvalidArgumentException;
+use Paysera_WalletApi_Entity_Allowance;
+use Paysera_WalletApi_Entity_FundsSource;
+use Paysera_WalletApi_Entity_Limit;
 use Exception;
 use Paysera_WalletApi_Entity_Client;
 use Paysera_WalletApi_Entity_Client_Host;
 use Paysera_WalletApi_Entity_ClientPermissions;
 use Paysera_WalletApi_Entity_ClientPermissionsToWallet;
 use Paysera_WalletApi_Entity_Location_SearchFilter;
-use Paysera_WalletApi_Entity_MacCredentials;
+use Paysera_WalletApi_Entity_MacAccessToken;
+use Paysera_WalletApi_Entity_Money;
+use Paysera_WalletApi_Entity_Payment;
 use Paysera_WalletApi_Entity_Project;
+use Paysera_WalletApi_Entity_Restriction_UserRestriction;
+use Paysera_WalletApi_Entity_Restrictions;
+use Paysera_WalletApi_Entity_Search_Result;
+use Paysera_WalletApi_Entity_MacCredentials;
 use Paysera_WalletApi_Entity_Transaction;
 use Paysera_WalletApi_Entity_User_Identity;
+use Paysera_WalletApi_Exception_LogicException;
 use Paysera_WalletApi_Entity_Wallet;
 use Paysera_WalletApi_Entity_Wallet_Account;
-use Paysera_WalletApi_Exception_LogicException;
 use Paysera_WalletApi_Mapper;
 use Paysera_WalletApi_Mapper_IdentityMapper;
-use Paysera_WalletApi_OAuth_Consumer;
+use PHPUnit_Framework_TestCase;
 use ReflectionProperty;
+use Paysera_WalletApi_OAuth_Consumer;
 
-class MapperTest extends \PHPUnit_Framework_TestCase
+class MapperTest extends PHPUnit_Framework_TestCase
 {
     private $mapper;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
         $this->mapper = new Paysera_WalletApi_Mapper();
+    }
+
+    /**
+    * @dataProvider accessTokenDataProvider
+    */
+    public function testDecodeAccessToken($data, $expectedException, $expectedResult)
+    {
+        if ($expectedException !== null) {
+            $this->setExpectedException($expectedException);
+        }
+
+        $result = $this->mapper->decodeAccessToken($data);
+
+        if ($expectedResult !== null) {
+            $this->assertInstanceOf(Paysera_WalletApi_Entity_MacAccessToken::class, $result);
+            $this->assertEquals($expectedResult->getMacId(), $result->getMacId());
+            $this->assertEquals($expectedResult->getMacKey(), $result->getMacKey());
+            $this->assertEquals($expectedResult->getRefreshToken(), $result->getRefreshToken());
+        }
+    }
+
+    public function accessTokenDataProvider()
+    {
+        return [
+            'valid data' => [
+                'data' => [
+                    'token_type' => 'mac',
+                    'mac_algorithm' => 'hmac-sha-256',
+                    'expires_in' => 3600,
+                    'access_token' => 'test_token',
+                    'mac_key' => 'test_key',
+                    'refresh_token' => 'test_refresh_token',
+                ],
+                'expectedException' => null,
+                'expectedResult' => Paysera_WalletApi_Entity_MacAccessToken::create()
+                    ->setMacId('test_token')
+                    ->setMacKey('test_key')
+                    ->setRefreshToken('test_refresh_token')
+            ],
+            'invalid token type' => [
+                'data' => [
+                    'token_type' => 'invalid',
+                    'mac_algorithm' => 'hmac-sha-256',
+                    'expires_in' => 3600,
+                    'access_token' => 'test_token',
+                    'mac_key' => 'test_key',
+                    'refresh_token' => 'test_refresh_token',
+                ],
+                'expectedException' => InvalidArgumentException::class,
+                'expectedResult' => null
+            ],
+            'invalid mac_algorithm' => [
+                'data' => [
+                    'token_type' => 'mac',
+                    'mac_algorithm' => 'invalid',
+                    'expires_in' => 3600,
+                    'access_token' => 'test_token',
+                    'mac_key' => 'test_key',
+                    'refresh_token' => 'test_refresh_token',
+                ],
+                'expectedException' => InvalidArgumentException::class,
+                'expectedResult' => null
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider paymentProvider
+     */
+    public function testEncodePayment($payment, $expectedOutput, $expectedException = null)
+    {
+        if ($expectedException !== null) {
+            $this->setExpectedException($expectedException);
+        }
+
+        $result = $this->mapper->encodePayment($payment);
+
+        if ($expectedOutput !== null) {
+            $this->assertEquals($expectedOutput, $result);
+        }
+    }
+
+    public function paymentProvider()
+    {
+        $payment1 = new Paysera_WalletApi_Entity_Payment();
+        $payment1->setDescription("Test payment");
+        $payment1->setPrice(new Paysera_WalletApi_Entity_Money(100, 'USD'));
+        $payment1->setCashback(new Paysera_WalletApi_Entity_Money(10, 'USD'));
+
+        $payment2 = new Paysera_WalletApi_Entity_Payment();
+        $payment2->setDescription("Test payment");
+        $payment2->setPrice(new Paysera_WalletApi_Entity_Money(100, 'USD'));
+
+        $payment3 = new Paysera_WalletApi_Entity_Payment();
+        $payment3->setDescription("Test payment");
+        $payment3->setPrice(new Paysera_WalletApi_Entity_Money(100, 'USD'));
+        $payment3->setCashback(new Paysera_WalletApi_Entity_Money(110, 'EUR'));
+
+        $payment4 = new Paysera_WalletApi_Entity_Payment();
+        $payment4->setPrice(new Paysera_WalletApi_Entity_Money(100, 'USD'));
+
+        return [
+            'valid data' => [
+                'payment'=> $payment1,
+                'expectedOutput' => [
+                    'description' => 'Test payment',
+                    'price_decimal' => 100,
+                    'currency' => 'USD',
+                    'cashback_decimal' => 10,
+                ]
+            ],
+            [
+                'payment'=> $payment2,
+                'expectedOutput' => [
+                    'description' => 'Test payment',
+                    'price_decimal' => 100,
+                    'currency' => 'USD',
+                ]
+            ],
+            'Price and cashback currency must be the same' => [
+                'payment'=> $payment3,
+                'expectedOutput' => null,
+                'expectedException' => 'Paysera_WalletApi_Exception_LogicException'
+            ],
+            'Description and price are required if items are not set' => [
+                'payment'=> $payment4,
+                'expectedOutput' => null,
+                'expectedException' => 'Paysera_WalletApi_Exception_LogicException'
+            ],
+        ];
+    }
+
+    public function testEncodeFundsSources()
+    {
+        $fundsSource1 = new Paysera_WalletApi_Entity_FundsSource();
+        $fundsSource1->setType("Credit Card");
+        $fundsSource1->setDetails("Test details1");
+
+        $fundsSource2 = new Paysera_WalletApi_Entity_FundsSource();
+        $fundsSource2->setType("Bank Transfer");
+        $fundsSource2->setDetails("Test details2");
+
+        $fundsSources = [$fundsSource1, $fundsSource2];
+
+        $expected = [
+            'funds_sources' => [
+                [
+                    'type' => 'Credit Card',
+                    'details' => 'Test details1',
+                ],
+                [
+                    'type' => 'Bank Transfer',
+                    'details' => 'Test details2',
+                ],
+            ]
+        ];
+
+        $result = $this->mapper->encodeFundsSources($fundsSources);
+
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * @dataProvider fundsSourceProvider
+     */
+    public function testEncodeFundsSource($fundsSource, $expectedOutput, $expectedException = null)
+    {
+        if ($expectedException !== null) {
+            $this->setExpectedException($expectedException);
+        }
+
+        $result = $this->mapper->encodeFundsSource($fundsSource);
+
+        if ($expectedOutput !== null) {
+            $this->assertEquals($expectedOutput, $result);
+        }
+    }
+
+    public function fundsSourceProvider()
+    {
+        $fundsSource1 = new Paysera_WalletApi_Entity_FundsSource();
+        $fundsSource1->setType("Credit Card");
+        $fundsSource1->setDetails("Test details");
+
+        $fundsSource2 = new Paysera_WalletApi_Entity_FundsSource();
+
+        return [
+            [
+                'fundsSource' => $fundsSource1,
+                'expectedOutput' => [
+                    'type' => 'Credit Card',
+                    'details' => 'Test details',
+                ]
+            ],
+            [
+                'fundsSource' => $fundsSource2,
+                'expectedOutput' => null,
+                'expectedException' => 'Paysera_WalletApi_Exception_LogicException'
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider fundsSourceDataProvider
+     */
+    public function testDecodeFundsSource($data, $expectedOutput)
+    {
+        $result = $this->mapper->decodeFundsSource($data);
+
+        $this->assertEquals($expectedOutput->getType(), $result->getType());
+        $this->assertEquals($expectedOutput->getDetails(), $result->getDetails());
+
+    }
+
+    public function fundsSourceDataProvider()
+    {
+        $fundsSource1 = new Paysera_WalletApi_Entity_FundsSource();
+        $fundsSource1->setType("Credit Card");
+        $fundsSource1->setDetails("Test details");
+
+        $fundsSource2 = new Paysera_WalletApi_Entity_FundsSource();
+        $fundsSource2->setDetails("Test details");
+
+        $fundsSource3 = new Paysera_WalletApi_Entity_FundsSource();
+        $fundsSource3->setType("Credit Card");
+
+        return [
+            'all data' => [
+                'data' => [
+                    'type' => 'Credit Card',
+                    'details' => 'Test details',
+                ],
+                'expectedOutput' => $fundsSource1,
+            ],
+            'empty type' => [
+                'data' => [
+                    'details' => 'Test details',
+                ],
+                'expectedOutput' => $fundsSource2,
+            ],
+            'empty details' => [
+                'data' => [
+                    'type' => 'Credit Card',
+                ],
+                'expectedOutput' => $fundsSource3,
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider restrictionsProvider
+     */
+    public function testEncodeRestrictions($restrictions, $expected)
+    {
+        $result = $this->mapper->encodeRestrictions($restrictions);
+
+        $this->assertEquals($expected, $result);
+    }
+
+    public function restrictionsProvider()
+    {
+        $userRestriction1 = new Paysera_WalletApi_Entity_Restriction_UserRestriction();
+        $userRestriction1->setIdentityRequired(true);
+        $userRestriction1->setType('type1');
+        $userRestriction1->setLevel('level1');
+        $restriction1 = new Paysera_WalletApi_Entity_Restrictions();
+        $restriction1->setAccountOwnerRestriction($userRestriction1);
+
+        $userRestriction2 = new Paysera_WalletApi_Entity_Restriction_UserRestriction();
+        $userRestriction2->setIdentityRequired(false);
+        $userRestriction2->setType('type2');
+        $userRestriction2->setLevel('level2');
+        $restriction2 = new Paysera_WalletApi_Entity_Restrictions();
+        $restriction2->setAccountOwnerRestriction($userRestriction2);
+
+        $restriction3 = new Paysera_WalletApi_Entity_Restrictions();
+
+        return [
+            'restriction with identity required' => [
+                'restrictions' => $restriction1,
+                'expected' => [
+                    'account_owner' => [
+                        'type' => 'type1',
+                        'requirements' => ['identity'],
+                        'level' => 'level1',
+                    ],
+                ],
+            ],
+            'restriction without identity required' => [
+                'restrictions' => $restriction2,
+                'expected' => [
+                    'account_owner' => [
+                        'type' => 'type2',
+                        'requirements' => [],
+                        'level' => 'level2',
+                    ],
+                ],
+            ],
+            'no restriction' => [
+                'restrictions' => $restriction3,
+                'expected' => [],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider encodeProjectDataProvider
+     */
+    public function testEncodeProject($project, $expectedOutput, $expectedException = null)
+    {
+        if ($expectedException !== null) {
+            $this->setExpectedException($expectedException);
+        }
+
+        $result = $this->mapper->encodeProject($project);
+
+        if ($expectedOutput !== null) {
+            $this->assertEquals($expectedOutput, $result);
+        }
+    }
+
+    public function encodeProjectDataProvider()
+    {
+        $project1 = new Paysera_WalletApi_Entity_Project();
+        $project1->setId(1);
+        $project1->setTitle("Test project");
+        $project1->setDescription("Test description");
+        $project1->setWalletId(12345);
+
+        $project2 = new Paysera_WalletApi_Entity_Project();
+        $project2->setId(2);
+        $project2->setDescription("Test description");
+        $project2->setWalletId(12345);
+
+        $project3 = new Paysera_WalletApi_Entity_Project();
+        $project3->setId(3);
+        $project3->setTitle("Test project");
+        $project3->setWalletId(12345);
+
+        $project4 = new Paysera_WalletApi_Entity_Project();
+        $project4->setId(4);
+        $project4->setTitle("Test project");
+        $project4->setDescription("Test description");
+
+        return [
+            'all data' => [
+                'project' => $project1,
+                'expectedOutput' => [
+                    'title' => 'Test project',
+                    'description' => 'Test description',
+                    'wallet_id' => 12345,
+                ],
+                'expectedException' => null
+            ],
+            'title null' => [
+                'project' => $project2,
+                'expectedOutput' => null,
+                'expectedException' => Paysera_WalletApi_Exception_LogicException::class
+            ],
+            'no description' => [
+                'project' => $project3,
+                'expectedOutput' => [
+                    'title' => 'Test project',
+                    'wallet_id' => 12345,
+                ],
+                'expectedException' => null
+            ],
+            'no wallet_id' => [
+                'project' => $project4,
+                'expectedOutput' => [
+                    'title' => 'Test project',
+                    'description' => 'Test description',
+                ],
+                'expectedException' => null
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider decodeProjectDataProvider
+     */
+    public function testDecodeProject($data, $expectedOutput)
+    {
+        $result = $this->mapper->decodeProject($data);
+
+        if ($expectedOutput !== null) {
+            $this->assertEquals($expectedOutput->getId(), $result->getId());
+            $this->assertEquals($expectedOutput->getTitle(), $result->getTitle());
+            $this->assertEquals($expectedOutput->getDescription(), $result->getDescription());
+            $this->assertEquals($expectedOutput->getWalletId(), $result->getWalletId());
+        }
+    }
+
+    public function decodeProjectDataProvider()
+    {
+        $project1 = new Paysera_WalletApi_Entity_Project();
+        $project1->setId(1);
+        $project1->setTitle("Test project");
+        $project1->setDescription("Test description");
+        $project1->setWalletId(12345);
+
+        $project2 = new Paysera_WalletApi_Entity_Project();
+        $project2->setId(2);
+        $project2->setTitle("Test project");
+        $project2->setWalletId(12345);
+
+        $project3 = new Paysera_WalletApi_Entity_Project();
+        $project3->setId(3);
+        $project3->setTitle("Test project");
+        $project3->setDescription("Test description");
+
+        return [
+            'all data' => [
+                'data' => [
+                    'id' => 1,
+                    'title' => 'Test project',
+                    'description' => 'Test description',
+                    'wallet_id' => 12345,
+                ],
+                'expectedOutput' => $project1,
+            ],
+            'empty description' => [
+                'data' => [
+                    'id' => 2,
+                    'title' => 'Test project',
+                    'wallet_id' => 12345,
+                ],
+                'expectedOutput' => $project2,
+            ],
+            'empty wallet_id' => [
+                'data' => [
+                    'id' => 3,
+                    'title' => 'Test project',
+                    'description' => 'Test description',
+                ],
+                'expectedOutput' => $project3,
+            ],
+        ];
+    }
+    public function testDecodePaymentAllData()
+    {
+        $data = [
+            'id' => '1',
+            'transaction_key' => 'key',
+            'created_at' => time(),
+            'status' => 'status',
+            'price_decimal' => '10',
+            'currency' => 'USD',
+            'commission' => ['amount' => '1.00'],
+            'cashback_decimal' => '2',
+            'wallet' => 'wallet_id',
+            'confirmed_at' => time(),
+            'freeze_until' => time(),
+            'freeze_for' => 'freeze_reason',
+            'description' => 'description',
+            'items' => [
+                [
+                    'title' => 'item1',
+                    'price_decimal' => '5.00',
+                    'currency' => 'USD',
+                    'quantity' => 1,
+                ]
+            ],
+            'beneficiary' => ['email' => 'test@example.com'],
+            'parameters' => ['param' => 'value'],
+            'password' => ['value' => 'password'],
+            'price_rules' => [['amount' => '5.00']],
+            'purpose' => 'purpose',
+            'funds_source' => [
+                'type' => 'type',
+            ],
+        ];
+
+        $payment = $this->mapper->decodePayment($data);
+
+        $this->assertSame($data['id'], $payment->getId());
+        $this->assertSame($data['transaction_key'], $payment->getTransactionKey());
+        $this->assertSame($data['status'], $payment->getStatus());
+        $this->assertSame($data['price_decimal'], $payment->getPrice()->getAmount());
+        $this->assertSame($data['currency'], $payment->getPrice()->getCurrency());
+        $this->assertSame($data['cashback_decimal'], $payment->getCashback()->getAmount());
+        $this->assertSame($data['currency'], $payment->getCashback()->getCurrency());
+        $this->assertSame($data['wallet'], $payment->getWalletId());
+        $this->assertSame($data['description'], $payment->getDescription());
+        $this->assertSame($data['items'][0]['title'], $payment->getItems()[0]->getTitle());
+        $this->assertSame($data['beneficiary']['email'], $payment->getBeneficiary()->getEmail());
+        $this->assertSame($data['parameters']['param'], $payment->getParameters()['param']);
+        $this->assertSame($data['purpose'], $payment->getPurpose());
+        $this->assertSame($data['funds_source']['type'], $payment->getFundsSource()->getType());
+    }
+
+    public function testDecodePaymentMandatoryData()
+    {
+        $minData = [
+            'id' => '2',
+            'transaction_key' => 'key2',
+            'created_at' => time(),
+            'status' => 'status2',
+            'price_decimal' => '20.00',
+            'currency' => 'EUR',
+        ];
+
+        $minPayment = $this->mapper->decodePayment($minData);
+
+        $this->assertEquals($minData['id'], $minPayment->getId());
+        $this->assertEquals($minData['transaction_key'], $minPayment->getTransactionKey());
+        $this->assertEquals($minData['status'], $minPayment->getStatus());
+        $this->assertEquals($minData['price_decimal'], $minPayment->getPrice()->getAmount());
+        $this->assertEquals($minData['currency'], $minPayment->getPrice()->getCurrency());
+    }
+
+    public function testDecodePaymentSearchResult()
+    {
+        $data = [
+            'payments' => [],
+            '_metadata' => [
+                'total' => 10,
+                'offset' => 0,
+                'limit' => 5,
+            ],
+        ];
+
+        $result = $this->mapper->decodePaymentSearchResult($data);
+
+        $this->assertInstanceOf(Paysera_WalletApi_Entity_Search_Result::class, $result);
+        $this->assertEquals(10, $result->getTotal());
+        $this->assertEquals(0, $result->getOffset());
+        $this->assertEquals(5, $result->getLimit());
+    }
+
+    /**
+     * @dataProvider encodeAllowanceDataProvider
+     */
+    public function testEncodeAllowance($allowance, $expectedOutput, $expectedException = null, $expectedExceptionMessage = null)
+    {
+        if ($expectedException !== null) {
+            $this->setExpectedException($expectedException, $expectedExceptionMessage);
+        }
+
+        $result = $this->mapper->encodeAllowance($allowance);
+
+        if ($expectedException === null) {
+            $this->assertEquals($expectedOutput, $result);
+        }
+    }
+
+    public function encodeAllowanceDataProvider()
+    {
+        $allowance1 = new Paysera_WalletApi_Entity_Allowance();
+        $allowance1->setDescription("Test allowance");
+        $allowance1->setMaxPrice(new Paysera_WalletApi_Entity_Money(100, 'USD'));
+        $allowance1->setValidFor(3600);
+
+        $allowance2 = clone $allowance1;
+        $this->setProperty($allowance2, 'id', 1);
+
+        $allowance3 = clone $allowance1;
+        $limit = new Paysera_WalletApi_Entity_Limit();
+        $limit->setMaxPrice(new Paysera_WalletApi_Entity_Money(100, 'EUR'));
+        $limit->setTime(3600);
+        $allowance3->addLimit($limit);
+
+        $allowance4 = clone $allowance1;
+        $allowance4->setValidUntil(new DateTime());
+
+        $allowance5 = clone $allowance1;
+        $limit = new Paysera_WalletApi_Entity_Limit();
+        $limit->setMaxPrice(new Paysera_WalletApi_Entity_Money(100, 'USD'));
+        $allowance5->addLimit($limit);
+
+        return [
+            'all valid data' => [
+                'allowance' => $allowance1,
+                'expectedOutput' => [
+                    'description' => 'Test allowance',
+                    'max_price' => 10000,
+                    'currency' => 'USD',
+                    'valid_for' => 3600,
+                ],
+            ],
+            'exception on non null id' => [
+                'allowance' => $allowance2,
+                'expectedOutput' => null,
+                'expectedException' => 'Paysera_WalletApi_Exception_LogicException',
+                'expectedExceptionMessage' => 'Cannot create already existing allowance',
+            ],
+            'exception on different currency on allowance and limits' => [
+                'allowance' => $allowance3,
+                'expectedOutput' => null,
+                'expectedException' => 'Paysera_WalletApi_Exception_LogicException',
+                'expectedExceptionMessage' => 'All sums in allowance must have the same currency',
+            ],
+            'exception on non null validfor and validUntil' => [
+                'allowance' => $allowance4,
+                'expectedOutput' => null,
+                'expectedException' => 'Paysera_WalletApi_Exception_LogicException',
+                'expectedExceptionMessage' => 'Only one of validFor and validUntil can be provided',
+            ],
+            'exception on at least one limit no price or not time' => [
+                'allowance' => $allowance5,
+                'expectedOutput' => null,
+                'expectedException' => 'Paysera_WalletApi_Exception_LogicException',
+                'expectedExceptionMessage' => 'At least one limit has no price or no time',
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider decodeAllowanceDataProvider
+     */
+    public function testDecodeAllowance($data, $expectedOutput)
+    {
+        $result = $this->mapper->decodeAllowance($data);
+        $this->assertEquals($expectedOutput, $result);
+    }
+
+    public function decodeAllowanceDataProvider()
+    {
+        $allowance1 = new Paysera_WalletApi_Entity_Allowance();
+        $allowance1->setDescription("Test allowance");
+        $allowance1->setMaxPrice(new Paysera_WalletApi_Entity_Money(100, 'USD'));
+        $allowance1->setValidFor(3600);
+        $this->setProperty($allowance1, 'wallet', 1);
+        $this->setProperty($allowance1, 'id', 1);
+        $this->setProperty($allowance1, 'transactionKey', 'key');
+        $this->setProperty($allowance1, 'createdAt', DateTime::createFromFormat('U', 123));
+        $this->setProperty($allowance1, 'status', 'status');
+
+        $allowance2 = new Paysera_WalletApi_Entity_Allowance();
+        $allowance2->setDescription("Test allowance");
+        $this->setProperty($allowance2, 'id', 1);
+        $this->setProperty($allowance2, 'transactionKey', 'key');
+        $this->setProperty($allowance2, 'createdAt', DateTime::createFromFormat('U', 123));
+        $this->setProperty($allowance2, 'status', 'status');
+
+        return [
+            'all data' => [
+                'data' => [
+                    'description' => 'Test allowance',
+                    'max_price' => 10000,
+                    'currency' => 'USD',
+                    'valid_for' => 3600,
+                    'wallet' => 1,
+                    'transaction_key' => 'key',
+                    'created_at' => 123,
+                    'status' => 'status',
+                    'id' => 1,
+                ],
+                'expectedOutput' => $allowance1,
+            ],
+            'necessary data' => [
+                'data' => [
+                    'description' => 'Test allowance',
+                    'transaction_key' => 'key',
+                    'created_at' => 123,
+                    'status' => 'status',
+                    'id' => 1,
+                ],
+                'expectedOutput' => $allowance2,
+            ],
+        ];
+    }
+
+    public function testDecodeRestrictions()
+    {
+        $data = array(
+            'account_owner' => array(
+                'type' => 'test_type',
+                'requirements' => array('identity'),
+                'level' => 'test_level',
+            ),
+        );
+
+        $restrictions = $this->mapper->decodeRestrictions($data);
+
+        $this->assertInstanceOf(Paysera_WalletApi_Entity_Restrictions::class, $restrictions);
+        $this->assertEquals('test_type', $restrictions->getAccountOwnerRestriction()->getType());
+        $this->assertTrue($restrictions->getAccountOwnerRestriction()->isIdentityRequired());
+        $this->assertEquals('test_level', $restrictions->getAccountOwnerRestriction()->getLevel());
     }
 
     public function testMapperJoinsLocationSearchFilterStatusesArray()
@@ -36,8 +726,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
         $filter = new Paysera_WalletApi_Entity_Location_SearchFilter();
         $filter->setStatuses(['a','b']);
 
-        $mapper = new Paysera_WalletApi_Mapper();
-        $encoded = $mapper->encodeLocationFilter($filter);
+        $encoded = $this->mapper->encodeLocationFilter($filter);
 
         $statuses = explode(',', $encoded['status']);
         $this->assertCount(2, $statuses);
@@ -94,8 +783,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $mapper = new Paysera_WalletApi_Mapper();
-        $transaction = $mapper->decodeTransaction($data);
+        $transaction = $this->mapper->decodeTransaction($data);
 
         $this->assertEquals($until->getTimestamp(), $transaction->getReserveUntil()->getTimestamp());
     }
@@ -112,8 +800,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $mapper = new Paysera_WalletApi_Mapper();
-        $transaction = $mapper->decodeTransaction($data);
+        $transaction = $this->mapper->decodeTransaction($data);
 
         $this->assertEquals($for, $transaction->getReserveFor());
     }
@@ -128,8 +815,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $mapper = new Paysera_WalletApi_Mapper();
-        $pepObj = $mapper->decodePep($data);
+        $pepObj = $this->mapper->decodePep($data);
         self::assertEquals('nameValue', $pepObj->getName());
         self::assertEquals('relationValue', $pepObj->getRelation());
         self::assertEquals('positionAValue', $pepObj->getPositions()[0]);
