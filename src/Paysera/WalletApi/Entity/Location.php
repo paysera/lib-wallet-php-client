@@ -112,6 +112,11 @@ class Paysera_WalletApi_Entity_Location
     private $public;
 
     /**
+     * @var Paysera_WalletApi_Entity_Spot[]
+     */
+    private $spots;
+
+    /**
      * Set id
      *
      * @param mixed $id
@@ -557,5 +562,25 @@ class Paysera_WalletApi_Entity_Location
     public static function getServiceTypes()
     {
         return self::$serviceTypes;
+    }
+
+    /**
+     * @param Paysera_WalletApi_Entity_Spot[] $spots
+     * 
+     * @return $this
+     */
+    public function setSpots($spots)
+    {
+        $this->spots = $spots;
+
+        return $this;
+    }
+
+    /**
+     * @return Paysera_WalletApi_Entity_Spot[]
+     */
+    public function getSpots()
+    {
+        return $this->spots;
     }
 }

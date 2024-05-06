@@ -1726,6 +1726,13 @@ class Paysera_WalletApi_Mapper
             $location->setPublic((bool)$data['public']);
         }
 
+        if (isset($data['spots'])) {
+            $spots = [];
+            foreach ($spots as $spot) {
+                $spots[] = $this->decodeSpot($spot);
+            }
+        }
+
         return $location;
     }
 
@@ -2463,5 +2470,55 @@ class Paysera_WalletApi_Mapper
             'account_number' => $walletPermissions->getWallet()->getAccount()->getNumber(),
             'scopes' => $walletPermissions->getScopes(),
         ];
+    }
+
+    public function decodeSpot(array $data)
+    {
+        $spot = new Paysera_WalletApi_Entity_Spot();
+        
+        if (isset($data['id'])) {
+            $spot->setId($data['id']);
+        }
+
+        if (isset($data['status'])) {
+            $spot->setStatus($data['status']);
+        }
+
+        if (isset($data['identifier'])) {
+            $spot->setIdentifier($data['identifier']);
+        }
+
+        if (isset($data['place_info'])) {
+            $spot->setSpotInfo($this->decodeSpotInfo($data['place_info']));
+        }
+
+        return $spot;
+    }
+
+    public function decodeSpotInfo(array $data)
+    {
+        $spotInfo = new Paysera_WalletApi_Entity_SpotInfo();
+
+        if (isset($data['title'])) {
+            $spotInfo->setTitle($data['title']);
+        }
+
+        if (isset($data['description'])) {
+            $spotInfo->setDescription($data['description']);
+        }
+
+        if (isset($data['address'])) {
+            $spotInfo->setAddress($data['address']);
+        }
+
+        if (isset($data['logo_uri'])) {
+            $spotInfo->setLogoUri($data['logo_uri']);
+        }
+
+        if (isset($data['location_id'])) {
+            $spotInfo->setLocationId($data['location_id']);
+        }
+
+        return $spotInfo;
     }
 }
