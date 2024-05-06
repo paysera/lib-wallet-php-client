@@ -1731,6 +1731,8 @@ class Paysera_WalletApi_Mapper
             foreach ($spots as $spot) {
                 $spots[] = $this->decodeSpot($spot);
             }
+
+            $location->setSpots($spots);
         }
 
         return $location;
