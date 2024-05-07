@@ -33,7 +33,7 @@ class Paysera_WalletApi_Entity_Spot
     /**
      * @param int $id
      * 
-     * @return Paysera_WalletApi_Entity_Spot
+     * @return $this
      */
     public function setId($id)
     {
@@ -51,13 +51,14 @@ class Paysera_WalletApi_Entity_Spot
     }
 
     /**
-     * @param string @status
+     * @param string status
      * 
-     * @return Paysera_WalletApi_Entity_Spot
+     * @return $this
      */
     public function setStatus($status)
     {
         $this->status = $status;
+
         return $this;
     }
 
@@ -72,11 +73,12 @@ class Paysera_WalletApi_Entity_Spot
     /**
      * @param string $identifier
      * 
-     * @return Paysera_WalletApi_Entity_Spot
+     * @return $this
      */
     public function setIdentifier($identifier)
     {
         $this->identifier = $identifier;
+        
         return $this;
     }
 
@@ -91,7 +93,7 @@ class Paysera_WalletApi_Entity_Spot
     /**
      * @param Paysera_WalletApi_Entity_SpotInfo $spotInfo
      * 
-     * @return Paysera_WalletApi_Entity_Spot
+     * @return $this
      */
     public function setSpotInfo($spotInfo)
     {
@@ -99,5 +101,4 @@ class Paysera_WalletApi_Entity_Spot
 
         return $this;
     }
-
 }

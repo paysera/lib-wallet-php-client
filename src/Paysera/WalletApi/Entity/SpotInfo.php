@@ -30,7 +30,7 @@ class Paysera_WalletApi_Entity_SpotInfo
     /**
      * @param string $title
      *
-     * @return Paysera_WalletApi_Entity_SpotInfo
+     * @return $this
      */
     public function setTitle($title)
     {
@@ -50,7 +50,7 @@ class Paysera_WalletApi_Entity_SpotInfo
     /**
      * @param string $description
      *
-     * @return Paysera_WalletApi_Entity_SpotInfo
+     * @return $this
      */
     public function setDescription($description)
     {
@@ -70,7 +70,7 @@ class Paysera_WalletApi_Entity_SpotInfo
     /**
      * @param string $address
      *
-     * @return Paysera_WalletApi_Entity_SpotInfo
+     * @return $this
      */
     public function setAddress($address)
     {
@@ -90,7 +90,7 @@ class Paysera_WalletApi_Entity_SpotInfo
     /**
      * @param string $logoUri
      *
-     * @return Paysera_WalletApi_Entity_SpotInfo
+     * @return $this
      */
     public function setLogoUri($logoUri)
     {
@@ -110,7 +110,7 @@ class Paysera_WalletApi_Entity_SpotInfo
     /**
      * @param int $locationId
      *
-     * @return Paysera_WalletApi_Entity_SpotInfo
+     * @return $this
      */
     public function setLocationId($locationId)
     {
