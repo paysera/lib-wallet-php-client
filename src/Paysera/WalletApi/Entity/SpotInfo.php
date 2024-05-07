@@ -1,7 +1,5 @@
 <?php
 
-namespace Paysera_WalletApi\Paysera\WalletApi\Entity;
-
 class Paysera_WalletApi_Entity_SpotInfo
 {
     /**
