@@ -12,6 +12,7 @@ use Paysera_WalletApi_Entity_Client;
 use Paysera_WalletApi_Entity_Client_Host;
 use Paysera_WalletApi_Entity_ClientPermissions;
 use Paysera_WalletApi_Entity_ClientPermissionsToWallet;
+use Paysera_WalletApi_Entity_Location;
 use Paysera_WalletApi_Entity_Location_SearchFilter;
 use Paysera_WalletApi_Entity_MacAccessToken;
 use Paysera_WalletApi_Entity_Money;
@@ -1640,6 +1641,128 @@ class MapperTest extends PHPUnit_Framework_TestCase
                 ],
             ],
         ];
+    }
+
+    public function testDecodeLocation() {
+        // Arrange
+        $data = [
+            'id' => 1,
+            'title' => 'Test Location',
+            'description' => 'This is a test location',
+            'address' => 'Test Address',
+            'radius' => 100,
+            'lat' => 54.6872,
+            'lng' => 25.2797,
+            'prices' => [
+                ['title' => 'a', 'type' => 'price', 'price' => ['amount' => 10000, 'currency' => 'EUR']],
+                ['title' => 'b', 'type' => 'price', 'price' => ['amount' => 20000, 'currency' => 'USD']]
+            ],
+            'working_hours' => [
+                'monday' => ['opening_time' => '09:00', 'closing_time' => '17:00'],
+                'tuesday' => ['opening_time' => '09:00', 'closing_time' => '17:00']
+            ],
+            'images' => [
+                'pin_open' => 'http://example.com/pin_open.png',
+                'pin_closed' => 'http://example.com/pin_closed.png'
+            ],
+            'services' => [
+                'pay' => ['available' => true, 'categories' => ['category1', 'category2']],
+                'cash_in' => ['available' => true, 'types' => ['type1', 'type2']],
+                'cash_out' => ['available' => true, 'types' => ['type1', 'type2']]
+            ],
+            'status' => 'active',
+            'public' => true,
+            'spots' => [
+                [
+                    'id' => 1,
+                    'status' => 'active',
+                    'identifier' => 'spot1',
+                    'place_info' => [
+                        'title' => 'Spot 1',
+                        'description' => 'This is spot 1',
+                        'address' => 'Spot 1 Address',
+                        'logo_uri' => 'http://example.com/spot1.png',
+                        'location_id' => 1
+                    ]
+                ]
+            ]
+        ];
+
+        // Act
+        $location = $this->mapper->decodeLocation($data);
+
+        // Assert
+        $this->assertInstanceOf(Paysera_WalletApi_Entity_Location::class, $location);
+        $this->assertEquals(1, $location->getId());
+        $this->assertEquals('Test Location', $location->getTitle());
+        $this->assertEquals('This is a test location', $location->getDescription());
+        $this->assertEquals('Test Address', $location->getAddress());
+        $this->assertEquals(100, $location->getRadius());
+        $this->assertEquals(54.6872, $location->getLat());
+        $this->assertEquals(25.2797, $location->getLng());
+        // Add more assertions for other properties as needed
+
+        // Assert prices
+        $prices = $location->getPrices();
+        $this->assertCount(2, $prices);
+        $this->assertEquals(100, $prices[0]->getPrice()->getAmount());
+        $this->assertEquals('EUR', $prices[0]->getPrice()->getCurrency());
+        $this->assertEquals(200, $prices[1]->getPrice()->getAmount());
+        $this->assertEquals('USD', $prices[1]->getPrice()->getCurrency());
+        // Assert working hours
+        $workingHours = $location->getWorkingHours();
+        $this->assertCount(2, $workingHours);
+        $this->assertEquals('monday', $workingHours[0]->getDay());
+        $this->assertEquals('tuesday', $workingHours[1]->getDay());
+        $this->assertEquals('09:00', $workingHours[0]->getOpeningTime()->getFormatted());
+        $this->assertEquals('17:00', $workingHours[0]->getClosingTime()->getFormatted());
+        $this->assertEquals('09:00', $workingHours[1]->getOpeningTime()->getFormatted());
+        $this->assertEquals('17:00', $workingHours[1]->getClosingTime()->getFormatted());
+
+        // Assert images
+        $this->assertEquals('http://example.com/pin_open.png', $location->getImagePinOpen());
+        $this->assertEquals('http://example.com/pin_closed.png', $location->getImagePinClosed());
+
+        // Assert services
+        $services = $location->getServices();
+        $this->assertCount(3, $services);
+        $this->assertContains('pay', $services);
+        $this->assertContains('cash_in', $services);
+        $this->assertContains('cash_out', $services);
+
+        $payCategories = $location->getPayCategories();
+        $this->assertCount(2, $payCategories);
+        $this->assertContains('category1', $payCategories);
+        $this->assertContains('category2', $payCategories);
+
+        $cashInTypes = $location->getCashInTypes();
+        $this->assertCount(2, $cashInTypes);
+        $this->assertContains('type1', $cashInTypes);
+        $this->assertContains('type2', $cashInTypes);
+
+        $cashOutTypes = $location->getCashOutTypes();
+        $this->assertCount(2, $cashOutTypes);
+        $this->assertContains('type1', $cashOutTypes);
+        $this->assertContains('type2', $cashOutTypes);
+
+        // Assert status and public
+        $this->assertEquals('active', $location->getStatus());
+        $this->assertTrue($location->getPublic());
+
+        // Assert spots
+        $spots = $location->getSpots();
+        $this->assertCount(1, $spots);
+        $this->assertEquals(1, $spots[0]->getId());
+        $this->assertEquals('active', $spots[0]->getStatus());
+        $this->assertEquals('spot1', $spots[0]->getIdentifier());
+
+        // Assert spot info
+        $spotInfo = $spots[0]->getSpotInfo();
+        $this->assertEquals('Spot 1', $spotInfo->getTitle());
+        $this->assertEquals('This is spot 1', $spotInfo->getDescription());
+        $this->assertEquals('Spot 1 Address', $spotInfo->getAddress());
+        $this->assertEquals('http://example.com/spot1.png', $spotInfo->getLogoUri());
+        $this->assertEquals(1, $spotInfo->getLocationId());
     }
 
     private function setProperty($object, $property, $value)
