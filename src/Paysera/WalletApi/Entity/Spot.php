@@ -20,7 +20,7 @@ class Paysera_WalletApi_Entity_Spot
     /**
      * @var Paysera_WalletApi_Entity_SpotInfo
      */
-    private $placeInfo;
+    private $spotInfo;
 
     /**
      * @return int
@@ -83,20 +83,20 @@ class Paysera_WalletApi_Entity_Spot
     /**
      * @return Paysera_WalletApi_Entity_SpotInfo
      */
-    public function getPlaceInfo()
+    public function getSpotInfo()
     {
-        return $this->placeInfo;
+        return $this->spotInfo;
     }
 
     /**
-     * @param Paysera_WalletApi_Entity_SpotInfo $placeInfo
+     * @param Paysera_WalletApi_Entity_SpotInfo $spotInfo
      * 
      * @return Paysera_WalletApi_Entity_Spot
      */
-    public function setPlaceInfo($placeInfo)
+    public function setSpotInfo($spotInfo)
     {
-        $this->placeInfo = $placeInfo;
-        
+        $this->spotInfo = $spotInfo;
+
         return $this;
     }
 
