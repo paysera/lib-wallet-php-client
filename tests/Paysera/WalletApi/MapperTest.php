@@ -1644,7 +1644,6 @@ class MapperTest extends PHPUnit_Framework_TestCase
     }
 
     public function testDecodeLocation() {
-        // Arrange
         $data = [
             'id' => 1,
             'title' => 'Test Location',
@@ -1688,10 +1687,8 @@ class MapperTest extends PHPUnit_Framework_TestCase
             ]
         ];
 
-        // Act
         $location = $this->mapper->decodeLocation($data);
 
-        // Assert
         $this->assertInstanceOf(Paysera_WalletApi_Entity_Location::class, $location);
         $this->assertEquals(1, $location->getId());
         $this->assertEquals('Test Location', $location->getTitle());
@@ -1700,16 +1697,14 @@ class MapperTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(100, $location->getRadius());
         $this->assertEquals(54.6872, $location->getLat());
         $this->assertEquals(25.2797, $location->getLng());
-        // Add more assertions for other properties as needed
 
-        // Assert prices
         $prices = $location->getPrices();
         $this->assertCount(2, $prices);
         $this->assertEquals(100, $prices[0]->getPrice()->getAmount());
         $this->assertEquals('EUR', $prices[0]->getPrice()->getCurrency());
         $this->assertEquals(200, $prices[1]->getPrice()->getAmount());
         $this->assertEquals('USD', $prices[1]->getPrice()->getCurrency());
-        // Assert working hours
+
         $workingHours = $location->getWorkingHours();
         $this->assertCount(2, $workingHours);
         $this->assertEquals('monday', $workingHours[0]->getDay());
@@ -1719,11 +1714,9 @@ class MapperTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('09:00', $workingHours[1]->getOpeningTime()->getFormatted());
         $this->assertEquals('17:00', $workingHours[1]->getClosingTime()->getFormatted());
 
-        // Assert images
         $this->assertEquals('http://example.com/pin_open.png', $location->getImagePinOpen());
         $this->assertEquals('http://example.com/pin_closed.png', $location->getImagePinClosed());
 
-        // Assert services
         $services = $location->getServices();
         $this->assertCount(3, $services);
         $this->assertContains('pay', $services);
@@ -1745,19 +1738,17 @@ class MapperTest extends PHPUnit_Framework_TestCase
         $this->assertContains('type1', $cashOutTypes);
         $this->assertContains('type2', $cashOutTypes);
 
-        // Assert status and public
         $this->assertEquals('active', $location->getStatus());
         $this->assertTrue($location->getPublic());
 
-        // Assert spots
         $spots = $location->getSpots();
+        $spot = $spots[0];
         $this->assertCount(1, $spots);
-        $this->assertEquals(1, $spots[0]->getId());
-        $this->assertEquals('active', $spots[0]->getStatus());
-        $this->assertEquals('spot1', $spots[0]->getIdentifier());
+        $this->assertEquals(1, $spot->getId());
+        $this->assertEquals('active', $spot->getStatus());
+        $this->assertEquals('spot1', $spot->getIdentifier());
 
-        // Assert spot info
-        $spotInfo = $spots[0]->getSpotInfo();
+        $spotInfo = $spot->getSpotInfo();
         $this->assertEquals('Spot 1', $spotInfo->getTitle());
         $this->assertEquals('This is spot 1', $spotInfo->getDescription());
         $this->assertEquals('Spot 1 Address', $spotInfo->getAddress());
