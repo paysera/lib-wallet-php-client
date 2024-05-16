@@ -1640,6 +1640,7 @@ class Paysera_WalletApi_Mapper
             'status'        => $object->getStatus(),
             'services'      => $services,
             'public'        => $object->getPublic(),
+            'spots'         => $this->encodeSpots($object->getSpots()),
         );
     }
 
@@ -2522,5 +2523,48 @@ class Paysera_WalletApi_Mapper
         }
 
         return $spotInfo;
+    }
+
+    /**
+     * @var Paysera_WalletApi_Entity_Spot[] $spots
+     * 
+     * @return array
+     */
+    public function encodeSpots($spots) {
+        $spotsEncoded = [];
+        foreach ($spots as $spot) {
+            $spotsEncoded[] = $this->encodeSpot($spot);
+        }
+
+        return $spotsEncoded;
+    }
+
+    /**
+     * @var Paysera_WalletApi_Entity_Spot $spot
+     * 
+     * @return array
+     */
+    public function encodeSpot($spot) {
+        return [
+            'id' => $spot->getId(),
+            'status' => $spot->getStatus(),
+            'identifier' => $spot->getIdentifier(),
+            'place_info' => $this->encodeSpotInfo($spot->getSpotInfo())
+        ];
+    }
+
+    /**
+     * @var Paysera_WalletApi_Entity_SpotInfo $spotInfo
+     * 
+     * @return array
+     */
+    public function encodeSpotInfo($spotInfo) {
+        return [
+            'title' => $spotInfo->getTitle(),
+            'description' => $spotInfo->getDescription(),
+            'address' => $spotInfo->getAddress(),
+            'logo_uri' => $spotInfo->getLogoUri(),
+            'location_id' => $spotInfo->getLocationId(),
+        ];
     }
 }
