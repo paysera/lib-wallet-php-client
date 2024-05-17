@@ -1877,6 +1877,84 @@ class MapperTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expectedData, $encodedLocation);
     }
 
+    public function testEncodeLocationEmptySpot() {
+        $location = new Paysera_WalletApi_Entity_Location();
+        $location->setId(1);
+        $location->setTitle('Test Location');
+        $location->setDescription('This is a test location');
+        $location->setAddress('Test Address');
+        $location->setRadius(100);
+        $location->setLat(54.6872);
+        $location->setLng(25.2797);
+
+        $price1 = new Paysera_WalletApi_Entity_Location_Price();
+        $price1->setTitle('a');
+        $price1->markAsPrice();
+        $price1->setPrice(new Paysera_WalletApi_Entity_Money(10000, 'EUR'));
+        $location->addPrice($price1);
+    
+        $price2 = new Paysera_WalletApi_Entity_Location_Price();
+        $price2->setTitle('b');
+        $price2->markAsPrice();
+        $price2->setPrice(new Paysera_WalletApi_Entity_Money(20000, 'USD'));
+        $location->addPrice($price2);
+
+        $openingTime = new Paysera_WalletApi_Entity_Time('9', '0');
+        $closingTime = new Paysera_WalletApi_Entity_Time('17', '0');
+        $workingHours1 = new Paysera_WalletApi_Entity_Location_DayWorkingHours();
+        $workingHours1->markAsMonday();
+        $workingHours1->setOpeningTime($openingTime);
+        $workingHours1->setClosingTime($closingTime);
+        $location->addWorkingHours($workingHours1);
+    
+        $workingHours2 = new Paysera_WalletApi_Entity_Location_DayWorkingHours();
+        $workingHours2->markAsTuesday();
+        $workingHours2->setOpeningTime($openingTime);
+        $workingHours2->setClosingTime($closingTime);
+        $location->addWorkingHours($workingHours2);
+
+        $location->setImagePinOpen('http://example.com/pin_open.png');
+        $location->setImagePinClosed('http://example.com/pin_closed.png');
+
+        $location->setServices([
+            'pay',
+            'cash_in',
+            'cash_out',
+        ]);
+
+        $location->setStatus('active');
+        $location->setPublic(true);
+
+        $encodedLocation = $this->mapper->encodeLocation($location);
+    
+        $expectedData = [
+            'id' => 1,
+            'title' => 'Test Location',
+            'description' => 'This is a test location',
+            'address' => 'Test Address',
+            'radius' => 100,
+            'lat' => 54.6872,
+            'lng' => 25.2797,
+            'prices' => [
+                ['title' => 'a', 'type' => 'price', 'price' => ['amount' => 1000000, 'currency' => 'EUR']],
+                ['title' => 'b', 'type' => 'price', 'price' => ['amount' => 2000000, 'currency' => 'USD']]
+            ],
+            'working_hours' => [
+                'monday' => ['opening_time' => '9:0', 'closing_time' => '17:0'],
+                'tuesday' => ['opening_time' => '9:0', 'closing_time' => '17:0']
+            ],
+            'services' => [
+                'pay' => ['available' => true],
+                'cash_in' => ['available' => true],
+                'cash_out' => ['available' => true]
+            ],
+            'status' => 'active',
+            'public' => true,
+            'spots' => [],
+        ];
+        $this->assertEquals($expectedData, $encodedLocation);
+    }
+
     private function setProperty($object, $property, $value)
     {
         $reflectionProperty = new ReflectionProperty($object, $property);
