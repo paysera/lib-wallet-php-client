@@ -114,7 +114,7 @@ class Paysera_WalletApi_Entity_Location
     /**
      * @var Paysera_WalletApi_Entity_Spot[]
      */
-    private $spots;
+    private $spots = array();
 
     /**
      * Set id
