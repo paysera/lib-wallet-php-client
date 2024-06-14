@@ -1955,6 +1955,85 @@ class MapperTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expectedData, $encodedLocation);
     }
 
+    /**
+     * @dataProvider encodeTimeDataProvider
+     */
+    public function testDecodeTime($data, $expectedException, $expectedResult)
+    {
+        if ($expectedException !== null) {
+            $this->setExpectedException($expectedException);
+        }
+
+        $result = $this->mapper->decodeTime($data);
+
+        if ($expectedResult !== null) {
+            $this->assertInstanceOf(Paysera_WalletApi_Entity_Time::class, $result);
+            $this->assertEquals($expectedResult->getHours(), $result->getHours());
+            $this->assertEquals($expectedResult->getHours(), $result->getHours());
+        }
+    }
+
+    public function encodeTimeDataProvider()
+    {
+        return [
+            'valid data' => [
+                'data' => '9:0',
+                'expectedException' => null,
+                'expectedResult' => new Paysera_WalletApi_Entity_Time(9, 0),
+            ],
+            'wrong format: missed minutes' => [
+                'data' => '9',
+                'expectedException' => InvalidArgumentException::class,
+                'expectedResult' => null
+            ],
+            'wrong format: wrong separator' => [
+                'data' => '9-0',
+                'expectedException' => InvalidArgumentException::class,
+                'expectedResult' => null
+            ],
+            '24:00 converts to 0:0' => [
+                'data' => '24:00',
+                'expectedException' => null,
+                'expectedResult' => new Paysera_WalletApi_Entity_Time(0, 0),
+            ],
+            'wrong format: extra data' => [
+                'data' => '9:0:0',
+                'expectedException' => InvalidArgumentException::class,
+                'expectedResult' => null
+            ],
+            'invalid data: negative hours' => [
+                'data' => '-9:0',
+                'expectedException' => Paysera_WalletApi_Exception_LogicException::class,
+                'expectedResult' => null
+            ],
+            'invalid data: negative minutes' => [
+                'data' => '9:-1',
+                'expectedException' => Paysera_WalletApi_Exception_LogicException::class,
+                'expectedResult' => null
+            ],
+            'invalid data: hours more that 23' => [
+                'data' => '25:00',
+                'expectedException' => Paysera_WalletApi_Exception_LogicException::class,
+                'expectedResult' => null
+            ],
+            'invalid data: minutes more that 59' => [
+                'data' => '23:60',
+                'expectedException' => Paysera_WalletApi_Exception_LogicException::class,
+                'expectedResult' => null
+            ],
+            'invalid data: hours are not numeric' => [
+                'data' => 'a:10',
+                'expectedException' => InvalidArgumentException::class,
+                'expectedResult' => null
+            ],
+            'invalid data: minutes are not numeric' => [
+                'data' => '23:a',
+                'expectedException' => InvalidArgumentException::class,
+                'expectedResult' => null
+            ],
+        ];
+    }
+
     private function setProperty($object, $property, $value)
     {
         $reflectionProperty = new ReflectionProperty($object, $property);
