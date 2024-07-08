@@ -1888,6 +1888,9 @@ class Paysera_WalletApi_Mapper
     public function decodeTime($input)
     {
         $time = explode(':', $input);
+        if (count($time) !== 2) {
+            throw new InvalidArgumentException('Provided time is not in valid format. Valid format is HH:MM.');
+        }
 
         return new Paysera_WalletApi_Entity_Time(
             (int) $time[0] !== 24 ? $time[0] : 0,
