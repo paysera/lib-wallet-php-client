@@ -22,7 +22,7 @@ class Paysera_WalletApi_Listener_AppendHeadersListener implements Paysera_Wallet
         }
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return array(
             Paysera_WalletApi_Events::BEFORE_REQUEST => array('onBeforeRequest', 100),

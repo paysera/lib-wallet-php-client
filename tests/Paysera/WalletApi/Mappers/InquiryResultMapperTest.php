@@ -1,10 +1,10 @@
 <?php
 
-class InquiryResultMapperTest extends \PHPUnit_Framework_TestCase
+class InquiryResultMapperTest extends \PHPUnit\Framework\TestCase
 {
     private $inquiryResultMapper;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->inquiryResultMapper = new \Paysera_WalletApi_Mapper_InquiryResultMapper(array(
             Paysera_WalletApi_Entity_Inquiry_InquiryItem::TYPE_USER_IDENTITY =>

@@ -27,12 +27,12 @@ class Paysera_WalletApi_Listener_EndpointSetter implements Paysera_WalletApi_Eve
     public function onBeforeRequest(Paysera_WalletApi_Event_RequestEvent $event)
     {
         $uri = $event->getRequest()->getFullUri();
-        if (substr($uri, 0, 7) !== 'http://' && substr($uri, 0, 8) !== 'https://') {
+        if ($uri !== null && substr($uri, 0, 7) !== 'http://' && substr($uri, 0, 8) !== 'https://') {
             $event->getRequest()->setFullUri($this->endpoint . $uri);
         }
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return array(
             Paysera_WalletApi_Events::BEFORE_REQUEST => array('onBeforeRequest', 100),

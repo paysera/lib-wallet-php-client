@@ -68,7 +68,7 @@ class Paysera_WalletApi_Listener_OAuthRequestSigner extends Paysera_WalletApi_Li
         return $this->token;
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return parent::getSubscribedEvents() + array(
             Paysera_WalletApi_Events::ON_RESPONSE_EXCEPTION => 'onResponseException',

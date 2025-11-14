@@ -1,7 +1,7 @@
 <?php
 
 
-class Paysera_WalletApi_Entity_HostTest extends PHPUnit_Framework_TestCase
+class Paysera_WalletApi_Entity_HostTest extends PHPUnit\Framework\TestCase
 {
 
     /**

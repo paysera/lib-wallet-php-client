@@ -8,7 +8,7 @@ class Paysera_WalletApi_Service_LocationManager
      * @param DateTime $date
      * @return bool
      */
-    public function isLocationOpen(Paysera_WalletApi_Entity_Location $location, DateTime $date = null)
+    public function isLocationOpen(Paysera_WalletApi_Entity_Location $location, ?DateTime $date = null)
     {
         if (count($location->getWorkingHours()) === 0) {
             return false;

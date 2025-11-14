@@ -1,13 +1,13 @@
 <?php
 
-class Paysera_WalletApi_OAuth_ConsumerTest extends PHPUnit_Framework_TestCase
+class Paysera_WalletApi_OAuth_ConsumerTest extends PHPUnit\Framework\TestCase
 {
     /**
      * @var Paysera_WalletApi_OAuth_Consumer
      */
     private $consumer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

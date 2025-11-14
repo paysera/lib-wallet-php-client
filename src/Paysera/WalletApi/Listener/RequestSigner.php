@@ -31,7 +31,7 @@ class Paysera_WalletApi_Listener_RequestSigner implements Paysera_WalletApi_Even
         $this->signer->signRequest($event->getRequest(), $parameters);
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return array(
             Paysera_WalletApi_Events::BEFORE_REQUEST => array('onBeforeRequest', -100),

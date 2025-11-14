@@ -119,7 +119,7 @@ class Paysera_WalletApi_Client_WalletClient extends Paysera_WalletApi_Client_Bas
      *
      * @throws Paysera_WalletApi_Exception_ApiException
      */
-    public function finalizePayment($paymentId, Paysera_WalletApi_Entity_Money $finalPrice = null)
+    public function finalizePayment($paymentId, ?Paysera_WalletApi_Entity_Money $finalPrice = null)
     {
         Paysera_WalletApi_Util_Assert::isInt($paymentId);
 
@@ -496,7 +496,7 @@ class Paysera_WalletApi_Client_WalletClient extends Paysera_WalletApi_Client_Bas
      *
      * @throws Paysera_WalletApi_Exception_ApiException
      */
-    public function getWalletStatements($walletId, Paysera_WalletApi_Entity_Statement_SearchFilter $filter = null)
+    public function getWalletStatements($walletId, ?Paysera_WalletApi_Entity_Statement_SearchFilter $filter = null)
     {
         Paysera_WalletApi_Util_Assert::isId($walletId);
         if ($filter !== null) {
@@ -798,7 +798,7 @@ class Paysera_WalletApi_Client_WalletClient extends Paysera_WalletApi_Client_Bas
      * @param Paysera_WalletApi_Entity_Location_SearchFilter $filter
      * @return Paysera_WalletApi_Entity_Search_Result|Paysera_WalletApi_Entity_Location[]
      */
-    public function getLocations(Paysera_WalletApi_Entity_Location_SearchFilter $filter = null)
+    public function getLocations(?Paysera_WalletApi_Entity_Location_SearchFilter $filter = null)
     {
         if ($filter !== null) {
             $query = '?' . http_build_query($this->mapper->encodeLocationFilter($filter), null, '&');

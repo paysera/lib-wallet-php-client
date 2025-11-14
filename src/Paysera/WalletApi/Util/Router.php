@@ -131,6 +131,9 @@ class Paysera_WalletApi_Util_Router
      */
     private function resolveEndpointPath($endpoint, $path)
     {
+        if ($path === null) {
+            return $endpoint;
+        }
         if (substr($path, 0, 7) !== 'http://' && substr($path, 0, 8) !== 'https://') {
             return $endpoint . $path;
         } else {

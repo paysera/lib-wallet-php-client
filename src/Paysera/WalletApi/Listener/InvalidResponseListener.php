@@ -22,7 +22,7 @@ class Paysera_WalletApi_Listener_InvalidResponseListener implements Paysera_Wall
         }
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return array(
             Paysera_WalletApi_Events::ON_RESPONSE_EXCEPTION => 'onResponseException',

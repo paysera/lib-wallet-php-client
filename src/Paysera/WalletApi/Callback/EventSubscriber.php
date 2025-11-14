@@ -7,7 +7,7 @@ abstract class Paysera_WalletApi_Callback_EventSubscriber
     implements Paysera_WalletApi_EventDispatcher_EventSubscriberInterface
 {
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return array(
             'transaction.failed' => 'onTransactionFailed',

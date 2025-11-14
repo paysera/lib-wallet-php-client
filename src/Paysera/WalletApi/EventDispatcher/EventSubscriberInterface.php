@@ -21,5 +21,5 @@ interface Paysera_WalletApi_EventDispatcher_EventSubscriberInterface
      *
      * @return array
      */
-    public static function getSubscribedEvents();
+    public static function getSubscribedEvents(): array;
 }

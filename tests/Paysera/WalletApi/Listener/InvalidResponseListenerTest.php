@@ -1,10 +1,10 @@
 <?php
 
-class Paysera_WalletApi_Listener_InvalidResponseListenerTest extends PHPUnit_Framework_TestCase
+class Paysera_WalletApi_Listener_InvalidResponseListenerTest extends PHPUnit\Framework\TestCase
 {
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|Paysera_WalletApi_Http_ClientInterface
+     * @var PHPUnit\Framework\MockObject\MockObject|Paysera_WalletApi_Http_ClientInterface
      */
     protected $webClient;
 
@@ -16,9 +16,9 @@ class Paysera_WalletApi_Listener_InvalidResponseListenerTest extends PHPUnit_Fra
     /**
      * Set up
      */
-    public function setUp()
+    public function setUp(): void
     {
-        $this->webClient = $this->getMock('Paysera_WalletApi_Http_ClientInterface');
+        $this->webClient = $this->createMock('Paysera_WalletApi_Http_ClientInterface');
 
         $dispatcher = new Paysera_WalletApi_EventDispatcher_EventDispatcher();
         $dispatcher->addSubscriber(new Paysera_WalletApi_Listener_InvalidResponseListener());
@@ -87,7 +87,7 @@ class Paysera_WalletApi_Listener_InvalidResponseListenerTest extends PHPUnit_Fra
                 '
             )));
 
-        $this->setExpectedException('Paysera_WalletApi_Exception_ResponseException');
+        $this->expectException('Paysera_WalletApi_Exception_ResponseException');
         $this->service->makeRequest(new Paysera_WalletApi_Http_Request(''));
     }
 

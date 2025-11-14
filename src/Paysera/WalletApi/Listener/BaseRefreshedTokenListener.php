@@ -18,7 +18,7 @@ abstract class Paysera_WalletApi_Listener_BaseRefreshedTokenListener
         // implement in subclasses
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return array(
             Paysera_WalletApi_Events::AFTER_OAUTH_TOKEN_REFRESH => 'onTokenRefresh',

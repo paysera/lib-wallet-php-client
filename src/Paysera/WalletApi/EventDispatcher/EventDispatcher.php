@@ -38,7 +38,7 @@ class Paysera_WalletApi_EventDispatcher_EventDispatcher
      *
      * @return boolean whether at least one listener was registered
      */
-    public function dispatch($eventName, Paysera_WalletApi_EventDispatcher_Event $event = null)
+    public function dispatch($eventName, ?Paysera_WalletApi_EventDispatcher_Event $event = null)
     {
         if (null === $event) {
             $event = new Paysera_WalletApi_EventDispatcher_Event();

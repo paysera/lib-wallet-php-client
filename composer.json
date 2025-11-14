@@ -5,10 +5,11 @@
         "psr-0": { "Paysera_WalletApi": "src/" }
     },
     "require-dev": {
-        "phpunit/phpunit": "^4.7"
+        "phpunit/phpunit": "^9.5",
+        "ext-mbstring": "*"
     },
     "require": {
-        "php": ">=5.5 || >=7.0",
+        "php": ">=7.1",
         "ext-json": "*",
         "paysera/lib-wallet-transfer-rest-client": "^0.2.0"
     }

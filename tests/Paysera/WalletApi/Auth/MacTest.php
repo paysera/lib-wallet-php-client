@@ -1,21 +1,20 @@
 <?php
 
-class Paysera_WalletApi_Auth_MacTest extends PHPUnit_Framework_TestCase
+class Paysera_WalletApi_Auth_MacTest extends PHPUnit\Framework\TestCase
 {
     protected $service;
 
-    /** @var Paysera_WalletApi_Auth_Mac|PHPUnit_Framework_MockObject_MockObject */
+    /** @var Paysera_WalletApi_Auth_Mac|PHPUnit\Framework\MockObject\MockObject */
     protected $mock;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->service = new Paysera_WalletApi_Auth_Mac('wkVd93h2uS', 'IrdTc8uQodU7PRpLzzLTW6wqZAO6tAMU');
 
-        $this->mock = $this->getMock(
-            'Paysera_WalletApi_Auth_Mac',
-            array('getTimestamp', 'generateNonce'),
-            array('wkVd93h2uS', 'IrdTc8uQodU7PRpLzzLTW6wqZAO6tAMU')
-        );
+        $this->mock = $this->getMockBuilder('Paysera_WalletApi_Auth_Mac')
+            ->setConstructorArgs(array('wkVd93h2uS', 'IrdTc8uQodU7PRpLzzLTW6wqZAO6tAMU'))
+            ->onlyMethods(array('getTimestamp', 'generateNonce'))
+            ->getMock();
         $this->mock->expects($this->any())->method('getTimestamp')->will($this->returnValue('1343818800'));
         $this->mock->expects($this->any())->method('generateNonce')->will($this->returnValue('nQnNaSNyubfPErjRO55yaaEYo9YZfKHN'));
     }

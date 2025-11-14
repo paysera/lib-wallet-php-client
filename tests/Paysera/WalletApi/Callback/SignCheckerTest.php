@@ -1,6 +1,6 @@
 <?php
 
-class Paysera_WalletApi_Callback_SignCheckerTest extends PHPUnit_Framework_TestCase
+class Paysera_WalletApi_Callback_SignCheckerTest extends PHPUnit\Framework\TestCase
 {
     /**
      * @var Paysera_WalletApi_Callback_SignChecker
@@ -8,13 +8,13 @@ class Paysera_WalletApi_Callback_SignCheckerTest extends PHPUnit_Framework_TestC
     protected $service;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|Paysera_WalletApi_Http_ClientInterface
+     * @var PHPUnit\Framework\MockObject\MockObject|Paysera_WalletApi_Http_ClientInterface
      */
     protected $webClient;
 
-    public function setUp()
+    public function setUp(): void
     {
-        $this->webClient = $this->getMock('Paysera_WalletApi_Http_ClientInterface');
+        $this->webClient = $this->createMock('Paysera_WalletApi_Http_ClientInterface');
         $this->service = new Paysera_WalletApi_Callback_SignChecker('http://publickey.abc', $this->webClient);
     }
 

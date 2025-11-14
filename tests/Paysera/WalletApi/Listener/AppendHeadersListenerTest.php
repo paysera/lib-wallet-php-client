@@ -1,6 +1,6 @@
 <?php
 
-class Paysera_WalletApi_Listener_AppendHeadersListenerTest extends PHPUnit_Framework_TestCase
+class Paysera_WalletApi_Listener_AppendHeadersListenerTest extends PHPUnit\Framework\TestCase
 {
     public function testHeadersIsDefined()
     {

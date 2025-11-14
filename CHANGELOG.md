@@ -4,6 +4,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 2.9.0
+
+### Added
+- PHP 8.1, 8.2, 8.3 and PHP 9.0 compatibility
+- PHPUnit 9.6 support for modern testing
+- Explicit nullable parameter type declarations (PHP 8.1+ requirement)
+- Array return type declarations for EventSubscriber implementations
+- Null safety checks for `substr()` calls to prevent deprecation warnings
+
+### Changed
+- Updated minimum PHP version from >=5.5 to >=7.1 (required for nullable types)
+- Updated PHPUnit from 4.8 to 9.6
+- Updated all test files to PHPUnit 9 syntax
+- Added `ext-mbstring` as dev dependency for PHPUnit 9
+
+### Fixed
+- Fixed implicit nullable parameter deprecation warnings in PHP 8.1+
+- Fixed `EventDispatcher::dispatch()` nullable parameter
+- Fixed `WalletClient::finalizePayment()` nullable parameter
+- Fixed `WalletClient::getWalletStatements()` nullable parameter
+- Fixed `WalletClient::getLocations()` nullable parameter
+- Fixed `TokenRelatedWalletClient::getCurrentWalletStatements()` nullable parameter
+- Fixed `LocationManager::isLocationOpen()` nullable parameter
+- Fixed `Router::resolveEndpointPath()` to properly handle null path parameter
+- Fixed `EndpointSetter::onBeforeRequest()` substr() null safety
+- Fixed missing return type declarations in EventSubscriber interface and implementations
+- Fixed all PHPUnit deprecations in test suite
+
 ## 2.8.0
 - Added owner type to wallet account entity
 
