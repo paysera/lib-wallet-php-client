@@ -413,6 +413,8 @@ class Paysera_WalletApi_Client_WalletClient extends Paysera_WalletApi_Client_Bas
      * @return Paysera_WalletApi_Entity_Transaction
      *
      * @throws Paysera_WalletApi_Exception_ApiException
+     *
+     * @deprecated
      */
     public function sendTransactionFlashSms($transactionKey, $walletId)
     {
