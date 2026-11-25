@@ -80,6 +80,9 @@ class Paysera_WalletApi_Client_TokenRelatedWalletClient extends Paysera_WalletAp
         return parent::cancelAllowanceForWallet($walletId);
     }
 
+    /**
+     * @deprecated
+     */
     public function sendTransactionFlashSms($transactionKey, $walletId = 'me')
     {
         return parent::sendTransactionFlashSms($transactionKey, $walletId);
